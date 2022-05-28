@@ -49,27 +49,29 @@ class FornecedorResource extends Resource
                                 'md' => 4,
                             ]),
             
-                        Forms\Components\TextInput::make('telefone')
+                        Forms\Components\TextInput::make('responsavel')
+                            ->label('Contato')
                             ->tel()
                             ->maxLength(15)
                             ->columnSpan([
-                                'lg' => 3,
-                                'md' => 4,
-                            ]),
-                        Forms\Components\TextInput::make('celular')
-                            ->maxLength(15)
-                            ->columnSpan([
-                                'lg' => 3,
-                                'md' => 2,
+                                'lg' => 2,
                             ]),
                         Forms\Components\TextInput::make('whatsapp')
                             ->maxLength(15)
                             ->columnSpan([
                                 'lg' => 2,
-                                'md' => 2,
+                            ]),
+                        Forms\Components\TextInput::make('telefone')
+                            ->maxLength(15)
+                            ->columnSpan([
+                                'lg' => 2,
                             ]),
                             
-                        Forms\Components\TextInput::make('cep'),
+                            Forms\Components\TextInput::make('celular')
+                            ->maxLength(15)
+                            ->columnSpan([
+                                'lg' => 2,
+                            ]),
                     ])
                     ->columns([
                         'md' => 8,
