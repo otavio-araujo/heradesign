@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Filament\Facades\Filament;
+use Illuminate\Support\Pluralizer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Filament::serving(function () {
             Filament::registerTheme(mix('css/filament.css'));
         });
+
+        Pluralizer::useLanguage('portuguese');
     }
 }
