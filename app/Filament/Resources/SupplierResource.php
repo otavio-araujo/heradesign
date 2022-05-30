@@ -4,32 +4,32 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Helpers\Helpers;
-use App\Models\Fornecedor;
-use Squire\Models\Country;
-use Illuminate\Support\Str;
+use App\Models\Supplier;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
-use App\Forms\Components\AddressForm;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
-use App\Filament\Resources\FornecedorResource\Pages;
-use App\Filament\Resources\FornecedorResource\RelationManagers;
+use App\Filament\Resources\SupplierResource\Pages;
+use App\Filament\Resources\SupplierResource\RelationManagers;
 
-class FornecedorResource extends Resource
+class SupplierResource extends Resource
 {
-    protected static ?string $model = Fornecedor::class;
+    protected static ?string $model = Supplier::class;
 
     protected static ?string $navigationLabel = 'Fornecedores';
     
     protected static ?string $slug = 'fornecedores';
 
+    protected static ?string $label = 'Fornecedor';
+
+    protected static ?string $pluralLabel = 'Fornecedores';
+
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
-    protected static ?string $recordTitleAttribute = 'nome_fantasia';
-    
+    protected static ?string $recordTitleAttribute = 'nome';
 
     public static function form(Form $form): Form
     {
@@ -37,7 +37,7 @@ class FornecedorResource extends Resource
             ->schema([
                 Section::make('Contato')
                     ->schema([
-                        Forms\Components\TextInput::make('nome_fantasia')
+                        Forms\Components\TextInput::make('nome')
                             ->required()
                             ->maxLength(150)
                             ->columnSpan([
@@ -50,7 +50,7 @@ class FornecedorResource extends Resource
                                 'lg' => 3,
                             ]),
             
-                        Forms\Components\TextInput::make('responsavel')
+                        Forms\Components\TextInput::make('contato')
                             ->label('Contato')
                             ->maxLength(15)
                             ->columnSpan([
@@ -91,10 +91,10 @@ class FornecedorResource extends Resource
                         ->schema([
                             Forms\Components\Placeholder::make('created_at')
                                 ->label('Data do cadastro')
-                                ->content(fn (?Fornecedor $record): string => $record ? $record->created_at->diffForHumans() : '-'),
+                                ->content(fn (?Supplier $record): string => $record ? $record->created_at->diffForHumans() : '-'),
                             Forms\Components\Placeholder::make('updated_at')
                                 ->label('Última atualização')
-                                ->content(fn (?Fornecedor $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
+                                ->content(fn (?Supplier $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
                         ])
                     ->columnSpan(3),
 
@@ -156,8 +156,8 @@ class FornecedorResource extends Resource
         
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nome_fantasia'),
-                Tables\Columns\TextColumn::make('responsavel'),
+                Tables\Columns\TextColumn::make('nome'),
+                Tables\Columns\TextColumn::make('contato'),
                 Tables\Columns\TextColumn::make('telefone'),
                 Tables\Columns\TextColumn::make('celular'),
                 Tables\Columns\TextColumn::make('whatsapp'),
@@ -177,15 +177,15 @@ class FornecedorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFornecedors::route('/'),
-            'create' => Pages\CreateFornecedor::route('/create'),
-            'edit' => Pages\EditFornecedor::route('/{record}/edit'),
+            'index' => Pages\ListSuppliers::route('/'),
+            'create' => Pages\CreateSupplier::route('/create'),
+            'edit' => Pages\EditSupplier::route('/{record}/edit'),
         ];
     }
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['nome_fantasia', 'cidade', 'responsavel'];
+        return ['nome_fantasia', 'cidade', 'contato'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -193,8 +193,9 @@ class FornecedorResource extends Resource
         
         
         return [
-            'Contato' => $record->responsavel,
+            'Contato' => $record->contato,
             'Whatsapp' => $record->whatsapp,
         ];
     }
+
 }

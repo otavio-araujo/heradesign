@@ -29,6 +29,6 @@ class AppServiceProvider extends ServiceProvider
             Filament::registerTheme(mix('css/filament.css'));
         });
 
-        Pluralizer::useLanguage('portuguese');
+        // Pluralizer::useLanguage('portuguese');
     }
 }
