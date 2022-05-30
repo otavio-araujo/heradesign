@@ -19,6 +19,14 @@ class SupplierResource extends Resource
 {
     protected static ?string $model = Supplier::class;
 
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+
+    protected static ?string $navigationGroup = 'Controle de Estoque';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $recordTitleAttribute = 'nome';
+
     protected static ?string $navigationLabel = 'Fornecedores';
     
     protected static ?string $slug = 'fornecedores';
@@ -27,10 +35,7 @@ class SupplierResource extends Resource
 
     protected static ?string $pluralLabel = 'Fornecedores';
 
-    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-
-    protected static ?string $recordTitleAttribute = 'nome';
-
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -170,7 +175,7 @@ class SupplierResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\FeedstocksRelationManager::class,
         ];
     }
     
@@ -185,7 +190,7 @@ class SupplierResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['nome_fantasia', 'cidade', 'contato'];
+        return ['nome', 'cidade', 'contato'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array

@@ -26,7 +26,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Filament::serving(function () {
+
             Filament::registerTheme(mix('css/filament.css'));
+
+            Filament::registerNavigationGroups([
+                'Controle de Estoque',
+            ]);
         });
 
         // Pluralizer::useLanguage('portuguese');

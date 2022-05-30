@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,11 +21,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Otávio Araújo',
             'email' => 'admin@heradesign.test',
             'password' => bcrypt('password'),
+            'email_verified_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         $this->call([
-            FornecedorSeeder::class,
             SupplierSeeder::class,
+            FeedstockSeeder::class,
         ]);
     }
 }
