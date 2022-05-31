@@ -12,6 +12,7 @@ use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\FeedstockResource\Pages;
 use App\Filament\Resources\FeedstockResource\RelationManagers;
+use Filament\Forms\Components\Grid;
 
 class FeedstockResource extends Resource
 {
@@ -36,54 +37,61 @@ class FeedstockResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Section::make('Produto')
-                    ->schema([
-                        Forms\Components\TextInput::make('nome')
-                            ->required()
-                            ->maxLength(150)
-                            ->columnSpan([
-                                'lg' => 6,
-                            ]),
+        return $form->schema([
 
-                        Forms\Components\TextInput::make('unidade_medida')
-                            ->required()
-                            ->maxLength(20)
-                            ->columnSpan([
-                                'lg' => 2,
-                            ]),
-                    ])
-                    ->columns([
-                        'md' => 8,
-                    ])
-                    ->columnSpan([
-                        'md' => 9,
-                     ]), 
-                    Section::make('Alterações')
-                        ->schema([
-                            Forms\Components\Placeholder::make('created_at')
-                                ->label('Data do cadastro')
-                                ->content(fn (?Feedstock $record): string => $record ? $record->created_at->diffForHumans() : '-'),
-                            Forms\Components\Placeholder::make('updated_at')
-                                ->label('Última atualização')
-                                ->content(fn (?Feedstock $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
-                        ])
-                    ->columnSpan(3),
+            Grid::make([
+                'default' => 1,
+                'sm' => 2,
+                'md' => 3,
+                'lg' => 4,
+                'xl' => 6,
+                '2xl' => 8,
+            ])->schema([
+
+                Section::make('Produto')->schema([
+                    
+                    Forms\Components\TextInput::make('nome')
+                        ->required()
+                        ->maxLength(150),
+
+                    Forms\Components\TextInput::make('unidade_medida')
+                        ->required()
+                        ->maxLength(20)
+
+                ])->columnSpan([
+                    'md' => 2,
+                    'lg' => 3,
+                    'xl' => 4,
+                ]),
+
+                Section::make('Alterações')->schema([
+
+                    Forms\Components\Placeholder::make('created_at')
+                        ->label('Data do cadastro')
+                        ->content(fn (?Feedstock $record): string => $record ? $record->created_at->diffForHumans() : '-'),
+
+                    Forms\Components\Placeholder::make('updated_at')
+                        ->label('Última atualização')
+                        ->content(fn (?Feedstock $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
+
+                ])->columnSpan([
+                    'md' => 1,
+                    'xl' => 2,
+                ]),
 
             ])
-            ->columns([
-                'md' => 12,
-                'lg' => null,
-            ]);
+
+        ]);
+            
     }
+
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns(static::getTableColumns())
             ->filters([
-                //
+                
             ]);
     }
     
@@ -106,14 +114,17 @@ class FeedstockResource extends Resource
     public static function getTableColumns(): array
     {
         return [
+
             Tables\Columns\TextColumn::make('nome')
                 ->label('Produto')
                 ->searchable()
                 ->sortable(),
+
             Tables\Columns\TextColumn::make('unidade_medida')
                 ->label('Unidade de Medida')
                 ->searchable()
                 ->sortable(),
+                
         ];
     }
 

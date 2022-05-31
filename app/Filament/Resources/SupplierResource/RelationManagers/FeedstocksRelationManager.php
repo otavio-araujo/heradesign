@@ -38,6 +38,16 @@ class FeedstocksRelationManager extends BelongsToManyRelationManager
                     ->label('Unidade de Medida')
                     ->searchable()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('preco')
+                    ->label('Preço')
+                    ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Última Cotação')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //

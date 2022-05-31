@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\FeedstockSupplier;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Feedstock extends Model
 {
@@ -16,6 +17,6 @@ class Feedstock extends Model
 
     public function suppliers()
     {
-        return $this->belongsToMany(Supplier::class);
+        return $this->belongsToMany(Supplier::class)->withPivot('preco', 'updated_at')->using(FeedstockSupplier::class);
     }
 }
