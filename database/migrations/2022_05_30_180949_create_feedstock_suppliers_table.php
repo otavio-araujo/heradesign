@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('feedstock_supplier', function (Blueprint $table) {
             $table->foreignId('feedstock_id')->constrained();
             $table->foreignId('supplier_id')->constrained();
+            $table->integer('preco');
             $table->timestamps();
         });
     }
