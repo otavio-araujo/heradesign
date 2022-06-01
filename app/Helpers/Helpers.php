@@ -68,7 +68,7 @@ class Helpers
         {
             
             if (gettype($value) === "string") {
-                $value = strtoupper($value);
+                $value = mb_strtoupper($value, 'UTF-8');
             }
             
         });

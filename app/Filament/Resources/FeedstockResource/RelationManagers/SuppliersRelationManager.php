@@ -103,79 +103,9 @@ class SuppliersRelationManager extends BelongsToManyRelationManager
                             ])
                         ,
 
-                        /* Forms\Components\TextInput::make('email')
-                            ->email()
-                            ->maxLength(255)
-                            ->columnSpan(12)
-                        , */
-
                     ])->columns([
                             'md' => 12
                         ]),
-    
-                    /* Section::make('Endereço')->schema([
-
-                        Forms\Components\TextInput::make('cep')
-                            ->maxLength(9)
-                            ->mask(fn (TextInput\Mask $mask) => $mask->pattern('00000-000'))
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 3,
-                            ])
-                        ,
-
-                        Forms\Components\TextInput::make('endereco')
-                            ->maxLength(255)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 9,
-                            ])
-                        ,
-
-                        Forms\Components\TextInput::make('bairro')
-                            ->maxLength(150)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 5,
-                            ])
-                        ,
-
-                        Forms\Components\TextInput::make('cidade')
-                            ->maxLength(150)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 5,
-                            ])
-                        ,
-
-                        Forms\Components\TextInput::make('uf')
-                            ->maxLength(2)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 2,
-                            ])
-                        ,                 
-                    
-                        Forms\Components\TextInput::make('numero')
-                            ->maxLength(10)
-                            ->mask(fn (TextInput\Mask $mask) => $mask->pattern('0000000000'))
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 5,
-                            ])
-                        ,
-
-                        Forms\Components\TextInput::make('complemento')
-                            ->maxLength(100)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 7,
-                            ])
-                        ,
-
-                    ])->columns([
-                            'md' => 12
-                        ]), */
 
                 ])->columnSpan([
                         'default' => 1,

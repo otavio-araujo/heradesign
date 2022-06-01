@@ -4,36 +4,35 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Feedstock;
+use App\Models\Estado;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
-use App\Filament\Resources\FeedstockResource\Pages;
-use App\Filament\Resources\FeedstockResource\RelationManagers;
-use Filament\Forms\Components\Grid;
+use App\Filament\Resources\EstadoResource\Pages;
+use App\Filament\Resources\EstadoResource\RelationManagers;
 
-class FeedstockResource extends Resource
+class EstadoResource extends Resource
 {
-    protected static ?string $model = Feedstock::class;
+    protected static ?string $model = Estado::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
+    protected static ?string $navigationIcon = 'heroicon-o-map';
 
-    protected static ?string $navigationGroup = 'Controle de Estoque';
+    protected static ?string $navigationGroup = 'Cadastros Auxiliares';
 
-    protected static ?int $navigationSort = 99;
+    protected static ?int $navigationSort = 100;
 
     protected static ?string $recordTitleAttribute = 'nome';
 
-    protected static ?string $navigationLabel = 'Matérias Primas';
+    protected static ?string $navigationLabel = 'Estados';
     
-    protected static ?string $slug = 'materias-primas';
+    protected static ?string $slug = 'estados';
 
-    protected static ?string $label = 'Matéria Prima';
+    protected static ?string $label = 'Estado';
 
-    protected static ?string $pluralLabel = 'Matérias Primas';
-
+    protected static ?string $pluralLabel = 'Estados';
 
     public static function form(Form $form): Form
     {
@@ -48,33 +47,45 @@ class FeedstockResource extends Resource
                 '2xl' => 8,
             ])->schema([
 
-                Section::make('Produto')->schema([
+                Section::make('Dados Básicos')->schema([
                     
                     Forms\Components\TextInput::make('nome')
+                        ->label('Nome do Estado')
                         ->required()
-                        ->maxLength(150)
+                        ->unique()
+                        ->maxLength(50)
+                        ->columnSpan([
+                            'md' => 3,
+                        ])
                     ,
 
-                    Forms\Components\TextInput::make('unidade_medida')
+                    Forms\Components\TextInput::make('uf')
+                        ->label('UF')
                         ->required()
-                        ->maxLength(20)
+                        ->unique()
+                        ->maxLength(2)
+                        ->columnSpan([
+                            'md' => 1,
+                        ])
                     ,
 
                 ])->columnSpan([
-                    'md' => 2,
-                    'lg' => 3,
-                    'xl' => 4,
-                ]),
+                        'md' => 2,
+                        'lg' => 3,
+                        'xl' => 4,
+                    ])->columns([
+                            'md' => 4,
+                        ]),
 
                 Section::make('Alterações')->schema([
 
                     Forms\Components\Placeholder::make('created_at')
                         ->label('Data do cadastro')
-                        ->content(fn (?Feedstock $record): string => $record ? $record->created_at->diffForHumans() : '-'),
+                        ->content(fn (?Estado $record): string => $record ? $record->created_at->diffForHumans() : '-'),
 
                     Forms\Components\Placeholder::make('updated_at')
                         ->label('Última atualização')
-                        ->content(fn (?Feedstock $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
+                        ->content(fn (?Estado $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
 
                 ])->columnSpan([
                     'md' => 1,
@@ -84,9 +95,7 @@ class FeedstockResource extends Resource
             ])
 
         ]);
-            
     }
-
 
     public static function table(Table $table): Table
     {
@@ -100,16 +109,16 @@ class FeedstockResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\SuppliersRelationManager::class,
+            RelationManagers\CidadesRelationManager::class,
         ];
     }
     
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListFeedstocks::route('/'),
-            'create' => Pages\CreateFeedstock::route('/create'),
-            'edit' => Pages\EditFeedstock::route('/{record}/edit'),
+            'index' => Pages\ListEstados::route('/'),
+            'create' => Pages\CreateEstado::route('/create'),
+            'edit' => Pages\EditEstado::route('/{record}/edit'),
         ];
     }
 
@@ -118,12 +127,12 @@ class FeedstockResource extends Resource
         return [
 
             Tables\Columns\TextColumn::make('nome')
-                ->label('Produto')
+                ->label('Nome do Estado')
                 ->searchable()
                 ->sortable(),
 
-            Tables\Columns\TextColumn::make('unidade_medida')
-                ->label('Unidade de Medida')
+            Tables\Columns\TextColumn::make('uf')
+                ->label('UF')
                 ->searchable()
                 ->sortable(),
                 
@@ -132,7 +141,7 @@ class FeedstockResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['nome'];
+        return ['nome', 'uf'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -140,8 +149,8 @@ class FeedstockResource extends Resource
         
         
         return [
-            'Nome' => $record->nome,
-            'Un. Medida' => $record->unidade_medida,
+            'Estado' => $record->nome,
+            'UF' => $record->uf,
         ];
     }
 }

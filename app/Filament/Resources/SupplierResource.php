@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Cidade;
+use App\Models\Estado;
 use App\Models\Supplier;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
@@ -11,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
@@ -152,8 +155,23 @@ class SupplierResource extends Resource
                             ])
                         ,
 
-                        Forms\Components\TextInput::make('cidade')
+                        /* Forms\Components\TextInput::make('cidade')
                             ->maxLength(150)
+                            ->columnSpan([
+                                'default' => 12,
+                                'md' => 5,
+                            ])
+                        , */
+
+                        Select::make('cidade_id')
+                            ->label('Cidade')
+                            ->required()
+                            ->searchable()
+                            ->getSearchResultsUsing(fn (string $searchQuery) => Cidade::where('nome', 'like', "%{$searchQuery}%")->limit(50)->pluck('nome', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => Cidade::find($value)?->nome)
+                            ->reactive()
+                            ->afterStateHydrated(fn ($state, callable $set) => $set('uf', Cidade::find($state)?->estado->uf ?? ''))
+                            ->afterStateUpdated(fn ($state, callable $set) => $set('uf', Cidade::find($state)?->estado->uf ?? ''))
                             ->columnSpan([
                                 'default' => 12,
                                 'md' => 5,
@@ -161,6 +179,7 @@ class SupplierResource extends Resource
                         ,
 
                         Forms\Components\TextInput::make('uf')
+                            ->disabled()
                             ->maxLength(2)
                             ->columnSpan([
                                 'default' => 12,

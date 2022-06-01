@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Cidade;
 use App\Models\Feedstock;
 use App\Models\FeedstockSupplier;
 use Illuminate\Database\Eloquent\Model;
@@ -22,8 +23,7 @@ class Supplier extends Model
         'cep',
         'endereco',
         'bairro',
-        'cidade',
-        'uf',
+        'cidade_id',
         'numero',
         'complemento',
     ];
@@ -31,5 +31,10 @@ class Supplier extends Model
     public function feedstocks()
     {
         return $this->belongsToMany(Feedstock::class)->withPivot('preco', 'updated_at')->using(FeedstockSupplier::class);
+    }
+
+    public function cidade()
+    {
+        return $this->belongsTo(Cidade::class);
     }
 }

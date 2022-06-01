@@ -25,8 +25,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
+            EstadoSeeder::class,
+            CidadeSeeder::class,
             SupplierSeeder::class,
-            FeedstockSeeder::class,
+            FeedstockSeeder::class,w
         ]);
     }
 }

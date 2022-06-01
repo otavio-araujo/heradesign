@@ -25,8 +25,7 @@ return new class extends Migration
             $table->string('cep', 9)->nullable();
             $table->string('endereco')->nullable();
             $table->string('bairro', 150)->nullable();
-            $table->string('cidade', 150)->nullable();
-            $table->string('uf', 2)->nullable();
+            $table->foreignId('cidade_id', 150)->constrained()->nullable();
             $table->string('numero')->nullable();
             $table->string('complemento', 100)->nullable();
             $table->timestamps();
