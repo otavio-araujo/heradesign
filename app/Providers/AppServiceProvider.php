@@ -30,7 +30,9 @@ class AppServiceProvider extends ServiceProvider
             Filament::registerTheme(mix('css/filament.css'));
 
             Filament::registerNavigationGroups([
-                'Controle de Estoque',
+                'Operacional',
+                'Fornecedores e Materiais',
+                'Cadastros Auxiliares',
             ]);
         });
 

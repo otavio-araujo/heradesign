@@ -20,7 +20,7 @@ class FeedstockResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
-    protected static ?string $navigationGroup = 'Controle de Estoque';
+    protected static ?string $navigationGroup = 'Fornecedores e Materiais';
 
     protected static ?int $navigationSort = 99;
 

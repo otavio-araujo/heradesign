@@ -5,43 +5,41 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Cidade;
-use App\Models\Estado;
-use App\Helpers\Helpers;
-use App\Models\Supplier;
+use App\Models\Partner;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
-use App\Filament\Resources\SupplierResource\Pages;
-use App\Filament\Resources\SupplierResource\RelationManagers;
+use Filament\Forms\Components\TextInput\Mask;
+use App\Filament\Resources\PartnerResource\Pages;
+use App\Filament\Resources\PartnerResource\RelationManagers;
+use App\Helpers\Helpers;
 
-class SupplierResource extends Resource
+class PartnerResource extends Resource
 {
-    protected static ?string $model = Supplier::class;
+    protected static ?string $model = Partner::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+    protected static ?string $navigationIcon = 'heroicon-o-thumb-up';
 
-    protected static ?string $navigationGroup = 'Fornecedores e Materiais';
+    protected static ?string $navigationGroup = 'Operacional';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $recordTitleAttribute = 'nome';
 
-    protected static ?string $navigationLabel = 'Fornecedores';
+    protected static ?string $navigationLabel = 'Parceiros';
     
-    protected static ?string $slug = 'fornecedores';
+    protected static ?string $slug = 'parceiros';
 
-    protected static ?string $label = 'Fornecedor';
+    protected static ?string $label = 'Parceiro';
 
-    protected static ?string $pluralLabel = 'Fornecedores';
+    protected static ?string $pluralLabel = 'Parceiros';
 
-    
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -156,14 +154,6 @@ class SupplierResource extends Resource
                             ])
                         ,
 
-                        /* Forms\Components\TextInput::make('cidade')
-                            ->maxLength(150)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 5,
-                            ])
-                        , */
-
                         Select::make('cidade_id')
                             ->label('Cidade')
                             ->required()
@@ -221,12 +211,12 @@ class SupplierResource extends Resource
 
                         Forms\Components\Placeholder::make('created_at')
                             ->label('Data do cadastro')
-                            ->content(fn (?Supplier $record): string => $record ? $record->created_at->diffForHumans() : '-')
+                            ->content(fn (?Partner $record): string => $record ? $record->created_at->diffForHumans() : '-')
                         ,
 
                         Forms\Components\Placeholder::make('updated_at')
                             ->label('Última atualização')
-                            ->content(fn (?Supplier $record): string => $record ? $record->updated_at->diffForHumans() : '-')
+                            ->content(fn (?Partner $record): string => $record ? $record->updated_at->diffForHumans() : '-')
                         ,
 
                     ]),
@@ -239,13 +229,10 @@ class SupplierResource extends Resource
             ])
 
         ]);
-            
     }
-
 
     public static function table(Table $table): Table
     {
-        
         return $table
             ->columns([
                     Tables\Columns\TextColumn::make('nome')
@@ -256,9 +243,21 @@ class SupplierResource extends Resource
                         ->sortable()
                         ->searchable()
                     ,
-                    Tables\Columns\TextColumn::make('telefone'),
-                    Tables\Columns\TextColumn::make('celular'),
-                    Tables\Columns\TextColumn::make('whatsapp'),
+                    Tables\Columns\TextColumn::make('telefone')
+                        ->formatStateUsing(function ($record){
+                            return Helpers::formataTelefone($record->telefone);
+                        })
+                    ,
+                    Tables\Columns\TextColumn::make('celular')
+                        ->formatStateUsing(function ($record){
+                            return Helpers::formataTelefone($record->celular);
+                        })
+                    ,
+                    Tables\Columns\TextColumn::make('whatsapp')
+                        ->formatStateUsing(function ($record){
+                            return Helpers::formataTelefone($record->whatsapp);
+                        })
+                    ,
             ])
             ->filters([
                 //
@@ -269,16 +268,16 @@ class SupplierResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\FeedstocksRelationManager::class,
+            //
         ];
     }
     
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSuppliers::route('/'),
-            'create' => Pages\CreateSupplier::route('/create'),
-            'edit' => Pages\EditSupplier::route('/{record}/edit'),
+            'index' => Pages\ListPartners::route('/'),
+            'create' => Pages\CreatePartner::route('/create'),
+            'edit' => Pages\EditPartner::route('/{record}/edit'),
         ];
     }
 
@@ -296,5 +295,4 @@ class SupplierResource extends Resource
             'Whatsapp' => Helpers::formataTelefone($record->whatsapp),
         ];
     }
-
 }

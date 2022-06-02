@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             EstadoSeeder::class,
             CidadeSeeder::class,
             SupplierSeeder::class,
-            FeedstockSeeder::class,w
+            FeedstockSeeder::class,
+            PartnerSeeder::class,
         ]);
     }
 }

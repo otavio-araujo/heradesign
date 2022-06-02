@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Estado;
+use App\Models\Partner;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,5 +24,10 @@ class Cidade extends Model
     public function suppliers() 
     {
         return $this->hasMany(Supplier::class);
+    }
+
+    public function partners() 
+    {
+        return $this->hasMany(Partner::class);
     }
 }
