@@ -70,7 +70,8 @@ class SupplierResource extends Resource
                         ,
                         
                         Forms\Components\TextInput::make('cnpj')
-                            ->unique(Fornecedor::class, 'cnpj', fn ($record) => $record)
+                            ->unique(Supplier::class, 'cnpj', fn ($record) => $record)
+                            ->rules('cnpj')
                             ->mask(fn (TextInput\Mask $mask) => $mask->pattern('00.000.000/0000-00'))
                             ->columnSpan([
                                 'default' => 12,
@@ -259,6 +260,7 @@ class SupplierResource extends Resource
                     Tables\Columns\TextColumn::make('telefone'),
                     Tables\Columns\TextColumn::make('celular'),
                     Tables\Columns\TextColumn::make('whatsapp'),
+                    Tables\Columns\TextColumn::make('cnpj'),
             ])
             ->filters([
                 //

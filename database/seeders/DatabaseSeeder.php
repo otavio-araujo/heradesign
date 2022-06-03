@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             FeedstockSeeder::class,
             PartnerSeeder::class,
+            PersonTypeSeeder::class,
         ]);
     }
 }
