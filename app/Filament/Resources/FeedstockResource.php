@@ -6,13 +6,15 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Feedstock;
 use Filament\Resources\Form;
+use App\Models\UnidadeMedida;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\FeedstockResource\Pages;
 use App\Filament\Resources\FeedstockResource\RelationManagers;
-use Filament\Forms\Components\Grid;
 
 class FeedstockResource extends Resource
 {
@@ -51,13 +53,17 @@ class FeedstockResource extends Resource
                 Section::make('Produto')->schema([
                     
                     Forms\Components\TextInput::make('nome')
+                        ->autofocus()
                         ->required()
+                        ->unique(Feedstock::class, 'nome', fn($record) => $record)
                         ->maxLength(150)
                     ,
 
-                    Forms\Components\TextInput::make('unidade_medida')
+                    Select::make('unidade_medida_id')
+                        ->label('Unidade de Medida')
                         ->required()
-                        ->maxLength(20)
+                        ->options(UnidadeMedida::all()->pluck('nome', 'id'))
+                        ->searchable()
                     ,
 
                 ])->columnSpan([
@@ -90,6 +96,7 @@ class FeedstockResource extends Resource
 
     public static function table(Table $table): Table
     {
+        
         return $table
             ->columns(static::getTableColumns())
             ->filters([
@@ -122,7 +129,7 @@ class FeedstockResource extends Resource
                 ->searchable()
                 ->sortable(),
 
-            Tables\Columns\TextColumn::make('unidade_medida')
+            Tables\Columns\TextColumn::make('unidade.simbolo')
                 ->label('Unidade de Medida')
                 ->searchable()
                 ->sortable(),
@@ -141,7 +148,7 @@ class FeedstockResource extends Resource
         
         return [
             'Nome' => $record->nome,
-            'Un. Medida' => $record->unidade_medida,
+            'Un. Medida' => $record->unidade->simbolo,
         ];
     }
 }

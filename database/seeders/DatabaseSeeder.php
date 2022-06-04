@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             EstadoSeeder::class,
             CidadeSeeder::class,
             SupplierSeeder::class,
+            UnidadeMedidaSeeder::class,
             FeedstockSeeder::class,
             PartnerSeeder::class,
             PersonTypeSeeder::class,

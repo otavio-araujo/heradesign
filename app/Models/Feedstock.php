@@ -12,11 +12,16 @@ class Feedstock extends Model
 
     protected $fillable = [
         'nome',
-        'unidade_medida',
+        'unidade_medida_id',
     ];
 
     public function suppliers()
     {
         return $this->belongsToMany(Supplier::class)->withPivot('preco', 'updated_at')->using(FeedstockSupplier::class);
+    }
+
+    public function unidade()
+    {
+        return $this->belongsTo(UnidadeMedida::class, 'unidade_medida_id');
     }
 }

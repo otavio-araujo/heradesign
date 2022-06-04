@@ -53,14 +53,16 @@ class CidadeResource extends Resource
                     Section::make('Dados Básicos')->schema([
                         
                         Forms\Components\TextInput::make('nome')
+                            ->autofocus()    
                             ->label('Nome da Cidade')
                             ->required()
-                            ->unique(ignorable: fn (?Model $record): ?Model => $record)
+                            ->unique(Cidade::class, 'nome', fn ($record) => $record)
                             ->maxLength(50)
                         ,
     
                         Select::make('estado_id')
                             ->label('Estado')
+                            ->required()
                             ->searchable()
                             ->getSearchResultsUsing(fn (string $searchQuery) => Estado::where('nome', 'like', "%{$searchQuery}%")->limit(50)->pluck('nome', 'id'))
                             ->getOptionLabelUsing(fn ($value): ?string => Estado::find($value)?->nome)

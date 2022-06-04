@@ -58,24 +58,25 @@ class PartnerResource extends Resource
                     Section::make('Contato')->schema([
 
                         Forms\Components\TextInput::make('nome')
+                            ->unique(Partner::class, 'nome', fn ($record) => $record)    
                             ->required()
                             ->maxLength(150)
                             ->columnSpan([
                                 'default' => 12,
                                 'md' => 12, 
-                                'lg' => 7  
                             ])
                         ,
                         
-                        Forms\Components\TextInput::make('cnpj')
-                            ->unique(Fornecedor::class, 'cnpj', fn ($record) => $record)
+                        /* Forms\Components\TextInput::make('cnpj')
+                            ->unique(Partner::class, 'cnpj', fn ($record) => $record)
+                            ->rules('cnpj')
                             ->mask(fn (TextInput\Mask $mask) => $mask->pattern('00.000.000/0000-00'))
                             ->columnSpan([
                                 'default' => 12,
                                 'md' => 7,
                                 'lg' => 5
                             ])
-                        ,
+                        , */
 
                         Forms\Components\TextInput::make('contato')
                             ->label('Contato')
@@ -119,6 +120,7 @@ class PartnerResource extends Resource
 
                         Forms\Components\TextInput::make('email')
                             ->email()
+                            ->rules('email:rfc,dns')
                             ->maxLength(255)
                             ->columnSpan(12)
                         ,

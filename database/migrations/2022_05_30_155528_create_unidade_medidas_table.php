@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('feedstocks', function (Blueprint $table) {
+        Schema::create('unidade_medidas', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 150)->unique();
-            $table->foreignId('unidade_medida_id')->default(1)->constrained();
+            $table->string('nome', 50);
+            $table->string('simbolo', 15);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedstocks');
+        Schema::dropIfExists('unidade_medidas');
     }
 };

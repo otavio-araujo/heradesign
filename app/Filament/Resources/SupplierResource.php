@@ -60,7 +60,9 @@ class SupplierResource extends Resource
                     Section::make('Contato')->schema([
 
                         Forms\Components\TextInput::make('nome')
+                            ->autofocus()
                             ->required()
+                            ->unique(Supplier::class, 'nome', fn($record) => $record)
                             ->maxLength(150)
                             ->columnSpan([
                                 'default' => 12,
@@ -122,6 +124,7 @@ class SupplierResource extends Resource
 
                         Forms\Components\TextInput::make('email')
                             ->email()
+                            ->rules('email:rfc,dns')
                             ->maxLength(255)
                             ->columnSpan(12)
                         ,
@@ -156,14 +159,6 @@ class SupplierResource extends Resource
                                 'md' => 5,
                             ])
                         ,
-
-                        /* Forms\Components\TextInput::make('cidade')
-                            ->maxLength(150)
-                            ->columnSpan([
-                                'default' => 12,
-                                'md' => 5,
-                            ])
-                        , */
 
                         Select::make('cidade_id')
                             ->label('Cidade')

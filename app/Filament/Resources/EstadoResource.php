@@ -50,9 +50,10 @@ class EstadoResource extends Resource
                 Section::make('Dados Básicos')->schema([
                     
                     Forms\Components\TextInput::make('nome')
+                        ->autofocus()
                         ->label('Nome do Estado')
                         ->required()
-                        ->unique()
+                        ->unique(Estado::class, 'nome', fn ($record) => $record)
                         ->maxLength(50)
                         ->columnSpan([
                             'md' => 3,
@@ -62,7 +63,7 @@ class EstadoResource extends Resource
                     Forms\Components\TextInput::make('uf')
                         ->label('UF')
                         ->required()
-                        ->unique()
+                        ->unique(Estado::class, 'uf', fn ($record) => $record)
                         ->maxLength(2)
                         ->columnSpan([
                             'md' => 1,
