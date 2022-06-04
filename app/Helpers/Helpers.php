@@ -96,4 +96,23 @@ class Helpers
         
     }
 
+    public static function getCpfCnpj($data)
+    {
+        if ($data->person_type_id == 1) {
+
+            return $data->pf_customer[0]->cpf;
+
+        } else if ($data->person_type_id == 2) {
+
+            return $data->pj_customer[0]->cnpj;
+
+        } else {
+
+            return null;
+
+        }
+
+        
+    }
+
 }

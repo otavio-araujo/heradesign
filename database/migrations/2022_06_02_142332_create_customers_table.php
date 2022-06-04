@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 150)->unique();
-            $table->string('nome_fantasia', 15)->nullable();
+            $table->string('nome_fantasia', 150)->nullable();
             $table->string('contato', 150)->nullable();
             $table->string('telefone', 15)->nullable();
             $table->string('celular', 15)->nullable();
@@ -27,9 +27,12 @@ return new class extends Migration
             $table->string('bairro', 150)->nullable();
             $table->string('numero')->nullable();
             $table->string('complemento', 100)->nullable();
-            $table->foreignId('cidade_id')->constrained()->default(1);
-            $table->foreignId('person_type_id')->constrained()->default(1);
-            $table->foreignId('partner_id')->constrained()->default(1);
+            $table->foreignId('cidade_id')
+                ->constrained();
+            $table->foreignId('person_type_id')
+                ->constrained();
+            $table->foreignId('partner_id')
+                ->constrained();
             $table->timestamps();
         });
     }

@@ -64,4 +64,55 @@ class Supplier extends Model
             set: fn ($value) => Helpers::unmask_input($value),
         );
     }
+
+    protected function whatsapp(): Attribute
+    {
+        
+        return Attribute::make(
+            
+            get: function ($value) {
+                if ($value !== null) {
+                    return Helpers::formataTelefone($value);
+                } else {
+                    return null;
+                }
+            },
+
+            set: fn ($value) => Helpers::unmask_input($value),
+        );
+    }
+
+    protected function telefone(): Attribute
+    {
+        
+        return Attribute::make(
+            
+            get: function ($value) {
+                if ($value !== null) {
+                    return Helpers::formataTelefone($value);
+                } else {
+                    return null;
+                }
+            },
+
+            set: fn ($value) => Helpers::unmask_input($value),
+        );
+    }
+
+    protected function celular(): Attribute
+    {
+        
+        return Attribute::make(
+            
+            get: function ($value) {
+                if ($value !== null) {
+                    return Helpers::formataTelefone($value);
+                } else {
+                    return null;
+                }
+            },
+
+            set: fn ($value) => Helpers::unmask_input($value),
+        );
+    }
 }

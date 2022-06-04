@@ -13,19 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('feedstock_supplier', function (Blueprint $table) {
-
-            $table->foreignId('feedstock_id')
+        Schema::create('pj_customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('cnpj', 15)->nullable();
+            $table->string('inscricao_estadual', 15)->nullable();
+            $table->string('inscricao_municipal', 15)->nullable();
+            $table->foreignId('customer_id')
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-
-            $table->foreignId('supplier_id')
-                ->constrained()     
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-                
-            $table->integer('preco')->default(0);
             $table->timestamps();
         });
     }
@@ -37,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedstock_supplier');
+        Schema::dropIfExists('pj_customers');
     }
 };
