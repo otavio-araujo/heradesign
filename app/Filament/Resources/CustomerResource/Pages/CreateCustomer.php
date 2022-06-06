@@ -36,6 +36,8 @@ class CreateCustomer extends CreateRecord
 
             $pj_customer = [
                 'cnpj' => $data['cnpj'],
+                'inscricao_estadual' => $data['inscricao_estadual'],
+                'inscricao_municipal' => $data['inscricao_municipal'],
                 'customer_id' => $customer->id
             ];
     

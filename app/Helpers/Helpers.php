@@ -24,7 +24,7 @@ class Helpers
         }
         switch($tipo_dado){
             default:
-                $cpf_cnpj_formatado = "Não foi possível definir tipo de dado";
+                $cpf_cnpj_formatado = "";
                 break;
 
             case "cpf":
@@ -96,22 +96,84 @@ class Helpers
         
     }
 
-    public static function getCpfCnpj($data)
+    public static function getCpfCnpj($data, $table)
     {
-        if ($data->person_type_id == 1) {
+        
+        switch ($table) {
+            case 'partners':
 
-            return $data->pf_customer[0]->cpf;
+                if ($data->person_type_id == 1) {
 
-        } else if ($data->person_type_id == 2) {
+                    if ($data->pf_partner->count() != 0) {
+                        return $data->pf_partner[0]->cpf;
+                    } 
+        
+                } else if ($data->person_type_id == 2) {
+        
+                    if ($data->pj_partner->count() != 0) {
+                        return $data->pj_partner[0]->cnpj;
+                    } 
+        
+                } else {
+        
+                    return null;
+        
+                }
 
-            return $data->pj_customer[0]->cnpj;
+                break;
 
-        } else {
+            case 'customers':
+                
+                if ($data->person_type_id == 1) {
 
-            return null;
+                    if ($data->pf_customer->count() != 0) {
+                        return $data->pf_customer[0]->cpf;
+                    } 
+        
+                } else if ($data->person_type_id == 2) {
 
+                    if ($data->pj_customer->count() != 0) {
+                        return $data->pj_customer[0]->cnpj;
+                    } 
+        
+                    
+        
+                } else {
+        
+                    return null;
+        
+                }
+
+                break;
+
+            case 'suppliers':
+                
+                if ($data->person_type_id == 1) {
+
+                    if ($data->pf_supplier->count() != 0) {
+                        return $data->pf_supplier[0]->cpf;
+                    } 
+        
+                } else if ($data->person_type_id == 2) {
+
+                    if ($data->pj_supplier->count() != 0) {
+                        return $data->pj_supplier[0]->cnpj;
+                    } 
+        
+                } else {
+        
+                    return null;
+        
+                }
+
+                break;
+            
+            default:
+
+                return null;
+
+                break;
         }
-
         
     }
 

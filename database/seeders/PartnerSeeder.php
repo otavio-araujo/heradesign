@@ -20,6 +20,7 @@ class PartnerSeeder extends Seeder
             'nome' => 'HERA DESIGN',
             'contato' => 'OTAVIO / NOSLEN',
             'cidade_id' => 1,
+            'person_type_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
@@ -28,6 +29,7 @@ class PartnerSeeder extends Seeder
             'nome' => 'DESIGN ARQUITETURA',
             'contato' => 'RENATA',
             'cidade_id' => 1,
+            'person_type_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
@@ -36,6 +38,7 @@ class PartnerSeeder extends Seeder
             'nome' => 'PATRICIA SIQUEIRA DESIGN',
             'contato' => 'PATRICIA',
             'cidade_id' => 1,
+            'person_type_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

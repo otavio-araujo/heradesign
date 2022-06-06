@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use App\Helpers\Helpers;
 use App\Models\Cidade;
+use App\Helpers\Helpers;
 use App\Models\Feedstock;
+use App\Models\PfSupplier;
+use App\Models\PjSupplier;
 use App\Models\FeedstockSupplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Supplier extends Model
@@ -16,7 +19,6 @@ class Supplier extends Model
 
     protected $fillable = [
         'nome',
-        'cnpj',
         'contato',
         'whatsapp',
         'telefone',
@@ -28,6 +30,7 @@ class Supplier extends Model
         'cidade_id',
         'numero',
         'complemento',
+        'person_type_id',
     ];
 
     public function feedstocks()
@@ -38,6 +41,16 @@ class Supplier extends Model
     public function cidade()
     {
         return $this->belongsTo(Cidade::class);
+    }
+
+    public function pf_supplier(): HasMany
+    {
+        return $this->hasMany(PfSupplier::class);
+    }
+
+    public function pj_supplier(): HasMany
+    {
+        return $this->hasMany(PjSupplier::class);
     }
 
     protected function cep(): Attribute

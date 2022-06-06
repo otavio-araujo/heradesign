@@ -7,8 +7,11 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Cidade;
 use App\Models\Partner;
+use App\Helpers\Helpers;
 use App\Models\Customer;
 use App\Models\PersonType;
+use App\Models\PfCustomer;
+use App\Models\PjCustomer;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
@@ -19,11 +22,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
-use App\Models\PfCustomer;
-use App\Models\PjCustomer;
 
 class CustomerResource extends Resource
 {
@@ -82,7 +84,7 @@ class CustomerResource extends Resource
                                     ->label('CPF')
                                     ->rules('cpf')
                                     ->mask(fn (TextInput\Mask $mask) => $mask->pattern('000.000.000-00'))
-                                    ->maxLength(150)
+                                    ->maxLength(15)
                                     ->columnSpan([
                                         'default' => 12,
                                         'md' => 6, 
@@ -94,7 +96,27 @@ class CustomerResource extends Resource
                                     ->label('CNPJ')
                                     ->rules('cnpj')
                                     ->mask(fn (TextInput\Mask $mask) => $mask->pattern('00.000.000/0000-00'))
-                                    ->maxLength(150)
+                                    ->maxLength(18)
+                                    ->columnSpan([
+                                        'default' => 12,
+                                        'md' => 6, 
+                                    ])->visible(fn (Closure $get) => ($get('person_type_id') == 2   ))
+                                ,
+
+                                Forms\Components\TextInput::make('inscricao_estadual')
+                                    ->label('Inscrição Estadual')
+                                    ->rules('numeric')
+                                    ->hydrateDefaultState()
+                                    ->columnSpan([
+                                        'default' => 12,
+                                        'md' => 6, 
+                                    ])->visible(fn (Closure $get) => ($get('person_type_id') == 2   ))
+                                ,
+
+                                Forms\Components\TextInput::make('inscricao_municipal')
+                                    ->label('Inscrição Municipal')
+                                    ->rules('numeric')
+                                    ->mask(fn (TextInput\Mask $mask) => $mask->pattern('000000000000000'))
                                     ->columnSpan([
                                         'default' => 12,
                                         'md' => 6, 
@@ -285,24 +307,27 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
+
                     Tables\Columns\TextColumn::make('nome')
                         ->sortable()
                         ->searchable()
                     ,
+
                     Tables\Columns\TextColumn::make('contato')
                         ->sortable()
                         ->searchable()
                     ,
-                    TextColumn::make('telefone'),
-                    TextColumn::make('celular'),
-                    TextColumn::make('whatsapp'),
+
                     ViewColumn::make('cpf_cnpj')
                         ->view('filament.tables.columns.cpf-cnpj')
                         ->label('CPF/CNPJ')
                     ,
-            ])
-            ->filters([
-                //
+
+                    TextColumn::make('telefones')
+                        ->view('filament.tables.columns.telefones')
+                        ->label('Telefones')
+                    ,
+                    
             ])
         ;
     }
@@ -320,6 +345,21 @@ class CustomerResource extends Resource
             'index' => Pages\ListCustomers::route('/'),
             'create' => Pages\CreateCustomer::route('/create'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nome', 'cidade.nome', 'contato'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        
+        
+        return [
+            'Contato' => $record->contato,
+            'Whatsapp' => Helpers::formataTelefone($record->whatsapp),
         ];
     }
 

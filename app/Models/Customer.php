@@ -36,6 +36,12 @@ class Customer extends Model
         return $this->belongsTo(PersonType::class);
     }
 
+
+    public function cidade(): BelongsTo
+    {
+        return $this->belongsTo(Cidade::class);
+    }
+
     public function pf_customer(): HasMany
     {
         return $this->hasMany(PfCustomer::class);

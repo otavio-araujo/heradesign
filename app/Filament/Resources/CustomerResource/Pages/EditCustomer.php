@@ -36,6 +36,8 @@ class EditCustomer extends EditRecord
 
             $pj = PjCustomer::firstWhere('customer_id', $data['id']);
             $data['cnpj'] = $pj->cnpj;
+            $data['inscricao_municipal'] = $pj->inscricao_municipal;
+            $data['inscricao_estadual'] = $pj->inscricao_estadual;
 
         }
     
@@ -78,7 +80,10 @@ class EditCustomer extends EditRecord
 
                 $pf = PjCustomer::firstWhere('customer_id', $record->id);
 
+
                 $pf->cnpj = $data['cnpj'];
+                $pf->inscricao_estadual = $data['inscricao_estadual'];
+                $pf->inscricao_municipal = $data['inscricao_municipal'];
             
                 $pf->save();
 
@@ -86,6 +91,8 @@ class EditCustomer extends EditRecord
 
                 $pj_customer = [
                     'cnpj' => $data['cnpj'],
+                    'inscricao_estadual' => $data['inscricao_estadual'],
+                    'inscricao_municipal' => $data['inscricao_municipal'],
                     'customer_id' => $record->id
                 ];
         

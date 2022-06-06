@@ -11,7 +11,7 @@ class UnidadeMedida extends Model
 
     protected $fillable = [
         'nome',
-        'unidade_medida_id',
+        'simbolo',
     ];
     protected $table = 'unidade_medidas';
 
