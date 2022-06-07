@@ -31,15 +31,19 @@ class Customer extends Model
         'partner_id',
     ];
 
-    public function tipo_pessoa(): BelongsTo
+    public function parceiro()
     {
-        return $this->belongsTo(PersonType::class);
+        return $this->belongsTo(Partner::class, 'partner_id', 'id');
     }
 
+    public function tipo_pessoa(): BelongsTo
+    {
+        return $this->belongsTo(PersonType::class, 'person_type_id', 'id');
+    }
 
     public function cidade(): BelongsTo
     {
-        return $this->belongsTo(Cidade::class);
+        return $this->belongsTo(Cidade::class, 'cidade_id', 'id');
     }
 
     public function pf_customer(): HasMany
@@ -50,6 +54,11 @@ class Customer extends Model
     public function pj_customer(): HasMany
     {
         return $this->hasMany(PjCustomer::class);
+    }
+
+    public function propostas(): HasMany
+    {
+        return $this->hasMany(Proposal::class);
     }
 
 

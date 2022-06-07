@@ -13,6 +13,7 @@ class Feedstock extends Model
     protected $fillable = [
         'nome',
         'unidade_medida_id',
+        'feedstock_type_id',
     ];
 
     public function suppliers()
@@ -23,5 +24,10 @@ class Feedstock extends Model
     public function unidade()
     {
         return $this->belongsTo(UnidadeMedida::class, 'unidade_medida_id');
+    }
+
+    public function feedstock_type() 
+    {
+        return $this->belongsTo(FeedstockType::class);
     }
 }

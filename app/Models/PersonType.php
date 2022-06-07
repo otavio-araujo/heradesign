@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PersonType extends Model
 {
@@ -13,8 +14,15 @@ class PersonType extends Model
         'nome'
     ];
 
-    public function customers()
+    protected $table ='person_types';
+
+    public function customers(): HasMany
     {
         return $this->hasMany(Customer::class);
+    }
+
+    public function parceiros(): HasMany
+    {
+        return $this->hasMany(Partner::class);
     }
 }

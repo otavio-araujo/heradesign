@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Models\Cidade;
+use App\Models\Customer;
 use App\Models\PfPartner;
 use App\Models\PjPartner;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Mockery\Matcher\HasKey;
 
 class Partner extends Model
 {
@@ -29,9 +32,19 @@ class Partner extends Model
         'person_type_id',
     ];
 
-    public function cidade()
+    public function clientes(): HasMany
+    {
+        return $this->hasMany(Customer::class);
+    }
+
+    public function cidade(): BelongsTo
     {
         return $this->belongsTo(Cidade::class);
+    }
+
+    public function tipo_pessoa(): BelongsTo
+    {
+        return $this->belongsTo(PersonType::class);
     }
 
     public function pf_partner(): HasMany

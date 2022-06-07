@@ -6,6 +6,7 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Feedstock;
 use Filament\Resources\Form;
+use App\Models\FeedstockType;
 use App\Models\UnidadeMedida;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
@@ -13,6 +14,8 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\BelongsToSelect;
 use App\Filament\Resources\FeedstockResource\Pages;
 use App\Filament\Resources\FeedstockResource\RelationManagers;
 
@@ -50,10 +53,59 @@ class FeedstockResource extends Resource
                 '2xl' => 8,
             ])->schema([
 
-                Section::make('Produto')->schema([
+                Section::make('Matéria Prima')->schema([
+                    
+                    /* Select::make('feedstock_type_id')
+                        ->autofocus()
+                        ->label('Tipo')
+                        ->required()
+                        ->options(FeedstockType::all()->sortBy('nome')->pluck('nome', 'id'))
+                        ->searchable()
+                    , */
+
+                    BelongsToSelect::make('feedstock_type_id')
+                        ->label('Tipo de Matéria Prima')
+                        ->searchable()
+                        ->relationship('feedstock_type', 'nome')
+                        ->createOptionForm([
+                            Grid::make([
+                                'default' => 1,
+                                'sm' => 2,
+                                'md' => 3,
+                                'lg' => 4,
+                                'xl' => 6,
+                                '2xl' => 8,
+                            ])->schema([
+                
+                                Section::make('Dados Básicos')->schema([
+                                    
+                                    Forms\Components\TextInput::make('nome')
+                                        ->autofocus()
+                                        ->label('Nome')
+                                        ->required()
+                                        ->unique(FeedstockType::class, 'nome', fn ($record) => $record)
+                                        ->maxLength(100)
+                                        ->columnSpan([
+                                            'default' => 12,
+                                        ])
+                                    ,
+                
+                                ])->columnSpan([
+                                        'md' => 3,
+                                        'lg' => 4,
+                                        'xl' => 8,
+                                    ])->columns([
+                                            'md' => 12,
+                                        ]),
+                
+                            ]),
+                        ])
+                        ->createOptionAction(fn ($action) => $action->modalHeading('Cadastrar Novo Tipo de  Matéria Prima'))
+                        ->preload(true)
+                        
+                    ,
                     
                     Forms\Components\TextInput::make('nome')
-                        ->autofocus()
                         ->required()
                         ->unique(Feedstock::class, 'nome', fn($record) => $record)
                         ->maxLength(150)
@@ -62,7 +114,7 @@ class FeedstockResource extends Resource
                     Select::make('unidade_medida_id')
                         ->label('Unidade de Medida')
                         ->required()
-                        ->options(UnidadeMedida::all()->pluck('nome', 'id'))
+                        ->options(UnidadeMedida::all()->sortBy('nome')->pluck('nome', 'id'))
                         ->searchable()
                     ,
 
@@ -124,6 +176,11 @@ class FeedstockResource extends Resource
     {
         return [
 
+            Tables\Columns\TextColumn::make('feedstock_type.nome')
+                ->label('Tipo')
+                ->searchable()
+                ->sortable(),
+            
             Tables\Columns\TextColumn::make('nome')
                 ->label('Produto')
                 ->searchable()
@@ -147,6 +204,7 @@ class FeedstockResource extends Resource
         
         
         return [
+            'Tipo' => $record->feedstock_type->nome,
             'Nome' => $record->nome,
             'Un. Medida' => $record->unidade->simbolo,
         ];

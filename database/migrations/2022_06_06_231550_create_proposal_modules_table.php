@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('feedstocks', function (Blueprint $table) {
+        Schema::create('proposal_modules', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 150)->unique();
-            $table->foreignId('unidade_medida_id')->default(1)->constrained();
-            $table->foreignId('feedstock_type_id')->default(1)->constrained();
+            $table->string('formato', 50)->nullable();
+            $table->integer('largura')->default(0);
+            $table->integer('altura')->default(0);
+            $table->integer('quantidade')->default(0);
+            $table->text('observacoes')->nullable();
+            $table->foreignId('proposal_id')->constrained();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedstocks');
+        Schema::dropIfExists('proposal_modules');
     }
 };

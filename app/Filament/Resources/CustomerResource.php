@@ -327,6 +327,9 @@ class CustomerResource extends Resource
                         ->view('filament.tables.columns.telefones')
                         ->label('Telefones')
                     ,
+
+                    Tables\Columns\TextColumn::make('parceiro.nome')
+                    ,
                     
             ])
         ;

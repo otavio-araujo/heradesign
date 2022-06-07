@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class FeedstockSeeder extends Seeder
+class ProposalStatusSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,35 +16,36 @@ class FeedstockSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('feedstocks')->insert([
-            'nome' => '6MM',
+        DB::table('proposal_statuses')->insert([
+            'nome' => 'Nova',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('feedstocks')->insert([
-            'nome' => 'FACTO - DUNNAS - FENDI',
+        DB::table('proposal_statuses')->insert([
+            'nome' => 'Em Análise',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('feedstocks')->insert([
-            'nome' => 'SUEDE',
+        DB::table('proposal_statuses')->insert([
+            'nome' => 'Reprovada',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('feedstocks')->insert([
-            'nome' => 'wD26 - 3CM',
+        DB::table('proposal_statuses')->insert([
+            'nome' => 'Aprovada',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('feedstocks')->insert([
-            'nome' => 'COLA DE CONTATO',
+        DB::table('proposal_statuses')->insert([
+            'nome' => 'Aprovada -> Pedido Gerado',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
-
+        
     }
+   
 }
