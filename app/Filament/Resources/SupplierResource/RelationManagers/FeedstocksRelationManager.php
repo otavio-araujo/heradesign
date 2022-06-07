@@ -112,7 +112,7 @@ class FeedstocksRelationManager extends BelongsToManyRelationManager
             ->schema([
                 static::getAttachFormRecordSelect()
                     ->required()
-                    ->label('Matéria Prima'),
+                    ->label('Matéria Primas'),
 
                 Forms\Components\TextInput::make('preco')
                     ->label('Preço')
