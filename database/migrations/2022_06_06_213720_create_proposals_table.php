@@ -19,12 +19,12 @@ return new class extends Migration
             $table->foreignId('proposal_status_id')->default(1)->constrained();
             $table->integer('largura')->default(0);
             $table->integer('altura')->default(0);
-            $table->integer('preco')->default(0);
+            $table->decimal('valor_total', 12, 2)->nullable();
             $table->string('tecido')->nullable();
             $table->integer('prazo_entrega');
             $table->boolean('fita_led')->default(false);
             $table->boolean('separadores')->default(false);
-            $table->text('observacoes')->nullable();
+            $table->longText('observacoes')->nullable();
             $table->timestamps();
         });
     }

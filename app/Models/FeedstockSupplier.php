@@ -15,17 +15,5 @@ class FeedstockSupplier extends Pivot
     protected $fillable = [
         'preco',
     ];
-
-    protected $casts = [
-        'preco' => 'integer',
-    ];
-
-    protected function preco(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => number_format($value / 100, 2, ',', '.'),
-            set: fn ($value) => ($value * 100),
-        );
-    }
-
+    
 }

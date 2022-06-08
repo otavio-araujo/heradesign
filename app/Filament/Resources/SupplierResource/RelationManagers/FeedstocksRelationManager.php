@@ -8,6 +8,8 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TextInput\Mask;
 use Filament\Resources\RelationManagers\BelongsToManyRelationManager;
 
 class FeedstocksRelationManager extends BelongsToManyRelationManager
@@ -19,14 +21,6 @@ class FeedstocksRelationManager extends BelongsToManyRelationManager
     protected static ?string $label = 'Matéria Prima';
 
     protected static ?string $pluralLabel = 'Matérias Primas';
-
-    protected function mutateFormDataBeforeFill(array $data): array
-    {
-        
-        $data['preco'] = $data['preco'] / 100;
-    
-        return $data;
-    }
 
     public static function form(Form $form): Form
     {
@@ -60,12 +54,21 @@ class FeedstocksRelationManager extends BelongsToManyRelationManager
                         ])
                     ,
 
-                    Forms\Components\TextInput::make('preco')
-                        ->label('Preço')
-                        ->numeric()
-                        ->rules(['regex:/^(\d+(\.\d{0,2})?|\.?\d{1,2})$/'])
-                        ->required()
-                        ->prefix('R$ ')
+                    TextInput::make('preco')
+                        ->mask(fn (Mask $mask) => $mask
+                            ->patternBlocks([
+                                'money' => fn (Mask $mask) => $mask
+                                    ->numeric()
+                                    ->decimalPlaces(2)
+                                    ->mapToDecimalSeparator([',', '.'])
+                                    ->thousandsSeparator('.')
+                                    ->decimalSeparator(',')
+                                    ->normalizeZeros(false)
+                                    ->padFractionalZeros(false)
+                                ,
+                            ])
+                            ->pattern('R$ money'),
+                        )
                         ->columnSpan([
                             'md' => 3
                         ])
@@ -112,14 +115,23 @@ class FeedstocksRelationManager extends BelongsToManyRelationManager
             ->schema([
                 static::getAttachFormRecordSelect()
                     ->required()
-                    ->label('Matéria Primas'),
+                    ->label('Matéria Prima'),
 
-                Forms\Components\TextInput::make('preco')
-                    ->label('Preço')
-                    ->numeric()
-                    ->rules(['regex:/^(\d+(\.\d{0,2})?|\.?\d{1,2})$/'])
-                    ->required()
-                    ->prefix('R$ '),
+                TextInput::make('preco')->mask(fn (Mask $mask) => $mask
+                    ->patternBlocks([
+                        'money' => fn (Mask $mask) => $mask
+                            ->numeric()
+                            ->decimalPlaces(2)
+                            ->mapToDecimalSeparator([',', '.'])
+                            ->thousandsSeparator('.')
+                            ->decimalSeparator(',')
+                            ->normalizeZeros(false)
+                            ->padFractionalZeros(false)
+                        ,
+                    ])
+                    ->pattern('R$ money'),
+                ),
+
             ]);
     }
 

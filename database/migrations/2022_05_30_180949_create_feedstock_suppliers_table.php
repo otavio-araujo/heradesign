@@ -24,8 +24,9 @@ return new class extends Migration
                 ->constrained()     
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-                
-            $table->integer('preco')->default(0);
+
+            $table->decimal('preco', 12, 2)->nullable();
+
             $table->timestamps();
         });
     }

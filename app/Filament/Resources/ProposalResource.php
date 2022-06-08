@@ -16,7 +16,12 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\BadgeColumn;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\TextInput\Mask;
 use Filament\Forms\Components\BelongsToSelect;
 use Filament\Forms\Components\HasManyRepeater;
 use App\Filament\Resources\ProposalResource\Pages;
@@ -24,6 +29,7 @@ use App\Filament\Resources\ProposalResource\RelationManagers;
 use App\Filament\Resources\ProposalResource\Pages\EditProposal;
 use App\Filament\Resources\ProposalResource\Pages\ListProposals;
 use App\Filament\Resources\ProposalResource\Pages\CreateProposal;
+use Filament\Forms\Components\RichEditor;
 
 class ProposalResource extends Resource
 {
@@ -53,6 +59,7 @@ class ProposalResource extends Resource
                     Wizard::make([
 
                         Wizard\Step::make('Proposta')
+                            ->icon('heroicon-o-clipboard-list')
                             ->schema([
                                 
                                 Grid::make([
@@ -113,15 +120,25 @@ class ProposalResource extends Resource
                                                 ])
                                             ,
 
-                                            Forms\Components\TextInput::make('preco')
-                                                ->label('Valor Total da Proposta')
-                                                ->numeric()
-                                                ->rules(['regex:/^(\d+(\.\d{0,2})?|\.?\d{1,2})$/'])
-                                                ->required()
-                                                ->prefix('R$ ')
+
+                                            TextInput::make('valor_total')
+                                                ->mask(fn (Mask $mask) => $mask
+                                                    ->patternBlocks([
+                                                        'money' => fn (Mask $mask) => $mask
+                                                            ->numeric()
+                                                            ->decimalPlaces(2)
+                                                            ->mapToDecimalSeparator([',', '.'])
+                                                            ->thousandsSeparator('.')
+                                                            ->decimalSeparator(',')
+                                                            ->normalizeZeros(false)
+                                                            ->padFractionalZeros(false)
+                                                        ,
+                                                    ])
+                                                    ->pattern('R$ money'),
+                                                )
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                    'md' => 6
+                                                    'md' => 6,
                                                 ])
                                             ,
     
@@ -206,6 +223,7 @@ class ProposalResource extends Resource
 
                             ]),
                         Wizard\Step::make('Módulos')
+                            ->icon('heroicon-o-table')
                             ->schema([
 
                                 Grid::make([
@@ -280,8 +298,34 @@ class ProposalResource extends Resource
 
                             ]),
                         Wizard\Step::make('Observações')
+                            ->icon('heroicon-o-document-text')
                             ->schema([
-                                // ...
+                                
+                                Grid::make([
+                                    'default' => 1,
+                                    'sm' => 1,
+                                    'md' => 6,
+                                    'lg' => 6,
+                                    'xl' => 6,
+                                    '2xl' => 8,
+                                ])->schema([
+
+                                    Group::make()->schema([
+
+                                        Section::make('Observações')->schema([
+                                
+                                            RichEditor::make('observacoes')
+                                                ->required()
+
+                                        ])
+
+                                    ])->columnSpan([
+                                        'md' => 3,
+                                        'lg' => 6,
+                                    ]), 
+
+                                ])
+
                             ]),
                     ])->columnSpan(12)
 
@@ -292,9 +336,33 @@ class ProposalResource extends Resource
     {
         return $table
             ->columns([
+
+                Tables\Columns\TextColumn::make('id')
+                    ->label('#')
+                    ->sortable()
+                ,
+
+                Tables\Columns\TextColumn::make('cliente.nome')
+                    ->label('Cliente')
+                    ->sortable()
+                ,
+
+                Tables\Columns\TextColumn::make('cliente.parceiro.nome')
+                    ->label('Parceiro')
+                    ->sortable()
+                ,
+
+                BadgeColumn::make('status.nome')
+                    ->colors([
+                        'success',
+                        'primary' => 'Nova',
+                        'danger' => 'Reprovada',
+                        'warning' => 'Em Análise',
+                        
+                    ]),
                 
-                Tables\Columns\TextColumn::make('preco')
-                    ->label('Preço')
+                Tables\Columns\TextColumn::make('valor_total')
+                    ->label('Valor Total')
                     ->sortable()
                     ->money('brl'),
 
@@ -314,6 +382,23 @@ class ProposalResource extends Resource
             'index' => Pages\ListProposals::route('/'),
             'create' => Pages\CreateProposal::route('/create'),
             'edit' => Pages\EditProposal::route('/{record}/edit'),
+        ];
+    }
+
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['id', 'cliente.nome', 'cliente.parceiro.nome'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        
+        
+        return [
+            'Proposta' => 'PT-' . $record->id,
+            'Cliente' => $record->cliente->nome,
+            'Valor Total' => $record->valor_total,
         ];
     }
 
