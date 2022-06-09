@@ -88,13 +88,16 @@
         }
 
         .dados-cliente {
-            border-bottom: 0.1pt solid #09204A; 
-            border-top: 0.1pt solid #09204A;
+            /* border-bottom: 0.1pt solid #09204A; 
+            border-top: 0.1pt solid #09204A; */
             /* border-left: 0.1pt solid #09204A; 
-            border-right: 0.1pt solid #09204A;
-            border-radius: 5px; */
+            border-right: 0.1pt solid #09204A;*/
+            border-radius: 5px; 
+            border: 0.1pt solid #BD986E; 
+            background: #fde8cd;
             padding: 0.5rem;
-            font-size: 10pt;
+            font-size: 9pt;
+            color: #434343;
         }
 
     </style>
@@ -148,7 +151,9 @@
             <table>
                 <tr>
                     <td align="right" width="50px"><b>Cliente:</b></td>
-                    <td colspan="3">Otávio Araújo</td>
+                    <td>Otávio Araújo</td>
+                    <td align="right"><b>CPF/CNPJ:</b></td>
+                    <td>000.000.000-00</td>
                     <td align="right"><b>Parceiro:</b></td>
                     <td>Hera Design</td>
                 </tr>
@@ -159,22 +164,28 @@
                 </tr>
                 <tr>
                     <td align="right"><b>Bairro:</b></td>
-                    <td>Parque Industrial</td>
+                    <td style="padding-right: 10px;">Vila Santa Isabel de La Castro</td>
                     <td align="right"><b>Cidade:</b></td>
                     <td>Santo Antonio da Platina</td>
                     <td align="right"><b>Estado:</b></td>
                     <td>PR</td>
                 </tr>
                 <tr>
+                    <td align="right"><b>WhatsApp:</b></td>
+                    <td>(44) 99119-0655</td>
+                    <td align="right"><b>Celular:</b></td>
+                    <td>(44) 99119-0655</td>
                     <td align="right"><b>Telefone:</b></td>
                     <td>(44) 99119-0655</td>
+                </tr>
+                <tr>
                     <td align="right"><b>Email:</b></td>
                     <td>otavio_araujo@hotmail.com</td>
                 </tr>
             </table>
         </div>
 
-        <h2 class="titulo">A História das Cabeceiras</h2>
+        <h2 class="titulo" style="margin-top: 2rem;">UM POUQUINHO DE HISTÓRIA</h2>
 
         <p>
             As cabeceiras tem sido uma parte importante dos leitos desde os tempos antigos, sendo útil em vários
@@ -185,10 +196,6 @@
             Os antigos gregos, por exemplo, não apenas DORMIAM em suas
             camas – eles também jantavam e socializavam nelas, de forma que a cabeceira tornou-se um encosto.
         </p>
-
-        <div style="text-align: center; padding: 0.5rem 0 0.5rem 0">
-            <img src="{{ asset('images/cabeceiras/photo-1560184897-502a475f7a0d.webp') }}" width="320" alt="">
-        </div>
 
         <p>
             Isso
@@ -207,8 +214,9 @@
             estejamos apostando que ela poderia ter royalties preferenciais em Romeu e Julieta).
         </p>
 
-        <div style="text-align: center; padding: 0.5rem 0 0.5rem 0">
-            <img src="{{ asset('images/cabeceiras/photo-1632210702485-e1841e30752a.webp') }}" width="320" alt="">
+        <div style="text-align: center; padding: 60px 0 0.5rem 0;">
+            <img src="{{ asset('images/cabeceiras/photo-1632210702485-e1841e30752a.webp') }}" height="185" alt="" style="margin-right: 20px;">
+            <img src="{{ asset('images/cabeceiras/photo-1560184897-502a475f7a0d.webp') }}" height="180" alt="">
         </div>
 
         <p>
@@ -241,14 +249,17 @@
         </p>
 
         <div style="text-align: center; padding: 1rem 0 0.5rem 0;">
-            <img src="{{ asset('images/cabeceiras/istockphoto-174863356-612x612.jpg') }}" width="400" alt="">
+            <img src="{{ asset('images/cabeceiras/istockphoto-174863356-612x612.jpg') }}" width="420" alt="">
         </div>
 
-        <div style="text-align: center; padding: 60px 0 0.5rem 0;">
+        <div style="text-align: center; padding: 60px 0 0 0;">
             <img src="{{ asset('images/cabeceiras/istockphoto-834429368-612x612.jpg') }}" width="300" alt="" style="margin-right: 20px;">
             <img src="{{ asset('images/cabeceiras/istockphoto-857618074-612x612.jpg') }}" width="300" alt="">
         </div>
 
+        <div></div>
+
+        <h2 class="titulo" style="margin-top: 2rem;">PROPOSTA</h2>
 
     </div>
 
