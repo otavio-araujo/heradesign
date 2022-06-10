@@ -4,103 +4,11 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-    <title>Header and Footer example</title>
-    <style type="text/css">
-        @page {
-            margin: 0;
-        }
+    <title>PT-{{ $data->id }}</title>
 
-        body {
-            font-family: sans-serif;
-            margin-top: 180px;
-            margin-bottom: 30px;
-            text-align: justify;
-            counter-reset: page;
-        }
 
-        #lineup {
-            background: #BD986E;
-            height: 2mm;
-        }
+    <link rel="stylesheet" href="{{ public_path('css/report.css') }}">
 
-        #header,
-        #footer {
-            position: fixed;
-            left: 0;
-            right: 0;
-            color: #aaa;
-            font-size: 0.9em;
-        }
-
-        #header {
-            top: 0;
-
-        }
-
-        #footer {
-            bottom: 0;
-            border-top: 0.1pt solid #aaa;
-        }
-
-        #header table,
-        #footer table {
-            width: 100%;
-            border-collapse: collapse;
-            border: none;
-        }
-
-        #header td,
-        #footer td {
-            padding: 0;
-            width: 50%;
-        }
-
-        .container {
-            margin: 0 20mm;
-        }
-
-        .page-number {
-            text-align: center;
-            background: #09204A;
-            padding: 2mm;
-            font-size: 8pt;
-            color: white;
-        }
-
-        .page-number:after {
-            content: "Página: "counter(page);
-        }
-
-        hr {
-            page-break-after: always;
-            border: 0;
-        }
-
-        .titulo {
-            border-left: 0.5rem solid #BD986E;
-            padding-left: 0.5rem;
-            color: #09204A;
-        }
-
-        p {
-            font-size: 12pt;
-            color: #6a6a6a;
-        }
-
-        .dados-cliente {
-            /* border-bottom: 0.1pt solid #09204A; 
-            border-top: 0.1pt solid #09204A; */
-            /* border-left: 0.1pt solid #09204A; 
-            border-right: 0.1pt solid #09204A;*/
-            border-radius: 5px; 
-            border: 0.1pt solid #BD986E; 
-            background: #fde8cd;
-            padding: 0.5rem;
-            font-size: 9pt;
-            color: #434343;
-        }
-
-    </style>
 
 </head>
 
@@ -129,15 +37,15 @@
             </tr>
         </table>
         <div style="text-align: center; margin: 1rem 0 0 0;">
-            <div
-                style="display: inline-block; background-color: #09204A ; padding: 4px 10px; border-radius: 3px; font-size: 9pt; color: white;">
-                Proposta: 000.000.001</div>
-            <div
-                style="margin: 0 0.5rem; display: inline-block; background-color: #09204A ; padding: 4px 10px; border-radius: 3px; font-size: 9pt; color: white;">
-                Emitida em: 08/06/2022</div>
-            <div
-                style="display: inline-block; background-color: #09204A ; padding: 4px 10px; border-radius: 3px; font-size: 9pt; color: white;">
-                Validade até: 08/07/2022</div>
+            <div class="badge-topo-hera">
+                Proposta: 000.000.001
+            </div>
+            <div class="badge-topo-hera ml-5px mr-5px">
+                Emitida em: 08/06/2022
+            </div>
+            <div class="badge-topo-hera">
+                Validade até: 08/07/2022
+            </div>
         </div>
     </div>
 
@@ -147,43 +55,95 @@
 
     <div class="container">
 
-        <div class="dados-cliente">
-            <table>
-                <tr>
-                    <td align="right" width="50px"><b>Cliente:</b></td>
-                    <td>Otávio Araújo</td>
-                    <td align="right"><b>CPF/CNPJ:</b></td>
-                    <td>000.000.000-00</td>
-                    <td align="right"><b>Parceiro:</b></td>
-                    <td>Hera Design</td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Endereço:</b></td>
-                    <td colspan="5">Rua Rubens Sebastião Marin, 1076 - Apto 2001 - Torre Sky</td>
-                    
-                </tr>
-                <tr>
-                    <td align="right"><b>Bairro:</b></td>
-                    <td style="padding-right: 10px;">Vila Santa Isabel de La Castro</td>
-                    <td align="right"><b>Cidade:</b></td>
-                    <td>Santo Antonio da Platina</td>
-                    <td align="right"><b>Estado:</b></td>
-                    <td>PR</td>
-                </tr>
-                <tr>
-                    <td align="right"><b>WhatsApp:</b></td>
-                    <td>(44) 99119-0655</td>
-                    <td align="right"><b>Celular:</b></td>
-                    <td>(44) 99119-0655</td>
-                    <td align="right"><b>Telefone:</b></td>
-                    <td>(44) 99119-0655</td>
-                </tr>
-                <tr>
-                    <td align="right"><b>Email:</b></td>
-                    <td>otavio_araujo@hotmail.com</td>
-                </tr>
-            </table>
+        <div class="card mb-15px">
+            <div class="card-header">
+                <h2>cadastro do cliente</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+                    <tr>
+                        <td colspan="2" class="pb-3px">
+                            <div class="label"><strong>NOME:</strong></div>
+                            <div>{{ $data->cliente->nome }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>CPF:</strong></div>
+                            <div>{{ $data->cliente->pf_customer[0]->cpf }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>PARCEIRO:</strong></div>
+                            <div>{{ $data->cliente->parceiro->nome }}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" class="pb-3px">
+                            <div class="label"><strong>endereço:</strong></div>
+                            <div>{{ $data->cliente->endereco }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>número:</strong></div>
+                            <div>{{ $data->cliente->numero }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>complemento:</strong></div>
+                            <div>{{ $data->cliente->complemento }}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" class="pb-3px">
+                            <div class="label"><strong>BAIRRO:</strong></div>
+                            <div>{{ $data->cliente->bairro }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>CIDADE:</strong></div>
+                            <div>{{ $data->cliente->cidade->nome }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>ESTADO:</strong></div>
+                            <div>{{ $data->cliente->cidade->estado->uf }}</div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
         </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>CONTATOs</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+
+                    <tr>
+                        <td colspan="2" class="pb-3px">
+                            <div class="label"><strong>whatsapp:</strong></div>
+                            <div>{{ $data->cliente->whatsapp }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>telefone:</strong></div>
+                            <div>{{ $data->cliente->telefone }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>celular:</strong></div>
+                            <div>{{ $data->cliente->celular }}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4">
+                            <div class="label"><strong>email:</strong></div>
+                            <div>{{ $data->cliente->email }}</div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+
 
         <h2 class="titulo" style="margin-top: 2rem;">UM POUQUINHO DE HISTÓRIA</h2>
 
@@ -214,11 +174,6 @@
             estejamos apostando que ela poderia ter royalties preferenciais em Romeu e Julieta).
         </p>
 
-        <div style="text-align: center; padding: 60px 0 0.5rem 0;">
-            <img src="{{ asset('images/cabeceiras/photo-1632210702485-e1841e30752a.webp') }}" height="185" alt="" style="margin-right: 20px;">
-            <img src="{{ asset('images/cabeceiras/photo-1560184897-502a475f7a0d.webp') }}" height="180" alt="">
-        </div>
-
         <p>
             Por volta do século 19, os quartos tornaram-se particulares, de configuração íntima, mas enquanto as camas
             eram tipicamente menos
@@ -227,16 +182,24 @@
             quarto.
         </p>
 
-
         <p>
             No século 18, Thomas Chippendale recomendou
-            que se cobrisse uma cabeceira no mesmo tecido que as cortinas da cama. Ao final do século 19, cabeceiras
+            que se cobrisse uma cabeceira no mesmo tecido que as cortinas da cama.
+        </p>
+
+        <p>Ao final do século 19, cabeceiras
             foram comumente cobertas de estofos em tufos. Um guia de estofador de 1890, por exemplo, mostra uma cama de
             dossel com botão de acolchoamento na cabeceira da cama como uma alternativa simples, mas à moda de festões
             de fantasia e tapeçaria.
         </p>
 
-        <p>
+        <div style="text-align: center; padding: 50px 0 .1rem 0; margin: 0;">
+            <img src="{{ asset('images/cabeceiras/photo-1632210702485-e1841e30752a.webp') }}" height="185" alt=""
+                style="margin-right: 20px;">
+            <img src="{{ asset('images/cabeceiras/photo-1560184897-502a475f7a0d.webp') }}" height="180" alt="">
+        </div>
+
+        <p style="margin-top: -12px;">
             Ao longo do século 20, cabeceiras estofadas foram favorecidas como um luxo
             decorativo, mas confortável, um vestígio dos drapeados elaborados que, uma vez enquadraram as mais elegantes
             camas.
@@ -248,18 +211,141 @@
             até fazer um lanchinho vez ou outra.
         </p>
 
-        <div style="text-align: center; padding: 1rem 0 0.5rem 0;">
-            <img src="{{ asset('images/cabeceiras/istockphoto-174863356-612x612.jpg') }}" width="420" alt="">
+        <div style="text-align: center; padding: .75rem 0 0.5rem 0;">
+            <img src="{{ asset('images/cabeceiras/istockphoto-174863356-612x612.jpg') }}" width="260" alt="">
         </div>
 
-        <div style="text-align: center; padding: 60px 0 0 0;">
-            <img src="{{ asset('images/cabeceiras/istockphoto-834429368-612x612.jpg') }}" width="300" alt="" style="margin-right: 20px;">
-            <img src="{{ asset('images/cabeceiras/istockphoto-857618074-612x612.jpg') }}" width="300" alt="">
+        <div style="text-align: center; padding: 50px 0 0 0;">
+            <img src="{{ asset('images/cabeceiras/istockphoto-834429368-612x612.jpg') }}" width="260" alt=""
+                style="margin-right: 20px;">
+            <img src="{{ asset('images/cabeceiras/istockphoto-857618074-612x612.jpg') }}" width="260" alt="">
         </div>
 
         <div></div>
 
-        <h2 class="titulo" style="margin-top: 2rem;">PROPOSTA</h2>
+        <h2 class="titulo" style="margin-top: 2rem;">DETALHES DA PROPOSTA</h2>
+
+        <div class="card mb-15px">
+            <div class="card-header">
+                <h2>DADOS GERAIS DO PROJETO</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="label"><strong>tecido escolhido:</strong></div>
+                            <div>{{ $data->tecido }}</div>
+                        </td>
+                        <td class="pb-3px">
+                            <div class="label"><strong>LARGURA (mm):</strong></div>
+                            <div>{{ $data->largura }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>altura (mm):</strong></div>
+                            <div>{{ $data->altura }}</div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-15px">
+            <div class="card-header">
+                <h2>customizações</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+
+                    <tr>
+                        <td style="width: 50%;">
+                            <div class="label"><strong>FITAS DE LED:</strong></div>
+                            <div>{{ true === (bool)$data->tecido ? 'Sim' : 'Nao'; }}</div>
+                        </td>
+                        <td>
+                            <div class="label"><strong>SEPARADORES METÁLICOS:</strong></div>
+                            <div>{{ true === (bool)$data->separadores ? 'Sim' : 'Nao'; }}</div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>módulos</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+                    <tr class="th">
+                        <td class="pb-3px pl-5px text-center">
+                            <div><strong>#</strong></div>
+                            
+                        </td>
+                        <td>
+                            <div><strong>qtd</strong></div>
+                            
+                        </td>
+                        <td>
+                            <div><strong>largura (mm)</strong></div>
+                        
+                        </td>
+                        <td>
+                            <div><strong>altura (mm)</strong></div>
+                        
+                        </td>
+                        <td>
+                            <div><strong>formato</strong></div>
+                        </td>
+                    </tr>
+                    @foreach ($data->modulos as $modulo)
+                        
+                    <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
+                        <td class="pb-3px pl-5px">
+                            <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">{{ $modulo->quantidade }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">{{ $modulo->largura }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">{{ $modulo->altura }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">{{ $modulo->formato }}</div> 
+                        </td>
+                    </tr>
+
+                        
+                    @endforeach
+
+                </table>
+            </div>
+        </div>
+
+        <h2 class="titulo" style="margin-top: 2rem;">prazo de entrega</h2>
+        
+        <p style="margin-left: 30px; color: #434343;">{{ $data->prazo_entrega }} dias da data de aprovação.</p>
+
+        <h2 class="titulo" style="margin-top: 2rem;">valor total da proposta</h2>
+        
+        <p style="margin-left: 30px; color: #434343;"><strong>R$ {{ number_format($data->valor_total, 2, ',', '.') }}.</strong></p>
+
+        <h2 class="titulo" style="margin-top: 2rem;">Formas de pagamento</h2>
+        
+        <ul style="color: #434343;">
+            <li class="p-3px text-secondary"><strong class="text-primary">Á VISTA: </strong> 5% de desconto no Pix / Depósito / Transferência / Débito; </li>
+            <li class="p-3px text-secondary"><strong class="text-primary">PARCELADO - BOLETO: </strong> Até 3x sem juros; </li>
+            <li class="p-3px text-secondary"><strong class="text-primary">PARCELADO - CARTÕES: </strong> Até 12x de R$267,87. </li>
+        </ul>
+
+        <div style="padding: 80px 20px 20px 20px; text-align: center;">
+            <img src="{{ asset('images/logo-middle-white.png') }}" height="30">
+        </div>
 
     </div>
 
