@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+    use App\Helpers\Helpers;
+@endphp
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
@@ -38,19 +42,29 @@
         </table>
         <div style="text-align: center; margin: 1rem 0 0 0;">
             <div class="badge-topo-hera">
-                Proposta: 000.000.001
+                Proposta: {{ Helpers::setProposalNumber($data->id) }}
             </div>
             <div class="badge-topo-hera ml-5px mr-5px">
-                Emitida em: 08/06/2022
+                Emitida em: {{ Carbon::parse($data->created_at)->format('d/m/Y') }}
             </div>
             <div class="badge-topo-hera">
-                Validade até: 08/07/2022
+                Validade até: {{ Carbon::parse($data->created_at)->addDays($data->dias_validade)->format('d/m/Y') }}
             </div>
         </div>
     </div>
 
     <div id="footer">
-        <div class="page-number">Hera Desing - Cabeceiras Sob Medida - </div>
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <div>
+                        <img src="{{ asset('images/logo-middle-white.png') }}" height="30">
+                    </div>
+                </td>
+                <td><div class="page-number"></div></td>
+            </tr>
+        </table> 
     </div>
 
     <div class="container">
@@ -223,6 +237,8 @@
 
         <div></div>
 
+        <hr/>
+
         <h2 class="titulo" style="margin-top: 2rem;">DETALHES DA PROPOSTA</h2>
 
         <div class="card mb-15px">
@@ -259,14 +275,57 @@
                 <table style="width: 100%;">
 
                     <tr>
-                        <td style="width: 50%;">
-                            <div class="label"><strong>FITAS DE LED:</strong></div>
-                            <div>{{ true === (bool)$data->tecido ? 'Sim' : 'Nao'; }}</div>
-                        </td>
                         <td>
-                            <div class="label"><strong>SEPARADORES METÁLICOS:</strong></div>
-                            <div>{{ true === (bool)$data->separadores ? 'Sim' : 'Nao'; }}</div>
+                            <div class="label"><strong>FITAS DE LED:</strong></div>
+                            <div>{{ $data->fita_led === true ? 'Sim' : 'Não'; }}</div>  
                         </td>
+                        <td></td>
+                        @if ($data->fita_led === true)
+                        <td style="width: 50%;" colspan="2">
+                            <div class="label"><strong>DETALHES:</strong></div>
+                            <div>{{ $data->obs_fita_led }}</div>
+                        </td>
+                        @endif
+                        
+                    </tr>
+
+                    <tr>
+                        <td colspan="4"><div class="separator"></div></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="label"><strong>SEPARADORES:</strong></div>
+                            <div>{{ $data->separadores === true ? 'Sim' : 'Não'; }}</div>
+                        </td>
+                        <td></td>
+                        @if ($data->separadores === true)
+                        <td colspan="2">
+                            <div class="label"><strong>DETALHES:</strong></div>
+                            <div>{{ $data->obs_separadores }}</div>
+                        </td>
+                        @endif
+                    </tr>
+
+                    <tr>
+                        <td colspan="4"><div class="separator"></div></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="label"><strong>TOMADAS:</strong></div>
+                            <div>{{ $data->tomadas === true ? 'Sim' : 'Não'; }}</div>
+                        </td>
+                        @if ($data->tomadas === true)
+                        <td>
+                            <div class="label"><strong>QUANTIDADE:</strong></div>
+                            <div>{{ $data->qtd_tomadas }}</div>
+                        </td>
+                        <td colspan="2">
+                            <div class="label"><strong>DETALHES:</strong></div>
+                            <div>{{ $data->obs_tomadas }}</div>
+                        </td>
+                        @endif
                     </tr>
 
                 </table>
@@ -331,6 +390,15 @@
         
         <p style="margin-left: 30px; color: #434343;">{{ $data->prazo_entrega }} dias da data de aprovação.</p>
 
+        @if ($data->observacoes != '')
+        <h2 class="titulo" style="margin-top: 3rem;">outras observações</h2>
+
+        <div style="margin-bottom: 4rem; color: #6a6a6a;">
+            {!! $data->observacoes !!}
+        </div>
+       
+        @endif
+
         <h2 class="titulo" style="margin-top: 2rem;">valor total da proposta</h2>
         
         <p style="margin-left: 30px; color: #434343;"><strong>R$ {{ number_format($data->valor_total, 2, ',', '.') }}.</strong></p>
@@ -338,14 +406,41 @@
         <h2 class="titulo" style="margin-top: 2rem;">Formas de pagamento</h2>
         
         <ul style="color: #434343;">
-            <li class="p-3px text-secondary"><strong class="text-primary">Á VISTA: </strong> 5% de desconto no Pix / Depósito / Transferência / Débito; </li>
-            <li class="p-3px text-secondary"><strong class="text-primary">PARCELADO - BOLETO: </strong> Até 3x sem juros; </li>
-            <li class="p-3px text-secondary"><strong class="text-primary">PARCELADO - CARTÕES: </strong> Até 12x de R$267,87. </li>
-        </ul>
 
-        <div style="padding: 80px 20px 20px 20px; text-align: center;">
+            @if ($data->pgto_a_vista != '')
+                <li class="p-3px text-secondary">
+                    <strong class="text-primary">Á VISTA: </strong> 
+                    {{  $data->pgto_a_vista }};
+                </li>
+            @endif
+
+            @if ($data->pgto_boleto != '')
+                <li class="p-3px text-secondary">
+                    <strong class="text-primary">BOLETO BANCÁRIO: </strong> 
+                    {{  $data->pgto_boleto }};
+                </li>
+            @endif
+
+            @if ($data->pgto_cartao != '')
+                <li class="p-3px text-secondary">
+                    <strong class="text-primary">CARTÕES DE CRÉDITO: </strong> 
+                    {{  $data->pgto_cartao }};
+                </li>
+            @endif
+
+            @if ($data->pgto_a_vista != '')
+                <li class="p-3px text-secondary">
+                    <strong class="text-primary">OUTROS: </strong> 
+                    {{  $data->pgto_outros }};
+                </li>
+            @endif
+
+        </ul>
+        
+
+        {{-- <div style="padding: 20px 20px 20px 20px; text-align: center;">
             <img src="{{ asset('images/logo-middle-white.png') }}" height="30">
-        </div>
+        </div> --}}
 
     </div>
 

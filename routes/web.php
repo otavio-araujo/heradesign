@@ -21,4 +21,4 @@ Route::get('/report/2', function () {
     return view('reports.proposta2');
 });
 
-Route::get('/pdf/1', [PDFController::class, 'pdf']);
+Route::get('/pdf/{record}', [PDFController::class, 'pdf'])->name('proposal.pdf');

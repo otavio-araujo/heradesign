@@ -23,8 +23,18 @@ return new class extends Migration
             $table->string('tecido')->nullable();
             $table->integer('prazo_entrega');
             $table->boolean('fita_led')->default(false);
+            $table->string('obs_fita_led')->nullable();
             $table->boolean('separadores')->default(false);
+            $table->string('obs_separadores')->nullable();
+            $table->boolean('tomadas')->default(false);
+            $table->integer('qtd_tomadas')->nullable();
+            $table->string('obs_tomadas')->nullable();
+            $table->string('pgto_a_vista')->nullable();
+            $table->string('pgto_boleto')->nullable();
+            $table->string('pgto_cartao')->nullable();
+            $table->string('pgto_outros')->nullable();
             $table->longText('observacoes')->nullable();
+            $table->integer('validade_dias')->default(5);
             $table->timestamps();
         });
     }

@@ -9,9 +9,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFController extends Controller
 {
-    public function pdf ()
+    public function pdf (Proposal $record)
     {
-        $data = Proposal::find(1);
+        // $data = Proposal::find($id);
+
+        $data = $record;
         // dd($proposta);
         // $pdf = App::make('dompdf.wrapper');
         // $pdf->loadView('reports.proposta1', $data);

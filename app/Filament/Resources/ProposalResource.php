@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use GMP;
+use Closure;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Customer;
@@ -12,6 +13,7 @@ use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
@@ -19,6 +21,7 @@ use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput\Mask;
@@ -29,7 +32,6 @@ use App\Filament\Resources\ProposalResource\RelationManagers;
 use App\Filament\Resources\ProposalResource\Pages\EditProposal;
 use App\Filament\Resources\ProposalResource\Pages\ListProposals;
 use App\Filament\Resources\ProposalResource\Pages\CreateProposal;
-use Filament\Forms\Components\RichEditor;
 
 class ProposalResource extends Resource
 {
@@ -74,6 +76,31 @@ class ProposalResource extends Resource
                                     Group::make()->schema([
 
                                         Section::make('Dados Básicos')->schema([
+
+                                            BelongsToSelect::make('proposal_status_id')
+                                                ->label('Status da Proposta')
+                                                ->default(1)
+                                                ->required()
+                                                ->searchable()
+                                                ->relationship('status', 'nome')
+                                                ->preload(true)
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 6,
+                                                ])
+                                                
+                                            ,
+
+                                            Forms\Components\TextInput::make('dias_validade')
+                                                ->label('Validade em dias')
+                                                ->default('5')
+                                                ->required()
+                                                ->numeric()
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 6,
+                                                ])
+                                            ,
 
                                             BelongsToSelect::make('customer_id')
                                                 ->label('Cliente')
@@ -152,6 +179,41 @@ class ProposalResource extends Resource
                                                     'md' => 6,
                                                 ])
                                             ,
+
+                                            Forms\Components\TextInput::make('pgto_a_vista')
+                                                ->label('Pagamento - Á Vista')
+                                                ->default('5% de desconto no Pix / Depósito / Transferência / Débito')
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 6,
+                                                ])
+                                            ,
+
+                                            Forms\Components\TextInput::make('pgto_boleto')
+                                                ->label('Pagamento - Boleto')
+                                                ->default('Até 3x sem juros')
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 6,
+                                                ])
+                                            ,
+
+                                            Forms\Components\TextInput::make('pgto_cartao')
+                                                ->label('Pagamento - Cartão')
+                                                ->default('Até 12x - Juros pelo Cliente')
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 6,
+                                                ])
+                                            ,
+
+                                            Forms\Components\TextInput::make('pgto_outros')
+                                                ->label('Pagamento - Outros')
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 6,
+                                                ])
+                                            ,
     
     
                                         ])->columns(12)
@@ -166,19 +228,8 @@ class ProposalResource extends Resource
     
                                     Group::make()->schema([
 
-                                        Section::make('Status e Detalhes')->schema([ 
+                                        Section::make('Detalhes')->schema([ 
 
-                                            BelongsToSelect::make('proposal_status_id')
-                                                ->label('Status da Proposta')
-                                                ->required()
-                                                ->searchable()
-                                                ->relationship('status', 'nome')
-                                                ->preload(true)
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                ])
-                                                
-                                            ,
 
                                             Forms\Components\TextInput::make('tecido')
                                                 ->label('Tecido Escolhido')
@@ -191,22 +242,68 @@ class ProposalResource extends Resource
 
                                             Toggle::make('fita_led')
                                                 ->label('Fitas de Led')
+                                                ->reactive()
                                                 ->onIcon('heroicon-s-check')
                                                 ->offIcon('heroicon-s-x')
                                                 ->inline(false)
                                                 ->columnSpan([
-                                                    'default' => 6,
+                                                    'default' => 12,
                                                 ])
+                                            ,
+
+                                            Forms\Components\TextInput::make('obs_fita_led')
+                                                ->label('Observações - Fita Led')
+                                                ->maxLength(255)
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                ])->visible(fn (Closure $get) => ($get('fita_led') == true))
                                             ,
     
                                             Toggle::make('separadores')
                                                 ->label('Separadores em Metal')
+                                                ->reactive()
                                                 ->onIcon('heroicon-s-check')
                                                 ->offIcon('heroicon-s-x')
                                                 ->inline(false)
                                                 ->columnSpan([
-                                                    'default' => 6,
+                                                    'default' => 12,
                                                 ])
+                                            ,
+
+                                            Forms\Components\TextInput::make('obs_separadores')
+                                                ->label('Observações - Separadores')
+                                                ->maxLength(255)
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                ])->visible(fn (Closure $get) => ($get('separadores') == true))
+                                            ,
+
+                                            Toggle::make('tomadas')
+                                                ->label('Instalação de tomadas')
+                                                ->onIcon('heroicon-s-check')
+                                                ->offIcon('heroicon-s-x')
+                                                ->inline(false)
+                                                ->reactive()
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                ])
+                                            ,
+
+                                            Forms\Components\TextInput::make('qtd_tomadas')
+                                                ->numeric()
+                                                ->integer()
+                                                ->label('Quantidade de Tomadas')
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                ])->visible(fn (Closure $get) => ($get('tomadas') == true))
+                                            ,
+
+                                            Forms\Components\TextInput::make('obs_tomadas')
+                                                ->label('Observações - Tomadas')
+                                                ->maxLength(255)
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                ])->visible(fn (Closure $get) => ($get('tomadas') == true))
                                             ,
 
                                         ])->columns(12)
@@ -315,7 +412,7 @@ class ProposalResource extends Resource
                                         Section::make('Observações')->schema([
                                 
                                             RichEditor::make('observacoes')
-                                                ->required()
+                                                
 
                                         ])
 
@@ -366,7 +463,14 @@ class ProposalResource extends Resource
                     ->sortable()
                     ->money('brl'),
 
-            ]);
+            ])->prependActions([
+                Action::make('Imprimir')
+                    ->url(fn (Proposal $record): string => route('proposal.pdf', $record))
+                    ->openUrlInNewTab()
+                    ->color('secondary')
+                    ->icon('heroicon-o-printer')
+            ])
+            ;
     }
     
     public static function getRelations(): array

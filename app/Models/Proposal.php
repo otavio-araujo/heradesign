@@ -20,15 +20,27 @@ class Proposal extends Model
         'tecido',
         'prazo_entrega',
         'fita_led',
+        'obs_fita_led',
         'separadores',
+        'obs_separadores',
+        'tomadas',
+        'obs_tomadas',
+        'qtd_tomadas',
         'observacoes',
+        'pgto_a_vista',
+        'pgto_boleto',
+        'pgto_cartao',
+        'pgto_outros',
+        'dias_validade'
     ];
 
     protected $casts = [
         'fita_led' => 'boolean',
         'separadores' => 'boolean',
+        'tomadas' => 'boolean',
         'largura' => 'integer',
         'altura' => 'integer',
+        'qtd_tomadas' => 'integer',
         'prazo_entrega' => 'integer',
     ];
 

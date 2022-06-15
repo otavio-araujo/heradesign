@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
+
 class Helpers
 {
     public static function formata_cpf_cnpj($cpf_cnpj)
@@ -53,6 +55,17 @@ class Helpers
         $cep_formatado = substr($string, 0, 5) . '-' . substr($string, 5, 3);
 
         return $cep_formatado;
+    }
+
+    public static function setProposalNumber ($id)
+    {
+        $proposal_number = Str::padLeft($id, 9, '0');
+
+        $proposal_array = str_split($proposal_number, 3);
+
+        $proposal_number = $proposal_array[0].'.'.$proposal_array[1].'.'.$proposal_array[2];
+
+        return $proposal_number;
     }
 
     public static function unmask_input($mask)
