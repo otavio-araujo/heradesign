@@ -30,7 +30,7 @@
                     </div>
                     <div style="color:#909090; font-size: 8pt; margin-bottom: 0.5rem;">
                         <address>
-                            21.296.142/0001-18 | (44) 99119-0655 | (44) 99760-7805
+                            46.539.802/0001-75 | (44) 99119-0655 | (44) 99760-7805
                         </address>
                         <address>
                             Rua Rio Taperoá, 464 - Jardim Novo Oasis, Maringá - PR, 87043-290
@@ -78,45 +78,45 @@
                     <tr>
                         <td colspan="2" class="pb-3px">
                             <div class="label"><strong>NOME:</strong></div>
-                            <div>{{ $data->cliente->nome }}</div>
+                            <div>{{ $data->customer->nome }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>CPF:</strong></div>
-                            <div>{{ $data->cliente->pf_customer[0]->cpf }}</div>
+                            <div>{{ $data->customer->pf_customer[0]->cpf }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>PARCEIRO:</strong></div>
-                            <div>{{ $data->cliente->parceiro->nome }}</div>
+                            <div>{{ $data->customer->parceiro->nome }}</div>
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="pb-3px">
                             <div class="label"><strong>endereço:</strong></div>
-                            <div>{{ $data->cliente->endereco }}</div>
+                            <div>{{ $data->customer->endereco }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>número:</strong></div>
-                            <div>{{ $data->cliente->numero }}</div>
+                            <div>{{ $data->customer->numero }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>complemento:</strong></div>
-                            <div>{{ $data->cliente->complemento }}</div>
+                            <div>{{ $data->customer->complemento }}</div>
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2" class="pb-3px">
                             <div class="label"><strong>BAIRRO:</strong></div>
-                            <div>{{ $data->cliente->bairro }}</div>
+                            <div>{{ $data->customer->bairro }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>CIDADE:</strong></div>
-                            <div>{{ $data->cliente->cidade->nome }}</div>
+                            <div>{{ $data->customer->cidade->nome }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>ESTADO:</strong></div>
-                            <div>{{ $data->cliente->cidade->estado->uf }}</div>
+                            <div>{{ $data->customer->cidade->estado->uf }}</div>
                         </td>
                     </tr>
 
@@ -134,22 +134,22 @@
                     <tr>
                         <td colspan="2" class="pb-3px">
                             <div class="label"><strong>whatsapp:</strong></div>
-                            <div>{{ $data->cliente->whatsapp }}</div>
+                            <div>{{ $data->customer->whatsapp }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>telefone:</strong></div>
-                            <div>{{ $data->cliente->telefone }}</div>
+                            <div>{{ $data->customer->telefone }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>celular:</strong></div>
-                            <div>{{ $data->cliente->celular }}</div>
+                            <div>{{ $data->customer->celular }}</div>
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="4">
                             <div class="label"><strong>email:</strong></div>
-                            <div>{{ $data->cliente->email }}</div>
+                            <div>{{ $data->customer->email }}</div>
                         </td>
                     </tr>
 
@@ -239,152 +239,270 @@
 
         <hr/>
 
-        <h2 class="titulo" style="margin-top: 2rem;">DETALHES DA PROPOSTA</h2>
+        @php
+            $count_cabeceiras = 1;
+        @endphp
+        @if ($data->headboards->count() > 0)
+        <h2 class="titulo" style="margin-top: 2rem;">cabeceiras</h2>
+        
+            @foreach ($data->headboards as $headboard)
+            <div class="card mb-15px">
+                <div class="card-header">
+                    <h2>Cabeceira - {{ $count_cabeceiras }}</h2>
+                </div>
+                <div class="card-body">
 
-        <div class="card mb-15px">
-            <div class="card-header">
-                <h2>DADOS GERAIS DO PROJETO</h2>
-            </div>
-            <div class="card-body">
-                <table style="width: 100%;">
+                    <table style="width: 100%;">
 
-                    <tr>
-                        <td colspan="2">
-                            <div class="label"><strong>tecido escolhido:</strong></div>
-                            <div>{{ $data->tecido }}</div>
-                        </td>
-                        <td class="pb-3px">
-                            <div class="label"><strong>LARGURA (mm):</strong></div>
-                            <div>{{ $data->largura }}</div>
-                        </td>
-                        <td>
-                            <div class="label"><strong>altura (mm):</strong></div>
-                            <div>{{ $data->altura }}</div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="label"><strong>Quantidade:</strong></div>
+                                <div>{{ $headboard->qtd }}</div>
+                            </td>
+                            <td class="pb-3px">
+                                <div class="label"><strong>Valor Unitário:</strong></div>
+                                <div>R${{ number_format($headboard->valor_unitario, 2, ',', '.') }}</div>
+                            </td>
+                            <td>
+                                <div class="label"><strong>Valor Total:</strong></div>
+                                <div>R${{ number_format($headboard->valor_total, 2, ',', '.') }}</div>
+                            </td>
+                        </tr>
 
-                </table>
-            </div>
-        </div>
+                        <tr>
+                            <td colspan="4"><div class="separator"></div></td>
+                        </tr>
 
-        <div class="card mb-15px">
-            <div class="card-header">
-                <h2>customizações</h2>
-            </div>
-            <div class="card-body">
-                <table style="width: 100%;">
+                        <tr>
+                            <td colspan="2">
+                                <div class="label"><strong>tecido escolhido:</strong></div>
+                                <div>{{ $headboard->tecido }}</div>
+                            </td>
+                            <td class="pb-3px">
+                                <div class="label"><strong>LARGURA (mm):</strong></div>
+                                <div>{{ $headboard->largura }}</div>
+                            </td>
+                            <td>
+                                <div class="label"><strong>altura (mm):</strong></div>
+                                <div>{{ $headboard->altura }}</div>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>
-                            <div class="label"><strong>FITAS DE LED:</strong></div>
-                            <div>{{ $data->fita_led === true ? 'Sim' : 'Não'; }}</div>  
-                        </td>
-                        <td></td>
-                        @if ($data->fita_led === true)
-                        <td style="width: 50%;" colspan="2">
-                            <div class="label"><strong>DETALHES:</strong></div>
-                            <div>{{ $data->obs_fita_led }}</div>
-                        </td>
-                        @endif
+                        <tr>
+                            <td colspan="4"><div class="separator"></div></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4">
+                                <div class="label"><strong>observações da cabeceira:</strong></div>
+                                <div>{{ $headboard->obs_headboard }}.</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 7px;"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4">
+                                <div class="card mb-15px">
+                                    <div class="card-header">
+                                        <h2>customizações</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <table style="width: 100%;">
                         
-                    </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="label"><strong>FITAS DE LED:</strong></div>
+                                                    <div>{{ $headboard->has_led === true ? 'Sim' : 'Não'; }}</div>  
+                                                </td>
+                                                <td></td>
+                                                @if ($headboard->has_led === true)
+                                                <td style="width: 50%;" colspan="2">
+                                                    <div class="label"><strong>DETALHES:</strong></div>
+                                                    <div>{{ $headboard->obs_led }}</div>
+                                                </td>
+                                                @endif
+                                                
+                                            </tr>
+                        
+                                            <tr>
+                                                <td colspan="4"><div class="separator"></div></td>
+                                            </tr>
+                        
+                                            <tr>
+                                                <td>
+                                                    <div class="label"><strong>SEPARADORES:</strong></div>
+                                                    <div>{{ $headboard->has_separador === true ? 'Sim' : 'Não'; }}</div>
+                                                </td>
+                                                <td></td>
+                                                @if ($headboard->has_separador === true)
+                                                <td colspan="2">
+                                                    <div class="label"><strong>DETALHES:</strong></div>
+                                                    <div>{{ $headboard->obs_separador }}</div>
+                                                </td>
+                                                @endif
+                                            </tr>
+                        
+                                            <tr>
+                                                <td colspan="4"><div class="separator"></div></td>
+                                            </tr>
+                        
+                                            <tr>
+                                                <td>
+                                                    <div class="label"><strong>TOMADAS:</strong></div>
+                                                    <div>{{ $headboard->has_tomada === true ? 'Sim' : 'Não'; }}</div>
+                                                </td>
+                                                @if ($headboard->has_tomada === true)
+                                                <td>
+                                                    <div class="label"><strong>QUANTIDADE:</strong></div>
+                                                    <div>{{ $headboard->qtd_tomada }}</div>
+                                                </td>
+                                                <td colspan="2">
+                                                    <div class="label"><strong>DETALHES:</strong></div>
+                                                    <div>{{ $headboard->obs_tomada }}</div>
+                                                </td>
+                                                @endif
+                                            </tr>
+                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td colspan="4"><div class="separator"></div></td>
-                    </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>módulos</h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <table style="width: 100%;">
+                                            <tr class="th">
+                                                <td class="pb-3px pl-5px text-center">
+                                                    <div><strong>#</strong></div>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <div><strong>qtd</strong></div>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <div><strong>largura (mm)</strong></div>
+                                                
+                                                </td>
+                                                <td>
+                                                    <div><strong>altura (mm)</strong></div>
+                                                
+                                                </td>
+                                                <td>
+                                                    <div><strong>formato</strong></div>
+                                                </td>
+                                            </tr>
+                                            @foreach ($headboard->modules as $modulo)
+                                                
+                                            <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
+                                                <td class="pb-3px pl-5px">
+                                                    <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
+                                                </td>
+                                                <td>
+                                                    <div class="label">{{ $modulo->quantidade }}</div> 
+                                                </td>
+                                                <td>
+                                                    <div class="label">{{ $modulo->largura }}</div> 
+                                                </td>
+                                                <td>
+                                                    <div class="label">{{ $modulo->altura }}</div> 
+                                                </td>
+                                                <td>
+                                                    <div class="label">{{ $modulo->formato }}</div> 
+                                                </td>
+                                            </tr>
+                        
+                                                
+                                            @endforeach
+                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>
-                            <div class="label"><strong>SEPARADORES:</strong></div>
-                            <div>{{ $data->separadores === true ? 'Sim' : 'Não'; }}</div>
-                        </td>
-                        <td></td>
-                        @if ($data->separadores === true)
-                        <td colspan="2">
-                            <div class="label"><strong>DETALHES:</strong></div>
-                            <div>{{ $data->obs_separadores }}</div>
-                        </td>
-                        @endif
-                    </tr>
-
-                    <tr>
-                        <td colspan="4"><div class="separator"></div></td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div class="label"><strong>TOMADAS:</strong></div>
-                            <div>{{ $data->tomadas === true ? 'Sim' : 'Não'; }}</div>
-                        </td>
-                        @if ($data->tomadas === true)
-                        <td>
-                            <div class="label"><strong>QUANTIDADE:</strong></div>
-                            <div>{{ $data->qtd_tomadas }}</div>
-                        </td>
-                        <td colspan="2">
-                            <div class="label"><strong>DETALHES:</strong></div>
-                            <div>{{ $data->obs_tomadas }}</div>
-                        </td>
-                        @endif
-                    </tr>
-
-                </table>
+                    </table>
+                </div>
             </div>
-        </div>
+            @php
+                $count_cabeceiras++;
+            @endphp
+            @endforeach
+        
+        @endif
 
-        <div class="card">
-            <div class="card-header">
-                <h2>módulos</h2>
+        @php
+            $count_items = 1;
+        @endphp
+        @if ($data->proposalItems->count() > 0)
+        <h2 class="titulo" style="margin-top: 2rem;">outros ítens</h2>
+        
+            @foreach ($data->proposalItems as $item)
+            <div class="card mb-15px">
+                <div class="card-header">
+                    <h2>Ítem - {{ $count_items }}</h2>
+                </div>
+                <div class="card-body">
+
+                    <table style="width: 100%;">
+
+                        <tr>
+                            <td colspan="4" style="padding-bottom: 5px;">
+                                <div class="label"><strong>Descricao:</strong></div>
+                                <div>{{ $item->descricao }}</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4"><div class="separator"></div></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="padding-bottom: 5px;">
+                                <div class="label"><strong>Quantidade:</strong></div>
+                                <div>{{ $item->qtd }}</div>
+                            </td>   
+                            <td style="padding-bottom: 5px;">
+                                <div class="label"><strong>Valor Unitário:</strong></div>
+                                <div>R${{ number_format($item->valor_unitario, 2, ',', '.') }}</div>
+                            </td>
+                            <td>
+                                <div class="label"><strong>Valor Total:</strong></div>
+                                <div>R${{ number_format($item->valor_total, 2, ',', '.') }}</div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4"><div class="separator"></div></td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="4">
+                                <div class="label"><strong>Observações do Ítem:</strong></div>
+                                <div>{{ $item->obs_item }}</div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
             </div>
-            <div class="card-body">
-                <table style="width: 100%;">
-                    <tr class="th">
-                        <td class="pb-3px pl-5px text-center">
-                            <div><strong>#</strong></div>
-                            
-                        </td>
-                        <td>
-                            <div><strong>qtd</strong></div>
-                            
-                        </td>
-                        <td>
-                            <div><strong>largura (mm)</strong></div>
-                        
-                        </td>
-                        <td>
-                            <div><strong>altura (mm)</strong></div>
-                        
-                        </td>
-                        <td>
-                            <div><strong>formato</strong></div>
-                        </td>
-                    </tr>
-                    @foreach ($data->modulos as $modulo)
-                        
-                    <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
-                        <td class="pb-3px pl-5px">
-                            <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">{{ $modulo->quantidade }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">{{ $modulo->largura }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">{{ $modulo->altura }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">{{ $modulo->formato }}</div> 
-                        </td>
-                    </tr>
+            @php
+                $count_items++;
+            @endphp
+            @endforeach
+        
+        @endif
+        
 
-                        
-                    @endforeach
-
-                </table>
-            </div>
-        </div>
 
         <h2 class="titulo" style="margin-top: 2rem;">prazo de entrega</h2>
         
@@ -399,36 +517,191 @@
        
         @endif
 
-        <h2 class="titulo" style="margin-top: 2rem;">valor total da proposta</h2>
         
-        <p style="margin-left: 30px; color: #434343;"><strong>R$ {{ number_format($data->valor_total, 2, ',', '.') }}.</strong></p>
 
+        <h2 class="titulo" style="margin-top: 2rem;">valor total da proposta</h2>
+
+        @if ($data->headboards->count() > 0)
+        <div class="card" style="margin-bottom: 15px !important;">
+            <div class="card-header">
+                <h2>DETALHAMENTO de cabeceiras</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+                    <tr class="th">
+                        <td class="pb-3px pl-5px text-center">
+                            <div><strong>#</strong></div>
+                            
+                        </td>
+                        <td>
+                            <div><strong>Descrição</strong></div>
+                            
+                        </td>
+                        <td style="text-align: center !important;">
+                            <div><strong>Quantidade</strong></div>
+                        
+                        </td>
+                        <td style="text-align: center !important;">
+                            <div><strong>Valor Unitário</strong></div>
+                        
+                        </td>
+                        <td style="text-align: center !important;">
+                            <div><strong>Valor Total</strong></div>
+                        </td>
+                    </tr>
+                    
+                    @foreach ($data->headboards as $headboard)
+                        
+                    <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
+                        <td class="pb-3px pl-5px">
+                            <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">Cabeceira - {{ $loop->iteration }}</div> 
+                        </td>
+                        <td>
+                            <div class="label" style="text-align: center !important;">{{ $headboard->qtd }}</div> 
+                        </td>
+                        <td>
+                            <div class="label" style="text-align: center !important;">R${{ number_format($headboard->valor_unitario, 2, ',', '.') }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">R${{ number_format($headboard->valor_total, 2, ',', '.') }}</div> 
+                        </td>
+                    </tr>
+
+                        
+                    @endforeach
+
+                    <tr class="total">
+                        <td colspan="4" style="text-align: right !important;"><strong>Total em Cabeceiras:</strong></td>
+                        <td style="text-align: center !important;"> R${{ number_format($data->headboards->sum('valor_total'), 2, ',', '.') }}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        @else
+        <div class="card" style="margin-bottom: 15px !important;">
+            <div class="card-header">
+                <h2>DETALHAMENTO de cabeceiras</h2>
+            </div>
+            <div class="card-body">
+                Sem Cabeceiras.
+            </div>
+        </div>
+        @endif
+
+        @if ($data->proposalItems->count() > 0)
+        <div class="card" style="margin-bottom: 15px !important;">
+            <div class="card-header">
+                <h2>DETALHAMENTO de outros ítens</h2>
+            </div>
+            <div class="card-body">
+                <table style="width: 100%;">
+                    <tr class="th">
+                        <td class="pb-3px pl-5px text-center">
+                            <div><strong>#</strong></div>
+                            
+                        </td>
+                        <td>
+                            <div><strong>Descrição</strong></div>
+                            
+                        </td>
+                        <td style="text-align: center !important;">
+                            <div><strong>Quantidade</strong></div>
+                        
+                        </td>
+                        <td style="text-align: center !important;">
+                            <div><strong>Valor Unitário</strong></div>
+                        
+                        </td>
+                        <td style="text-align: center !important;">
+                            <div><strong>Valor Total</strong></div>
+                        </td>
+                    </tr>
+                    
+                    @foreach ($data->proposalItems as $item)
+                        
+                    <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
+                        <td class="pb-3px pl-5px">
+                            <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">Ítem - {{ $loop->iteration }}</div> 
+                        </td>
+                        <td>
+                            <div class="label" style="text-align: center !important;">{{ $item->qtd }}</div> 
+                        </td>
+                        <td>
+                            <div class="label" style="text-align: center !important;">R${{ number_format($item->valor_unitario, 2, ',', '.') }}</div> 
+                        </td>
+                        <td>
+                            <div class="label">R${{ number_format($item->valor_total, 2, ',', '.') }}</div> 
+                        </td>
+                    </tr>
+
+                        
+                    @endforeach
+
+                    <tr class="total">
+                        <td colspan="4" style="text-align: right !important;"><strong>Total em Outros Ítens:</strong></td>
+                        <td style="text-align: center !important;"> R${{ number_format($data->proposalItems->sum('valor_total'), 2, ',', '.') }}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        @else
+        <div class="card" style="margin-bottom: 15px !important;">
+            <div class="card-header">
+                <h2>DETALHAMENTO de outros ítens</h2>
+            </div>
+            <div class="card-body">
+                Sem Outros Ítens.
+            </div>
+        </div>
+        @endif
+
+        <div class="card" style="margin-bottom: 15px !important;">
+            <div class="card-header">
+                <h2>TOTAL GERAL DA PROPOSTA</h2>
+            </div>
+            <div class="card-body">
+                <p style="color: #434343; text-align: center !important;">
+                    <strong>R${{ number_format($data->headboards->sum('valor_total') + $data->proposalItems->sum('valor_total') , 2, ',', '.')  }}</strong>
+                </p>
+            </div>
+        </div>
+        
+        @if (!empty($data->pgto_vista) or !empty($data->pgto_boleto) or !empty($data->pgto_cartao) or !empty($data->pgto_outros))
         <h2 class="titulo" style="margin-top: 2rem;">Formas de pagamento</h2>
         
         <ul style="color: #434343;">
 
-            @if ($data->pgto_a_vista != '')
+
+            @if (!empty($data->pgto_vista))
                 <li class="p-3px text-secondary">
                     <strong class="text-primary">Á VISTA: </strong> 
-                    {{  $data->pgto_a_vista }};
+                    {{  $data->pgto_vista }};
                 </li>
             @endif
 
-            @if ($data->pgto_boleto != '')
+            @if (!empty($data->pgto_boleto))
                 <li class="p-3px text-secondary">
                     <strong class="text-primary">BOLETO BANCÁRIO: </strong> 
                     {{  $data->pgto_boleto }};
                 </li>
             @endif
 
-            @if ($data->pgto_cartao != '')
+            @if (!empty($data->pgto_cartao))
                 <li class="p-3px text-secondary">
                     <strong class="text-primary">CARTÕES DE CRÉDITO: </strong> 
                     {{  $data->pgto_cartao }};
                 </li>
             @endif
 
-            @if ($data->pgto_a_vista != '')
+            @if (!empty($data->pgto_outros))
                 <li class="p-3px text-secondary">
                     <strong class="text-primary">OUTROS: </strong> 
                     {{  $data->pgto_outros }};
@@ -436,6 +709,7 @@
             @endif
 
         </ul>
+        @endif
         
 
         {{-- <div style="padding: 20px 20px 20px 20px; text-align: center;">

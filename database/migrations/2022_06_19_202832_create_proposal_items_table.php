@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('proposal_modules', function (Blueprint $table) {
+        Schema::create('proposal_items', function (Blueprint $table) {
             $table->id();
-            $table->string('formato', 50)->nullable();
-            $table->integer('largura')->default(0);
-            $table->integer('altura')->default(0);
-            $table->integer('quantidade')->default(0);
-            $table->text('observacoes')->nullable();
-            $table->foreignId('proposal_id')->constrained();
+            $table->foreignId('proposal_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('descricao');
+            $table->integer('qtd');
+            $table->decimal('valor_unitario', 12, 2);
+            $table->decimal('valor_total', 12, 2);
+            $table->string('obs_item')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('proposal_modules');
+        Schema::dropIfExists('proposal_items');
     }
 };

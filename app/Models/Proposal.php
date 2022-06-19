@@ -2,61 +2,57 @@
 
 namespace App\Models;
 
+use App\Models\Customer;
+use App\Models\Headboard;
+use App\Models\ProposalItem;
+use App\Models\ProposalStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Proposal extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
-        'customer_id',
+    protected $fillable = [
         'proposal_status_id',
-        'largura',
-        'altura',
-        'valor_total',
-        'tecido',
+        'customer_id',
         'prazo_entrega',
-        'fita_led',
-        'obs_fita_led',
-        'separadores',
-        'obs_separadores',
-        'tomadas',
-        'obs_tomadas',
-        'qtd_tomadas',
-        'observacoes',
-        'pgto_a_vista',
-        'pgto_boleto',
+        'pgto_vista',
         'pgto_cartao',
+        'pgto_boleto',
         'pgto_outros',
-        'dias_validade'
+        'validade',
+        'desconto',
+        'obs_proposal'
     ];
 
     protected $casts = [
-        'fita_led' => 'boolean',
-        'separadores' => 'boolean',
-        'tomadas' => 'boolean',
-        'largura' => 'integer',
-        'altura' => 'integer',
-        'qtd_tomadas' => 'integer',
+        'validade' => 'integer',
         'prazo_entrega' => 'integer',
     ];
 
 
-    public function status()
+    public function status ()
     {
         return $this->belongsTo(ProposalStatus::class, 'proposal_status_id');
     }
 
-    public function cliente(): BelongsTo
+    public function customer ()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
-    public function modulos(): HasMany
+    public function headboards ()
     {
-        return $this->hasMany(ProposalModule::class);
+        return $this->hasMany(Headboard::class);
     }
+
+    public function proposalItems ()
+    {
+        return $this->hasMany(ProposalItem::class);
+    }
+
+    
 }

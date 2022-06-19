@@ -16,25 +16,15 @@ return new class extends Migration
         Schema::create('proposals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained();
-            $table->foreignId('proposal_status_id')->default(1)->constrained();
-            $table->integer('largura')->default(0);
-            $table->integer('altura')->default(0);
-            $table->decimal('valor_total', 12, 2)->nullable();
-            $table->string('tecido')->nullable();
-            $table->integer('prazo_entrega');
-            $table->boolean('fita_led')->default(false);
-            $table->string('obs_fita_led')->nullable();
-            $table->boolean('separadores')->default(false);
-            $table->string('obs_separadores')->nullable();
-            $table->boolean('tomadas')->default(false);
-            $table->integer('qtd_tomadas')->nullable();
-            $table->string('obs_tomadas')->nullable();
-            $table->string('pgto_a_vista')->nullable();
+            $table->foreignId('proposal_status_id')->constrained();
+            $table->integer('prazo_entrega')->default(30);
+            $table->string('pgto_vista')->nullable();
             $table->string('pgto_boleto')->nullable();
             $table->string('pgto_cartao')->nullable();
             $table->string('pgto_outros')->nullable();
-            $table->longText('observacoes')->nullable();
-            $table->integer('validade_dias')->default(5);
+            $table->integer('validade')->default(5);
+            $table->longText('obs_proposal')->nullable();
+            $table->decimal('desconto', 12, 2)->nullable();
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\BadgeColumn;
@@ -58,12 +59,15 @@ class ProposalResource extends Resource
         return $form
             ->schema([
 
+                    // BEGIN - Wizard - Proposta
                     Wizard::make([
 
+                        // BEGIN - Wizard\Step - Proposta
                         Wizard\Step::make('Proposta')
                             ->icon('heroicon-o-clipboard-list')
                             ->schema([
                                 
+                                // BEGIN - Grid - Proposta
                                 Grid::make([
                                     'default' => 1,
                                     'sm' => 1,
@@ -73,12 +77,30 @@ class ProposalResource extends Resource
                                     '2xl' => 8,
                                 ])->schema([
 
+                                    // BEGIN - Group - Dados Básicos e Detalhes
                                     Group::make()->schema([
 
+                                        // BEGIN - Section - Dados Básicos
                                         Section::make('Dados Básicos')->schema([
 
+                                            BelongsToSelect::make('customer_id')
+                                                ->label('Cliente')
+                                                ->required()
+                                                ->searchable()
+                                                ->relationship('customer', 'nome')
+                                                ->preload(true)
+                                                ->reactive()
+                                                ->afterStateHydrated(fn ($state, callable $set) => $set('cliente.parceiro.nome', Customer::find($state)?->parceiro->nome ?? ''))
+                                                ->afterStateUpdated(fn ($state, callable $set) => $set('cliente.parceiro.nome', Customer::find($state)?->parceiro->nome ?? ''))
+                                                ->columnSpan([
+                                                    'default' => 12,
+                                                    'md' => 8,
+                                                ])
+                                                
+                                            ,
+                                            
                                             BelongsToSelect::make('proposal_status_id')
-                                                ->label('Status da Proposta')
+                                                ->label('Status')
                                                 ->default(1)
                                                 ->required()
                                                 ->searchable()
@@ -86,69 +108,38 @@ class ProposalResource extends Resource
                                                 ->preload(true)
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                    'md' => 6,
+                                                    'md' => 4,
                                                 ])
                                                 
                                             ,
+                                           
 
-                                            Forms\Components\TextInput::make('dias_validade')
-                                                ->label('Validade em dias')
+                                            TextInput::make('validade')
+                                                ->label('Validade (dias)')
                                                 ->default('5')
                                                 ->required()
                                                 ->numeric()
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                    'md' => 6,
+                                                    'md' => 4,
                                                 ])
                                             ,
 
-                                            BelongsToSelect::make('customer_id')
-                                                ->label('Cliente')
-                                                ->required()
-                                                ->searchable()
-                                                ->relationship('cliente', 'nome')
-                                                ->preload(true)
-                                                ->reactive()
-                                                ->afterStateHydrated(fn ($state, callable $set) => $set('cliente.parceiro.nome', Customer::find($state)?->parceiro->nome ?? ''))
-                                                ->afterStateUpdated(fn ($state, callable $set) => $set('cliente.parceiro.nome', Customer::find($state)?->parceiro->nome ?? ''))
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                                
-                                            ,
-    
-                                            Forms\Components\TextInput::make('cliente.parceiro.nome')
-                                                ->label('Parceiro')
-                                                ->disabled()
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-    
-                                            Forms\Components\TextInput::make('largura')
-                                                ->label('Largura (mm)')
+                                            TextInput::make('prazo_entrega')
+                                                ->label('Entrega (dias)')
+                                                ->default(30)
+                                                ->minValue(1)
                                                 ->required()
                                                 ->numeric()
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-    
-                                            Forms\Components\TextInput::make('altura')
-                                                ->label('Altura (mm)')
-                                                ->required()
-                                                ->numeric()
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
+                                                    'md' => 4,
                                                 ])
                                             ,
 
+                                            
 
-                                            TextInput::make('valor_total')
+                                            TextInput::make('desconto')
                                                 ->mask(fn (Mask $mask) => $mask
                                                     ->patternBlocks([
                                                         'money' => fn (Mask $mask) => $mask
@@ -161,168 +152,88 @@ class ProposalResource extends Resource
                                                             ->padFractionalZeros(false)
                                                         ,
                                                     ])
-                                                    ->pattern('R$ money'),
+                                                    ->pattern('R$ money')
+                                                    ->lazyPlaceholder(false),
                                                 )
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-    
-                                            Forms\Components\TextInput::make('prazo_entrega')
-                                                ->label('Prazo de Entrega (dias)')
-                                                ->minValue(1)
-                                                ->required()
-                                                ->numeric()
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-
-                                            Forms\Components\TextInput::make('pgto_a_vista')
-                                                ->label('Pagamento - Á Vista')
-                                                ->default('5% de desconto no Pix / Depósito / Transferência / Débito')
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-
-                                            Forms\Components\TextInput::make('pgto_boleto')
-                                                ->label('Pagamento - Boleto')
-                                                ->default('Até 3x sem juros')
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-
-                                            Forms\Components\TextInput::make('pgto_cartao')
-                                                ->label('Pagamento - Cartão')
-                                                ->default('Até 12x - Juros pelo Cliente')
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
-                                                ])
-                                            ,
-
-                                            Forms\Components\TextInput::make('pgto_outros')
-                                                ->label('Pagamento - Outros')
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                    'md' => 6,
+                                                    'md' => 4,
                                                 ])
                                             ,
     
     
                                         ])->columns(12)
+                                        // END - Section - Dados Básicos
 
                                     ])->columnSpan([
-                                        'md' => 3,
-                                        'lg' => 4,
-                                        'xl' => 4,
+                                        'md' => 6,
+                                        
                                     ]), 
+                                    // END - Group - Dados Básicos
 
-                                    
-    
+                                    // BEGIN - Group - Detalhes
                                     Group::make()->schema([
 
-                                        Section::make('Detalhes')->schema([ 
-
-
-                                            Forms\Components\TextInput::make('tecido')
-                                                ->label('Tecido Escolhido')
-                                                ->maxLength(50)
-                                                ->required()
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                ])
-                                            ,
-
-                                            Toggle::make('fita_led')
-                                                ->label('Fitas de Led')
-                                                ->reactive()
-                                                ->onIcon('heroicon-s-check')
-                                                ->offIcon('heroicon-s-x')
-                                                ->inline(false)
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                ])
-                                            ,
-
-                                            Forms\Components\TextInput::make('obs_fita_led')
-                                                ->label('Observações - Fita Led')
-                                                ->maxLength(255)
-                                                ->columnSpan([
-                                                    'default' => 12,
-                                                ])->visible(fn (Closure $get) => ($get('fita_led') == true))
-                                            ,
+                                        Section::make('Formas de Pagamento')->schema([ 
     
-                                            Toggle::make('separadores')
-                                                ->label('Separadores em Metal')
-                                                ->reactive()
-                                                ->onIcon('heroicon-s-check')
-                                                ->offIcon('heroicon-s-x')
-                                                ->inline(false)
+                                            TextInput::make('pgto_vista')
+                                                ->label('Pagamento - Á Vista')
+                                                ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
+                                                    'md' => 6,
                                                 ])
                                             ,
 
-                                            Forms\Components\TextInput::make('obs_separadores')
-                                                ->label('Observações - Separadores')
-                                                ->maxLength(255)
+                                            TextInput::make('pgto_boleto')
+                                                ->label('Pagamento - Boleto')
+                                                ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                ])->visible(fn (Closure $get) => ($get('separadores') == true))
-                                            ,
-
-                                            Toggle::make('tomadas')
-                                                ->label('Instalação de tomadas')
-                                                ->onIcon('heroicon-s-check')
-                                                ->offIcon('heroicon-s-x')
-                                                ->inline(false)
-                                                ->reactive()
-                                                ->columnSpan([
-                                                    'default' => 12,
+                                                    'md' => 6,
                                                 ])
                                             ,
 
-                                            Forms\Components\TextInput::make('qtd_tomadas')
-                                                ->numeric()
-                                                ->integer()
-                                                ->label('Quantidade de Tomadas')
+                                            TextInput::make('pgto_cartao')
+                                                ->label('Pagamento - Cartão')
+                                                ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                ])->visible(fn (Closure $get) => ($get('tomadas') == true))
+                                                    'md' => 6,
+                                                ])
                                             ,
 
-                                            Forms\Components\TextInput::make('obs_tomadas')
-                                                ->label('Observações - Tomadas')
-                                                ->maxLength(255)
+                                            TextInput::make('pgto_outros')
+                                                ->label('Pagamento - Outros')
+                                                ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
-                                                ])->visible(fn (Closure $get) => ($get('tomadas') == true))
+                                                    'md' => 6,
+                                                ])
                                             ,
-
+                                            
+    
                                         ])->columns(12)
-
+    
                                     ])->columnSpan([
-                                        'md' => 3,
-                                        'lg' => 2,
-
+                                        'md' => 6,
+    
                                     ]), 
-
+                                    // END - Group - Detalhes
                             
 
                                 ])
+                                // END - Grid - Proposta
 
-                            ]),
-                        Wizard\Step::make('Módulos')
+                        ]),
+                        // END - Wizard\Step - Proposta
+                        
+                        // BEGIN - Wizard\Step - Cabeceiras
+                        Wizard\Step::make('Cabeceiras')
                             ->icon('heroicon-o-table')
                             ->schema([
 
+                                // BEGIN - Grid - Cabeceiras
                                 Grid::make([
                                     'default' => 1,
                                     'sm' => 1,
@@ -332,69 +243,452 @@ class ProposalResource extends Resource
                                     '2xl' => 8,
                                 ])->schema([
 
+                                    // BEGIN - Group - Configuração de Cabeceiras
                                     Group::make()->schema([
 
-                                        Section::make('Configuração de Módulos')->schema([
+                                        // BEGIN - Section - Configuração de Cabeceiras
+                                        // Section::make('Configuração de Cabeceiras')->schema([
                                 
-                                            HasManyRepeater::make('modulos')
-                                                ->label('Módulos')
-                                                ->relationship('modulos')
+                                            // BEGIN - HasManyRepeater - Headboards
+                                            HasManyRepeater::make('headboards')
+                                                ->label('Cabeceiras')
+                                                ->relationship('headboards')
                                                 ->schema([
+
+                                                    // BEGIN - WIZARD - Cabeceiras
+                                                    Wizard::make([
+
+                                                        // BEGIN - WIZARD\STEP - Dados da Cabeceira
+                                                        Wizard\Step::make('Dados da Cabeceira')
+                                                            ->icon('heroicon-o-clipboard-list')
+                                                            ->schema([
+                                                                
+                                                                // BEGIN - Grid - Dados da Cabeceira
+                                                                Grid::make([
+                                                                    'default' => 1,
+                                                                    'sm' => 1,
+                                                                    'md' => 6,
+                                                                    'lg' => 6,
+                                                                    'xl' => 6,
+                                                                    '2xl' => 8,
+                                                                ])->schema([
+
+                                                                    // BEGN - Group - Dados Básico
+                                                                    Group::make()->schema([
+
+                                                                        Section::make('Dados Básicos')->schema([
+                                    
+                                                                            TextInput::make('largura')
+                                                                                ->label('Largura (mm)')
+                                                                                ->required()
+                                                                                ->numeric()
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                    'md' => 6,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            TextInput::make('altura')
+                                                                                ->label('Altura (mm)')
+                                                                                ->required()
+                                                                                ->numeric()
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                    'md' => 6,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            TextInput::make('valor_unitario')
+                                                                                ->lazy()
+                                                                                ->mask(fn (Mask $mask) => $mask
+                                                                                    ->patternBlocks([
+                                                                                        'money' => fn (Mask $mask) => $mask
+                                                                                            ->numeric()
+                                                                                            ->decimalPlaces(2)
+                                                                                            ->mapToDecimalSeparator([',', '.'])
+                                                                                            ->thousandsSeparator('.')
+                                                                                            ->decimalSeparator(',')
+                                                                                            ->normalizeZeros(false)
+                                                                                            ->padFractionalZeros(false)
+                                                                                            ->lazyPlaceholder()
+                                                                                        ,
+                                                                                    ])
+                                                                                    ->pattern('R$ money'),
+                                                                                )
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                    'md' => 5,
+                                                                                ])
+                                                                                ->reactive()
+                                                                                ->afterStateUpdated(function (Closure $set, $state, $get) {
+                                                                                    $set('valor_total', number_format($state * $get('qtd'), 2, ',', '.') );
+                                                                                })
+                                                                            ,
+
+                                                                            TextInput::make('qtd')
+                                                                                ->label('Quantidade')
+                                                                                ->lazy()
+                                                                                ->reactive()
+                                                                                ->afterStateUpdated(function (Closure $set, $state, $get) {
+                                                                                    $set('valor_total', number_format($state * $get('valor_unitario'), 2, ',', '.') );
+                                                                                })
+                                                                                ->required()
+                                                                                ->numeric()
+                                                                                ->integer()
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                    'md' => 2,
+                                                                                ])
+                                                                            ,
+
+                                                                            TextInput::make('valor_total')
+                                                                                ->disabled()
+                                                                                ->prefix('R$')
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                    'md' => 5,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            TextInput::make('obs_headboard')
+                                                                                ->label('Observações da Cabeceira')
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])
+                                                                            ,
+                                    
+                                    
+                                                                        ])->columns(12)
+                                    
+                                                                    ])->columnSpan([
+                                                                        'md' => 3,
+                                                                        'lg' => 4,
+                                                                        'xl' => 4,
+                                                                    ]), 
+                                                                    // END - Group - Dados Básico
+
+                                                                    // BEGIN - Group - Detalhes
+                                                                    Group::make()->schema([
+
+                                                                        Section::make('Detalhes')->schema([ 
+                                    
+                                    
+                                                                            TextInput::make('tecido')
+                                                                                ->label('Tecido Escolhido')
+                                                                                ->maxLength(50)
+                                                                                ->required()
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            Toggle::make('has_led')
+                                                                                ->label('Fitas de Led')
+                                                                                ->reactive()
+                                                                                ->onIcon('heroicon-s-check')
+                                                                                ->offIcon('heroicon-s-x')
+                                                                                ->inline(false)
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            TextInput::make('obs_led')
+                                                                                ->label('Observações - Fita Led')
+                                                                                ->maxLength(255)
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])->visible(fn (Closure $get) => ($get('has_led') == true))
+                                                                            ,
+                                    
+                                                                            Toggle::make('has_separador')
+                                                                                ->label('Separadores em Metal')
+                                                                                ->reactive()
+                                                                                ->onIcon('heroicon-s-check')
+                                                                                ->offIcon('heroicon-s-x')
+                                                                                ->inline(false)
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            TextInput::make('obs_separador')
+                                                                                ->label('Observações - Separadores')
+                                                                                ->maxLength(255)
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])->visible(fn (Closure $get) => ($get('has_separador') == true))
+                                                                            ,
+                                    
+                                                                            Toggle::make('has_tomada')
+                                                                                ->label('Instalação de tomadas')
+                                                                                ->onIcon('heroicon-s-check')
+                                                                                ->offIcon('heroicon-s-x')
+                                                                                ->inline(false)
+                                                                                ->reactive()
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])
+                                                                            ,
+                                    
+                                                                            TextInput::make('qtd_tomada')
+                                                                                ->numeric()
+                                                                                ->integer()
+                                                                                ->label('Quantidade de Tomadas')
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])->visible(fn (Closure $get) => ($get('has_tomada') == true))
+                                                                            ,
+                                    
+                                                                            TextInput::make('obs_tomada')
+                                                                                ->label('Observações - Tomadas')
+                                                                                ->maxLength(255)
+                                                                                ->columnSpan([
+                                                                                    'default' => 12,
+                                                                                ])->visible(fn (Closure $get) => ($get('has_tomada') == true))
+                                                                            ,
+                                    
+                                                                        ])->columns(12)
+                                    
+                                                                    ])->columnSpan([
+                                                                        'md' => 3,
+                                                                        'lg' => 2,
+                                    
+                                                                    ]), 
+                                                                    // END - Group - Detalhes
+
+                                                                ])
+                                                                // END - Grid - Dados da Cabeceira
+                                                        ]),
+                                                        // END - WIZARD\STEP - Dados da Cabeceira
+
+                                                        // BEGIN - WIZARD/STEP - Módulos
+                                                        Wizard\Step::make('Módulos')
+                                                            ->icon('heroicon-o-clipboard-list')
+                                                            ->schema([
+                                                                
+                                                                // BEGIN - Grid - Módulos
+                                                                Grid::make([
+                                                                    'default' => 1,
+                                                                    'sm' => 1,
+                                                                    'md' => 6,
+                                                                    'lg' => 6,
+                                                                    'xl' => 6,
+                                                                    '2xl' => 8,
+                                                                ])->schema([
+
+                                                                    // BEGIN - Módulos
+                                                                    Group::make()->schema([
+
+                                                                        // BEGIN - Section - Configuração de Módulos
+                                                                        Section::make('Configuração de Módulos')->schema([
+                                                                
+                                                                            // BEGIN - HasManyRepeater - headboard_modules
+                                                                            HasManyRepeater::make('headboard_modules')
+                                                                                ->label('Módulos')
+                                                                                ->relationship('modules')
+                                                                                ->schema([
+                                                                                    
+                                                                                    TextInput::make('qtd')
+                                                                                        ->label('Quantidade de Módulos')
+                                                                                        ->minValue(1)
+                                                                                        ->required()
+                                                                                        ->numeric()
+                                                                                        ->columnSpan([
+                                                                                            'default' => 12,
+                                                                                            'md' => 3,
+                                                                                        ])
+                                                                                    ,
+                                    
+                                                                                    TextInput::make('largura')
+                                                                                        ->label('Largura (mm)')
+                                                                                        ->required()
+                                                                                        ->numeric()
+                                                                                        ->columnSpan([
+                                                                                            'default' => 12,
+                                                                                            'md' => 3,
+                                                                                        ])
+                                                                                    ,
+                                            
+                                                                                    TextInput::make('altura')
+                                                                                        ->label('Altura (mm)')
+                                                                                        ->required()
+                                                                                        ->numeric()
+                                                                                        ->columnSpan([
+                                                                                            'default' => 12,
+                                                                                            'md' => 3,
+                                                                                        ])
+                                                                                    ,
+                                    
+                                                                                    TextInput::make('formato')
+                                                                                        ->label('Formato do Módulo')
+                                                                                        ->maxLength(50)
+                                                                                        ->required()
+                                                                                        ->columnSpan([
+                                                                                            'default' => 12,
+                                                                                            'md' => 3,
+                                                                                        ])
+                                                                                    ,
+                                                                                    TextInput::make('obs_module')
+                                                                                        ->label('Observações do Módulo')
+                                                                                        ->maxLength(255)
+                                                                                        ->columnSpan([
+                                                                                            'default' => 12,
+                                                                                        ])
+                                                                                    ,
+                                    
+                                                                            ])->columns(12)
+                                                                            // END - HasManyRepeater - headboard_modules
+                                    
+                                                                        ])
+                                                                        // END - Section - Configuração de Módulos
+                                    
+                                                                    ])->columnSpan([
+                                                                        'md' => 3,
+                                                                        'lg' => 6,
+                                                                    ]), 
+                                                                    // END -Módulos
+
+                                                                ])
+                                                                // END - Grid - Módulos
+                                                        ]),
+                                                        // END - WIZARD/STEP - Módulos
+
+                                                    ])
+                                                    // END - WIZARD - Cabeceiras
+
+                                            ])
+                                            // END - HasManyRepeater - Headboards       
                                                     
-                                                    Forms\Components\TextInput::make('quantidade')
-                                                        ->label('Quantidade de Módulos')
-                                                        ->minValue(1)
-                                                        ->required()
+    
+                                        // ]),
+                                        // END - Section - Configuração de Cabeceiras
+    
+                                    ])->columnSpan([
+                                        'md' => 3,
+                                        'lg' => 6,
+                                    ]), 
+                                    // END - Group - Configuração de Cabeceiras
+
+                                ])
+                                // END - Grid - Cabeceiras
+
+                        ]),
+                        // END - Wizard\Step - Cabeceiras
+
+                        // BEGIN - Wizard\Step - Outros Items
+                        Wizard\Step::make('Outros Items')
+                            ->icon('heroicon-o-document-text')
+                            ->schema([
+                                
+                                // BEGIN - Grid - Outros Items
+                                Grid::make([
+                                    'default' => 1,
+                                    'sm' => 1,
+                                    'md' => 6,
+                                    'lg' => 6,
+                                    'xl' => 6,
+                                    '2xl' => 8,
+                                ])->schema([
+
+                                    // BEGIN - Group - Observações - Outros Items
+                                    Group::make()->schema([
+
+                                        // BEGIN - Section - Observações - Outros Items
+                                        // Section::make('Outros Items')->schema([
+                                
+                                            // BEGIN - HasManyRepeater - proposal_items
+                                            HasManyRepeater::make('proposal_items')
+                                                ->label('Outros Items')
+                                                ->relationship('proposalItems')
+                                                ->schema([
+
+                                                    TextInput::make('valor_unitario')
+                                                        ->mask(fn (Mask $mask) => $mask
+                                                            ->patternBlocks([
+                                                                'money' => fn (Mask $mask) => $mask
+                                                                    ->numeric()
+                                                                    ->decimalPlaces(2)
+                                                                    ->mapToDecimalSeparator([',', '.'])
+                                                                    ->thousandsSeparator('.')
+                                                                    ->decimalSeparator(',')
+                                                                    ->normalizeZeros(false)
+                                                                    ->padFractionalZeros(false)
+                                                                    ->lazyPlaceholder()
+                                                                ,
+                                                            ])
+                                                            ->pattern('R$ money'),
+                                                        )
+                                                        ->columnSpan([
+                                                            'default' => 12,
+                                                            'md' => 2,
+                                                        ])
+                                                    ,
+                                                    
+                                                    TextInput::make('qtd')
+                                                        ->label('Quantidade')
                                                         ->numeric()
-                                                        ->columnSpan([
-                                                            'default' => 12,
-                                                            'md' => 3,
-                                                        ])
-                                                    ,
-
-                                                    Forms\Components\TextInput::make('largura')
-                                                        ->label('Largura (mm)')
+                                                        ->integer()
                                                         ->required()
-                                                        ->numeric()
+                                                        ->reactive()
+                                                        ->afterStateUpdated(function (Closure $set, $state, $get) {
+                                                            $set('valor_total', number_format($state * $get('valor_unitario'), 2, ',', '.') );
+                                                        })
+                                                        ->lazy()
                                                         ->columnSpan([
                                                             'default' => 12,
-                                                            'md' => 3,
+                                                            'md' => 2,
                                                         ])
                                                     ,
-            
-                                                    Forms\Components\TextInput::make('altura')
-                                                        ->label('Altura (mm)')
+
+                                                    TextInput::make('descricao')
+                                                        ->label('Descrição')
                                                         ->required()
-                                                        ->numeric()
+                                                        ->maxLength(255)
                                                         ->columnSpan([
                                                             'default' => 12,
-                                                            'md' => 3,
+                                                            'md' => 6,
                                                         ])
                                                     ,
 
-                                                    Forms\Components\TextInput::make('formato')
-                                                        ->label('Formato do Módulo')
-                                                        ->maxLength(50)
-                                                        ->required()
+                                                    TextInput::make('valor_total')
+                                                        ->disabled()
+                                                        ->prefix('R$')
                                                         ->columnSpan([
                                                             'default' => 12,
-                                                            'md' => 3,
+                                                            'md' => 2,
                                                         ])
                                                     ,
 
-                                                ])->columns(12)
+                                                    TextInput::make('obs_item')
+                                                        ->label('Observações do Item')
+                                                        ->maxLength(255)
+                                                        ->columnSpan([
+                                                            'default' => 12,
+                                                        ])
+                                                    ,
 
-                                        ])
+                                            ])->columns(12)
+                                            // END - HasManyRepeater - proposal_items
+                                                
+
+                                        // ])
+                                        // END - Section - Observações - Outros Items
 
                                     ])->columnSpan([
                                         'md' => 3,
                                         'lg' => 6,
                                     ]), 
+                                    // END - Group - Observações - Outros Items
 
                                 ])
+                                // END - Grid - Outros Items
 
-                            ]),
-                        Wizard\Step::make('Observações')
+                        ]),
+                        // END - Wizard\Step - Observações da Proposta
+
+                        // BEGIN - Wizard\Step - Observações da Proposta
+                        Wizard\Step::make('Observações da Proposta')
                             ->icon('heroicon-o-document-text')
                             ->schema([
                                 
@@ -411,7 +705,7 @@ class ProposalResource extends Resource
 
                                         Section::make('Observações')->schema([
                                 
-                                            RichEditor::make('observacoes')
+                                            RichEditor::make('obs_proposal')
                                                 
 
                                         ])
@@ -424,6 +718,9 @@ class ProposalResource extends Resource
                                 ])
 
                             ]),
+                            // END - Wizard\Step - Observações da Proposta
+
+
                     ])->columnSpan(12)
 
             ]);
@@ -439,12 +736,12 @@ class ProposalResource extends Resource
                     ->sortable()
                 ,
 
-                Tables\Columns\TextColumn::make('cliente.nome')
+                Tables\Columns\TextColumn::make('customer.nome')
                     ->label('Cliente')
                     ->sortable()
                 ,
 
-                Tables\Columns\TextColumn::make('cliente.parceiro.nome')
+                Tables\Columns\TextColumn::make('customer.parceiro.nome')
                     ->label('Parceiro')
                     ->sortable()
                 ,
@@ -457,11 +754,13 @@ class ProposalResource extends Resource
                         'warning' => 'Em Análise',
                         
                     ]),
+
+                ViewColumn::make('valor_total')->view('filament.tables.columns.proposal-valor-total'),
                 
-                Tables\Columns\TextColumn::make('valor_total')
-                    ->label('Valor Total')
-                    ->sortable()
-                    ->money('brl'),
+                // Tables\Columns\TextColumn::make('valor_total')
+                //     ->label('Valor Total')
+                //     ->sortable()
+                //     ->money('brl'),
 
             ])->prependActions([
                 Action::make('Imprimir')
@@ -492,7 +791,7 @@ class ProposalResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['id', 'cliente.nome', 'cliente.parceiro.nome'];
+        return ['id', 'customer.nome', 'customer.parceiro.nome'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -501,7 +800,7 @@ class ProposalResource extends Resource
         
         return [
             'Proposta' => 'PT-' . $record->id,
-            'Cliente' => $record->cliente->nome,
+            'Cliente' => $record->customer->nome,
             'Valor Total' => $record->valor_total,
         ];
     }
