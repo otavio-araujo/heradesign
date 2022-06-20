@@ -25,6 +25,7 @@ use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\CustomerResource\Pages;
+use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 
 class CustomerResource extends Resource
@@ -338,7 +339,16 @@ class CustomerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationGroup::make('Propostas', [
+                RelationManagers\ProposalsRelationManager::class,
+            ]),
+            RelationGroup::make('Pedidos', [
+                RelationManagers\ProposalsRelationManager::class,
+            ]),
+            RelationGroup::make('Financeiro', [
+                RelationManagers\ProposalsRelationManager::class,
+            ]),
+            
         ];
     }
     

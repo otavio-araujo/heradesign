@@ -56,7 +56,7 @@ class Customer extends Model
         return $this->hasMany(PjCustomer::class);
     }
 
-    public function propostas(): HasMany
+    public function proposals(): HasMany
     {
         return $this->hasMany(Proposal::class);
     }

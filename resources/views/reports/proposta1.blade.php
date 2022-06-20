@@ -48,7 +48,7 @@
                 Emitida em: {{ Carbon::parse($data->created_at)->format('d/m/Y') }}
             </div>
             <div class="badge-topo-hera">
-                Validade até: {{ Carbon::parse($data->created_at)->addDays($data->dias_validade)->format('d/m/Y') }}
+                Validade até: {{ Carbon::parse($data->created_at)->addDays($data->validade)->format('d/m/Y') }}
             </div>
         </div>
     </div>
