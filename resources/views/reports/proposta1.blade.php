@@ -457,7 +457,7 @@
 
                         <tr>
                             <td colspan="4" style="padding-bottom: 5px;">
-                                <div class="label"><strong>Descricao:</strong></div>
+                                <div class="label"><strong>Descrição:</strong></div>
                                 <div>{{ $item->descricao }}</div>
                             </td>
                         </tr>

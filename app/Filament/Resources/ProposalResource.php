@@ -178,6 +178,7 @@ class ProposalResource extends Resource
     
                                             TextInput::make('pgto_vista')
                                                 ->label('Pagamento - Á Vista')
+                                                ->maxLength(255)
                                                 ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
@@ -187,6 +188,7 @@ class ProposalResource extends Resource
 
                                             TextInput::make('pgto_boleto')
                                                 ->label('Pagamento - Boleto')
+                                                ->maxLength(255)
                                                 ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
@@ -196,6 +198,7 @@ class ProposalResource extends Resource
 
                                             TextInput::make('pgto_cartao')
                                                 ->label('Pagamento - Cartão')
+                                                ->maxLength(255)
                                                 ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
@@ -205,6 +208,7 @@ class ProposalResource extends Resource
 
                                             TextInput::make('pgto_outros')
                                                 ->label('Pagamento - Outros')
+                                                ->maxLength(255)
                                                 ->default('À Combinar')
                                                 ->columnSpan([
                                                     'default' => 12,
@@ -260,7 +264,7 @@ class ProposalResource extends Resource
 
                                                         // BEGIN - WIZARD\STEP - Dados da Cabeceira
                                                         Wizard\Step::make('Dados da Cabeceira')
-                                                            ->icon('heroicon-o-clipboard-list')
+                                                            ->icon('heroicon-o-table')
                                                             ->schema([
                                                                 
                                                                 // BEGIN - Grid - Dados da Cabeceira
@@ -282,6 +286,7 @@ class ProposalResource extends Resource
                                                                                 ->label('Largura (mm)')
                                                                                 ->required()
                                                                                 ->numeric()
+                                                                                ->integer()
                                                                                 ->columnSpan([
                                                                                     'default' => 12,
                                                                                     'md' => 6,
@@ -292,6 +297,7 @@ class ProposalResource extends Resource
                                                                                 ->label('Altura (mm)')
                                                                                 ->required()
                                                                                 ->numeric()
+                                                                                ->integer()
                                                                                 ->columnSpan([
                                                                                     'default' => 12,
                                                                                     'md' => 6,
@@ -299,7 +305,7 @@ class ProposalResource extends Resource
                                                                             ,
                                     
                                                                             TextInput::make('valor_unitario')
-                                                                                ->lazy()
+                                                                                ->required()
                                                                                 ->mask(fn (Mask $mask) => $mask
                                                                                     ->patternBlocks([
                                                                                         'money' => fn (Mask $mask) => $mask
@@ -319,10 +325,6 @@ class ProposalResource extends Resource
                                                                                     'default' => 12,
                                                                                     'md' => 5,
                                                                                 ])
-                                                                                ->reactive()
-                                                                                ->afterStateUpdated(function (Closure $set, $state, $get) {
-                                                                                    $set('valor_total', number_format($state * $get('qtd'), 2, ',', '.') );
-                                                                                })
                                                                             ,
 
                                                                             TextInput::make('qtd')
@@ -352,6 +354,7 @@ class ProposalResource extends Resource
                                     
                                                                             TextInput::make('obs_headboard')
                                                                                 ->label('Observações da Cabeceira')
+                                                                                ->maxLength(255)
                                                                                 ->columnSpan([
                                                                                     'default' => 12,
                                                                                 ])
@@ -464,7 +467,7 @@ class ProposalResource extends Resource
 
                                                         // BEGIN - WIZARD/STEP - Módulos
                                                         Wizard\Step::make('Módulos')
-                                                            ->icon('heroicon-o-clipboard-list')
+                                                            ->icon('heroicon-o-collection')
                                                             ->schema([
                                                                 
                                                                 // BEGIN - Grid - Módulos
@@ -494,6 +497,7 @@ class ProposalResource extends Resource
                                                                                         ->minValue(1)
                                                                                         ->required()
                                                                                         ->numeric()
+                                                                                        ->integer()
                                                                                         ->columnSpan([
                                                                                             'default' => 12,
                                                                                             'md' => 3,
@@ -504,6 +508,7 @@ class ProposalResource extends Resource
                                                                                         ->label('Largura (mm)')
                                                                                         ->required()
                                                                                         ->numeric()
+                                                                                        ->integer()
                                                                                         ->columnSpan([
                                                                                             'default' => 12,
                                                                                             'md' => 3,
@@ -514,6 +519,7 @@ class ProposalResource extends Resource
                                                                                         ->label('Altura (mm)')
                                                                                         ->required()
                                                                                         ->numeric()
+                                                                                        ->integer()
                                                                                         ->columnSpan([
                                                                                             'default' => 12,
                                                                                             'md' => 3,
@@ -523,7 +529,7 @@ class ProposalResource extends Resource
                                                                                     TextInput::make('formato')
                                                                                         ->label('Formato do Módulo')
                                                                                         ->maxLength(50)
-                                                                                        ->required()
+                                                                                        ->default('RETANGULAR')
                                                                                         ->columnSpan([
                                                                                             'default' => 12,
                                                                                             'md' => 3,
@@ -578,7 +584,7 @@ class ProposalResource extends Resource
 
                         // BEGIN - Wizard\Step - Outros Items
                         Wizard\Step::make('Outros Items')
-                            ->icon('heroicon-o-document-text')
+                            ->icon('heroicon-o-clipboard-copy')
                             ->schema([
                                 
                                 // BEGIN - Grid - Outros Items
