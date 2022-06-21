@@ -33,6 +33,7 @@ use App\Filament\Resources\ProposalResource\RelationManagers;
 use App\Filament\Resources\ProposalResource\Pages\EditProposal;
 use App\Filament\Resources\ProposalResource\Pages\ListProposals;
 use App\Filament\Resources\ProposalResource\Pages\CreateProposal;
+use App\Tables\Columns\StatusSwitcher;
 
 class ProposalResource extends Resource
 {
@@ -53,6 +54,8 @@ class ProposalResource extends Resource
     protected static ?string $label = 'Proposta';
 
     protected static ?string $pluralLabel = 'Propostas';
+
+    protected $listeners = ['refreshComponent' => '$refresh'];
 
     public static function form(Form $form): Form
     {
@@ -760,6 +763,11 @@ class ProposalResource extends Resource
                         'warning' => 'Em Análise',
                         
                     ]),
+
+                ViewColumn::make('status')
+                    ->view('filament.tables.columns.proposal-status')
+                    ->url('#')
+                ,
 
                 ViewColumn::make('valor_total')->view('filament.tables.columns.proposal-valor-total'),
                 
