@@ -81,8 +81,8 @@
                             <div>{{ $data->customer->nome }}</div>
                         </td>
                         <td>
-                            <div class="label"><strong>CPF:</strong></div>
-                            <div>{{ $data->customer->pf_customer[0]->cpf }}</div>
+                            <div class="label"><strong>{{ ($data->customer->person_type_id == 1) ? 'CPF' : 'CNPJ'}}:</strong></div>
+                            <div>{{ ($data->customer->person_type_id == 1) ? $data->customer->pf_customer[0]->cpf : $data->customer->pj_customer[0]->cnpj }}</div>
                         </td>
                         <td>
                             <div class="label"><strong>PARCEIRO:</strong></div>
@@ -242,6 +242,7 @@
         @php
             $count_cabeceiras = 1;
         @endphp
+        
         @if ($data->headboards->count() > 0)
         <h2 class="titulo" style="margin-top: 2rem;">cabeceiras</h2>
         
@@ -503,167 +504,170 @@
         @endif
         
 
-
-        <h2 class="titulo" style="margin-top: 2rem;">prazo de entrega</h2>
-        
-        <p style="margin-left: 30px; color: #434343;">{{ $data->prazo_entrega }} dias da data de aprovação.</p>
+        <div style="page-break-inside: avoid !important;">
+            <h2 class="titulo" style="margin-top: 2rem;">prazo de entrega</h2>
+            <p style="margin-left: 30px; color: #434343;">{{ $data->prazo_entrega }} dias da data de aprovação.</p>
+        </div> 
 
         @if ($data->observacoes != '')
-        <h2 class="titulo" style="margin-top: 3rem;">outras observações</h2>
+        <div style="page-break-inside: avoid !important;">
+            <h2 class="titulo" style="margin-top: 3rem;">outras observações</h2>
 
-        <div style="margin-bottom: 4rem; color: #6a6a6a;">
-            {!! $data->observacoes !!}
+            <div style="margin-bottom: 4rem; color: #6a6a6a;">
+                {!! $data->observacoes !!}
+            </div>
         </div>
-       
+
         @endif
 
         
+        <div style="page-break-inside: avoid !important;">
+            <h2 class="titulo" style="margin-top: 2rem;">valor total da proposta</h2>
 
-        <h2 class="titulo" style="margin-top: 2rem;">valor total da proposta</h2>
-
-        @if ($data->headboards->count() > 0)
-        <div class="card" style="margin-bottom: 15px !important;">
-            <div class="card-header">
-                <h2>DETALHAMENTO de cabeceiras</h2>
-            </div>
-            <div class="card-body">
-                <table style="width: 100%;">
-                    <tr class="th">
-                        <td class="pb-3px pl-5px text-center">
-                            <div><strong>#</strong></div>
+            @if ($data->headboards->count() > 0)
+            <div class="card" style="margin-bottom: 15px !important; page-break-inside: avoid !important;">
+                <div class="card-header">
+                    <h2>DETALHAMENTO de cabeceiras</h2>
+                </div>
+                <div class="card-body">
+                    <table style="width: 100%;">
+                        <tr class="th">
+                            <td class="pb-3px pl-5px text-center">
+                                <div><strong>#</strong></div>
+                                
+                            </td>
+                            <td>
+                                <div><strong>Descrição</strong></div>
+                                
+                            </td>
+                            <td style="text-align: center !important;">
+                                <div><strong>Quantidade</strong></div>
                             
-                        </td>
-                        <td>
-                            <div><strong>Descrição</strong></div>
+                            </td>
+                            <td style="text-align: center !important;">
+                                <div><strong>Valor Unitário</strong></div>
                             
-                        </td>
-                        <td style="text-align: center !important;">
-                            <div><strong>Quantidade</strong></div>
+                            </td>
+                            <td style="text-align: center !important;">
+                                <div><strong>Valor Total</strong></div>
+                            </td>
+                        </tr>
                         
-                        </td>
-                        <td style="text-align: center !important;">
-                            <div><strong>Valor Unitário</strong></div>
-                        
-                        </td>
-                        <td style="text-align: center !important;">
-                            <div><strong>Valor Total</strong></div>
-                        </td>
-                    </tr>
-                    
-                    @foreach ($data->headboards as $headboard)
-                        
-                    <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
-                        <td class="pb-3px pl-5px">
-                            <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">Cabeceira - {{ $loop->iteration }}</div> 
-                        </td>
-                        <td>
-                            <div class="label" style="text-align: center !important;">{{ $headboard->qtd }}</div> 
-                        </td>
-                        <td>
-                            <div class="label" style="text-align: center !important;">R${{ number_format($headboard->valor_unitario, 2, ',', '.') }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">R${{ number_format($headboard->valor_total, 2, ',', '.') }}</div> 
-                        </td>
-                    </tr>
-
-                        
-                    @endforeach
-
-                    <tr class="total">
-                        <td colspan="4" style="text-align: right !important;"><strong>Total em Cabeceiras:</strong></td>
-                        <td style="text-align: center !important;"> R${{ number_format($data->headboards->sum('valor_total'), 2, ',', '.') }}</td>
-                    </tr>
-
-                </table>
-            </div>
-        </div>
-        @else
-        <div class="card" style="margin-bottom: 15px !important;">
-            <div class="card-header">
-                <h2>DETALHAMENTO de cabeceiras</h2>
-            </div>
-            <div class="card-body">
-                Sem Cabeceiras.
-            </div>
-        </div>
-        @endif
-
-        @if ($data->proposalItems->count() > 0)
-        <div class="card" style="margin-bottom: 15px !important;">
-            <div class="card-header">
-                <h2>DETALHAMENTO de outros ítens</h2>
-            </div>
-            <div class="card-body">
-                <table style="width: 100%;">
-                    <tr class="th">
-                        <td class="pb-3px pl-5px text-center">
-                            <div><strong>#</strong></div>
+                        @foreach ($data->headboards as $headboard)
                             
-                        </td>
-                        <td>
-                            <div><strong>Descrição</strong></div>
+                        <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
+                            <td class="pb-3px pl-5px">
+                                <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
+                            </td>
+                            <td>
+                                <div class="label">Cabeceira - {{ $loop->iteration }}</div> 
+                            </td>
+                            <td>
+                                <div class="label" style="text-align: center !important;">{{ $headboard->qtd }}</div> 
+                            </td>
+                            <td>
+                                <div class="label" style="text-align: center !important;">R${{ number_format($headboard->valor_unitario, 2, ',', '.') }}</div> 
+                            </td>
+                            <td>
+                                <div class="label">R${{ number_format($headboard->valor_total, 2, ',', '.') }}</div> 
+                            </td>
+                        </tr>
+
                             
-                        </td>
-                        <td style="text-align: center !important;">
-                            <div><strong>Quantidade</strong></div>
-                        
-                        </td>
-                        <td style="text-align: center !important;">
-                            <div><strong>Valor Unitário</strong></div>
-                        
-                        </td>
-                        <td style="text-align: center !important;">
-                            <div><strong>Valor Total</strong></div>
-                        </td>
-                    </tr>
-                    
-                    @foreach ($data->proposalItems as $item)
-                        
-                    <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
-                        <td class="pb-3px pl-5px">
-                            <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">Ítem - {{ $loop->iteration }}</div> 
-                        </td>
-                        <td>
-                            <div class="label" style="text-align: center !important;">{{ $item->qtd }}</div> 
-                        </td>
-                        <td>
-                            <div class="label" style="text-align: center !important;">R${{ number_format($item->valor_unitario, 2, ',', '.') }}</div> 
-                        </td>
-                        <td>
-                            <div class="label">R${{ number_format($item->valor_total, 2, ',', '.') }}</div> 
-                        </td>
-                    </tr>
+                        @endforeach
 
-                        
-                    @endforeach
+                        <tr class="total">
+                            <td colspan="4" style="text-align: right !important;"><strong>Total em Cabeceiras:</strong></td>
+                            <td style="text-align: center !important;"> R${{ number_format($data->headboards->sum('valor_total'), 2, ',', '.') }}</td>
+                        </tr>
 
-                    <tr class="total">
-                        <td colspan="4" style="text-align: right !important;"><strong>Total em Outros Ítens:</strong></td>
-                        <td style="text-align: center !important;"> R${{ number_format($data->proposalItems->sum('valor_total'), 2, ',', '.') }}</td>
-                    </tr>
-
-                </table>
+                    </table>
+                </div>
             </div>
+            @else
+            <div class="card" style="margin-bottom: 15px !important; page-break-inside: avoid !important;">
+                <div class="card-header">
+                    <h2>DETALHAMENTO de cabeceiras</h2>
+                </div>
+                <div class="card-body">
+                    Sem Cabeceiras.
+                </div>
+            </div>
+            @endif
+
+            @if ($data->proposalItems->count() > 0)
+            <div class="card" style="margin-bottom: 15px !important; page-break-inside: avoid !important;">
+                <div class="card-header">
+                    <h2>DETALHAMENTO de outros ítens</h2>
+                </div>
+                <div class="card-body">
+                    <table style="width: 100%;">
+                        <tr class="th">
+                            <td class="pb-3px pl-5px text-center">
+                                <div><strong>#</strong></div>
+                                
+                            </td>
+                            <td>
+                                <div><strong>Descrição</strong></div>
+                                
+                            </td>
+                            <td style="text-align: center !important;">
+                                <div><strong>Quantidade</strong></div>
+                            
+                            </td>
+                            <td style="text-align: center !important;">
+                                <div><strong>Valor Unitário</strong></div>
+                            
+                            </td>
+                            <td style="text-align: center !important;">
+                                <div><strong>Valor Total</strong></div>
+                            </td>
+                        </tr>
+                        
+                        @foreach ($data->proposalItems as $item)
+                            
+                        <tr class="{{ $loop->even ? 'tr-bg-hera' : ''; }} {{ $loop->last ? 'tr-last' : ''; }}">
+                            <td class="pb-3px pl-5px">
+                                <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
+                            </td>
+                            <td>
+                                <div class="label">Ítem - {{ $loop->iteration }}</div> 
+                            </td>
+                            <td>
+                                <div class="label" style="text-align: center !important;">{{ $item->qtd }}</div> 
+                            </td>
+                            <td>
+                                <div class="label" style="text-align: center !important;">R${{ number_format($item->valor_unitario, 2, ',', '.') }}</div> 
+                            </td>
+                            <td>
+                                <div class="label">R${{ number_format($item->valor_total, 2, ',', '.') }}</div> 
+                            </td>
+                        </tr>
+
+                            
+                        @endforeach
+
+                        <tr class="total">
+                            <td colspan="4" style="text-align: right !important;"><strong>Total em Outros Ítens:</strong></td>
+                            <td style="text-align: center !important;"> R${{ number_format($data->proposalItems->sum('valor_total'), 2, ',', '.') }}</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            @else
+            <div class="card" style="margin-bottom: 15px !important; page-break-inside: avoid !important;">
+                <div class="card-header">
+                    <h2>DETALHAMENTO de outros ítens</h2>
+                </div>
+                <div class="card-body">
+                    Sem Outros Ítens.
+                </div>
+            </div>
+            @endif
         </div>
-        @else
-        <div class="card" style="margin-bottom: 15px !important;">
-            <div class="card-header">
-                <h2>DETALHAMENTO de outros ítens</h2>
-            </div>
-            <div class="card-body">
-                Sem Outros Ítens.
-            </div>
-        </div>
-        @endif
 
-        <div class="card" style="margin-bottom: 15px !important;">
+        <div class="card" style="margin-bottom: 15px !important; page-break-inside: avoid !important;">
             <div class="card-header">
                 <h2>TOTAL GERAL DA PROPOSTA</h2>
             </div>
