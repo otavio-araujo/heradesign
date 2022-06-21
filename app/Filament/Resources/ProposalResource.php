@@ -755,14 +755,14 @@ class ProposalResource extends Resource
                     ->sortable()
                 ,
 
-                BadgeColumn::make('status.nome')
-                    ->colors([
-                        'success',
-                        'primary' => 'Nova',
-                        'danger' => 'Reprovada',
-                        'warning' => 'Em Análise',
+                // BadgeColumn::make('status.nome')
+                //     ->colors([
+                //         'success',
+                //         'primary' => 'Nova',
+                //         'danger' => 'Reprovada',
+                //         'warning' => 'Em Análise',
                         
-                    ]),
+                //     ]),
 
                 ViewColumn::make('status')
                     ->view('filament.tables.columns.proposal-status')
@@ -783,6 +783,7 @@ class ProposalResource extends Resource
                     ->color('secondary')
                     ->icon('heroicon-o-printer')
             ])
+            ->defaultSort('id', 'desc')
             ;
     }
     

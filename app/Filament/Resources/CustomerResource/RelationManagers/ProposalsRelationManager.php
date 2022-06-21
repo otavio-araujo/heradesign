@@ -22,6 +22,8 @@ class ProposalsRelationManager extends HasManyRelationManager
 
     protected static ?string $pluralLabel = 'Propostas';
 
+    protected $listeners = ['refreshComponent' => '$refresh'];
+
     public static function form(Form $form): Form
     {
         return $form
@@ -45,14 +47,10 @@ class ProposalsRelationManager extends HasManyRelationManager
                     ->sortable()
                 ,
 
-                BadgeColumn::make('status.nome')
-                    ->colors([
-                        'success',
-                        'primary' => 'Nova',
-                        'danger' => 'Reprovada',
-                        'warning' => 'Em Análise',
-                        
-                    ]),
+                ViewColumn::make('status')
+                    ->view('filament.tables.columns.proposal-status')
+                    ->url(null)
+                ,
 
                 ViewColumn::make('valor_total')->view('filament.tables.columns.proposal-valor-total'),
                 
@@ -81,5 +79,15 @@ class ProposalsRelationManager extends HasManyRelationManager
             ])
             ->defaultSort('id', 'desc');
             ;
+    }
+
+    public function statusChange(Proposal $proposal, $status_id) 
+    {
+        $proposal->proposal_status_id = $status_id;
+        $proposal->save();
+
+        $this->emit('refreshComponent');
+
+        $this->notify('success', 'Status Atualizado!');
     }
 }
