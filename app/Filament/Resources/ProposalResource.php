@@ -776,12 +776,37 @@ class ProposalResource extends Resource
                 //     ->sortable()
                 //     ->money('brl'),
 
-            ])->prependActions([
-                Action::make('Imprimir')
+            ])
+            ->actions([
+
+                Action::make('poropsal_print')
+                    ->tooltip('Imprimir Proposta')
+                    ->label('')
                     ->url(fn (Proposal $record): string => route('proposal.pdf', $record))
                     ->openUrlInNewTab()
                     ->color('secondary')
                     ->icon('heroicon-o-printer')
+                    ->size('lg')
+                ,
+                Action::make('order_generate')
+                    // ->url(fn (Proposal $record): string => route('order.generate', $record))
+                    ->label('')
+                    ->tooltip('Gerar Pedido')
+                    ->color('success')
+                    ->icon('heroicon-o-clipboard-check')
+                    ->size('lg')
+                    ->action('generateOrder', fn (Proposal $record): string => $record->id)
+                ,
+
+                Action::make('edit')
+                    ->tooltip('Editar Proposta')
+                    ->label('')
+                    ->color('warning')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg')
+                    ->url(fn (Proposal $record): string => route('filament.resources.propostas.edit', $record))
+                , 
+
             ])
             ->defaultSort('id', 'desc')
             ;

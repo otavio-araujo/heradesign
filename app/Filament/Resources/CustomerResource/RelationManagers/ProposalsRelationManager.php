@@ -53,28 +53,40 @@ class ProposalsRelationManager extends HasManyRelationManager
                 ,
 
                 ViewColumn::make('valor_total')->view('filament.tables.columns.proposal-valor-total'),
-                
-                // Tables\Columns\TextColumn::make('valor_total')
-                //     ->label('Valor Total')
-                //     ->sortable()
-                //     ->money('brl'),
 
             ])
             ->headerActions([
 
             ])
             ->actions([
-                Action::make('Imprimir')
+
+                    Action::make('poropsal_print')
+                        ->tooltip('Imprimir Proposta')
+                        ->label('')
                         ->url(fn (Proposal $record): string => route('proposal.pdf', $record))
                         ->openUrlInNewTab()
                         ->color('secondary')
                         ->icon('heroicon-o-printer')
-                ,
-                Action::make('Alterar')
-                        ->url(fn (Proposal $record): string => route('filament.resources.propostas.edit', $record))
-                        ->openUrlInNewTab()
+                        ->size('lg')
+                    ,
+                    Action::make('order_generate')
+                        ->url(fn (Proposal $record): string => route('proposal.pdf', $record))
+                        ->label('')
+                        ->tooltip('Gerar Pedido')
+                        ->color('success')
+                        ->icon('heroicon-o-clipboard-check')
+                        ->size('lg')
+                    ,
+    
+                    Action::make('edit')
+                        ->tooltip('Editar Proposta')
+                        ->label('')
+                        ->color('warning')
                         ->icon('heroicon-o-pencil')
-                ,
+                        ->size('lg')
+                        ->openUrlInNewTab()
+                        ->url(fn (Proposal $record): string => route('filament.resources.propostas.edit', $record))
+                    , 
                 
             ])
             ->defaultSort('id', 'desc');

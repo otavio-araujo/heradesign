@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,12 +14,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/report/1', function () {
-    return view('reports.proposta1');
-});
 
-Route::get('/report/2', function () {
-    return view('reports.proposta2');
-});
-
+/* Rotas para gerar a Proposta em PDF */
 Route::get('/pdf/{record}', [PDFController::class, 'pdf'])->name('proposal.pdf');

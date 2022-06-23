@@ -28,4 +28,11 @@ class ListProposals extends ListRecords
         $this->notify('success', 'Status Atualizado!');
     }
 
+    public function generateOrder (Proposal $record)
+    {
+        
+        $this->notify('alert', 'Proposta -> Pedido');
+        return $record;
+    }
+
 }
