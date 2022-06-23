@@ -247,7 +247,7 @@
         <h2 class="titulo" style="margin-top: 2rem;">cabeceiras</h2>
         
             @foreach ($data->headboards as $headboard)
-            <div class="card mb-15px">
+            <div class="card mb-15px" style="page-break-inside: avoid !important;">
                 <div class="card-header">
                     <h2>Cabeceira - {{ $count_cabeceiras }}</h2>
                 </div>
@@ -409,7 +409,7 @@
                                                     <div class="label text-center" style="width: 100%;">{{ $loop->iteration }}</div> 
                                                 </td>
                                                 <td>
-                                                    <div class="label">{{ $modulo->quantidade }}</div> 
+                                                    <div class="label">{{ $modulo->qtd }}</div> 
                                                 </td>
                                                 <td>
                                                     <div class="label">{{ $modulo->largura }}</div> 
