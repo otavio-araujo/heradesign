@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ProposalStatus extends Model
+class Step extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nome',
+        'nome'
     ];
 
-    public function propostas()
+    public function orders()
     {
-        return $this->hasMany(Proposal::class);
+        return $this->belongsToMany(Order::class)->withPivot('defined_at')->using(OrderStep::class);
     }
 
     protected function nome(): Attribute

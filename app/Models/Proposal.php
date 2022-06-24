@@ -54,5 +54,10 @@ class Proposal extends Model
         return $this->hasMany(ProposalItem::class);
     }
 
+    public function order ()
+    {
+        return $this->hasOne(Order::class);
+    }
+
     
 }

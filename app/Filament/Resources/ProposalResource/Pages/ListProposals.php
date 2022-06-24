@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\ProposalResource\Pages;
 
+use App\Models\Order;
 use App\Models\Proposal;
 use Filament\Resources\Form;
+use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Resources\Pages\ListRecords;
@@ -31,7 +33,31 @@ class ListProposals extends ListRecords
     public function generateOrder (Proposal $record)
     {
         
-        $this->notify('alert', 'Proposta -> Pedido');
+        if ($counter = Order::where('proposal_id', $record->id)->count()) {
+
+            $this->notify('warning', 'Pedido Já Existente');
+
+            $order = DB::table('orders')
+                                ->where('proposal_id', $record->id)->first();
+            
+            return redirect()->route('filament.resources.orders.edit', $order->id);
+
+        } else {
+
+            $dados = [
+                'proposal_id' => $record->id,
+                'customer_id' => $record->customer->id
+            ];
+
+            $order = Order::create($dados);
+
+            $this->notify('success', 'Pedido Gerado com Sucesso!');
+
+            return redirect()->route('filament.resources.orders.edit', $order);
+            
+        }
+        
+        
         return $record;
     }
 

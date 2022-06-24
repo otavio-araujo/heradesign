@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             FeedstockSeeder::class,
             PartnerSeeder::class,
             ProposalStatusSeeder::class,
+            StepSeeder::class,
         ]);
     }
 }

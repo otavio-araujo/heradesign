@@ -61,6 +61,11 @@ class Customer extends Model
         return $this->hasMany(Proposal::class);
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
 
     // Mutators and Acessors
 

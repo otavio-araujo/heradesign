@@ -8,4 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'proposal_id',
+        'customer_id'
+    ];
+
+    protected $casts = [
+        'proposal_id' => 'integer',
+        'customer_id' => 'integer',
+    ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function proposal()
+    {
+        return $this->belongsTo(Proposal::class);
+    }
+
+    public function steps()
+    {
+        return $this->belongsToMany(Step::class)->withPivot('defined_at')->using(OrderStep::class);
+    }
 }
