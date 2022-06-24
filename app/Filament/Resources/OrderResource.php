@@ -59,7 +59,7 @@ class OrderResource extends Resource
                         ,
 
                         DatePicker::make('created_at')
-                            ->format('d/m/Y')
+                            ->displayFormat('d/m/Y')
                             ->disabled()
                             ->label('Emitido em')  
                             ->columnSpan([
@@ -120,7 +120,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\StepsRelationManager::class,
         ];
     }
     
@@ -132,4 +132,7 @@ class OrderResource extends Resource
             'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
+
+    
+
 }

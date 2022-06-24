@@ -14,5 +14,5 @@ class OrderStep extends Pivot
         'order_id',
         'step_id',
         'defined_at'
-    ]
+    ];
 }

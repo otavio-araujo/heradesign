@@ -31,6 +31,6 @@ class Order extends Model
 
     public function steps()
     {
-        return $this->belongsToMany(Step::class)->withPivot('defined_at')->using(OrderStep::class);
+        return $this->belongsToMany(Step::class)->withPivot('step_id', 'defined_at')->using(OrderStep::class);
     }
 }
