@@ -372,7 +372,7 @@ class CustomerResource extends Resource
         
         return [
             'Contato' => $record->contato,
-            'Whatsapp' => Helpers::formataTelefone($record->whatsapp),
+            'Whatsapp' => $record->whatsapp,
         ];
     }
 

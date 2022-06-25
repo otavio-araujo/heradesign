@@ -6,6 +6,7 @@ use GMP;
 use Closure;
 use Filament\Forms;
 use Filament\Tables;
+use App\Helpers\Helpers;
 use App\Models\Customer;
 use App\Models\Proposal;
 use Filament\Resources\Form;
@@ -17,6 +18,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Wizard;
+use App\Tables\Columns\StatusSwitcher;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +35,6 @@ use App\Filament\Resources\ProposalResource\RelationManagers;
 use App\Filament\Resources\ProposalResource\Pages\EditProposal;
 use App\Filament\Resources\ProposalResource\Pages\ListProposals;
 use App\Filament\Resources\ProposalResource\Pages\CreateProposal;
-use App\Tables\Columns\StatusSwitcher;
 
 class ProposalResource extends Resource
 {
@@ -834,14 +835,19 @@ class ProposalResource extends Resource
         return ['id', 'customer.nome', 'customer.parceiro.nome'];
     }
 
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return 'PT-' . Helpers::setProposalNumber($record->id);
+    }
+
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         
         
         return [
-            'Proposta' => 'PT-' . $record->id,
+            'Proposta' => 'PT-' . Helpers::setProposalNumber($record->id),
             'Cliente' => $record->customer->nome,
-            'Valor Total' => $record->valor_total,
+            'Valor Total' => 'R$' . number_format($record->headboards->sum('valor_total') + $record->proposalItems->sum('valor_total') , 2, ',', '.'),
         ];
     }
 

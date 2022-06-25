@@ -40,7 +40,7 @@ class ListProposals extends ListRecords
             $order = DB::table('orders')
                                 ->where('proposal_id', $record->id)->first();
             
-            return redirect()->route('filament.resources.orders.edit', $order->id);
+            return redirect()->route('filament.resources.pedidos.edit', $order->id);
 
         } else {
 
@@ -53,7 +53,7 @@ class ListProposals extends ListRecords
 
             $this->notify('success', 'Pedido Gerado com Sucesso!');
 
-            return redirect()->route('filament.resources.orders.edit', $order);
+            return redirect()->route('filament.resources.pedidos.edit', $order);
             
         }
         
