@@ -114,10 +114,10 @@ class OrderResource extends Resource
                     ->label('Pedido Nº')
                     ->formatStateUsing(fn (string $state): string => __(Helpers::setProposalNumber($state)))
                 ,
-                TextColumn::make('proposal.id')
-                    ->label('Proposta Nº')
-                    ->formatStateUsing(fn (string $state): string => __(Helpers::setProposalNumber($state)))
-                ,
+                // TextColumn::make('proposal.id')
+                //     ->label('Proposta Nº')
+                //     ->formatStateUsing(fn (string $state): string => __(Helpers::setProposalNumber($state)))
+                // ,
                 TextColumn::make('customer.nome')
                     ->label('Cliente')
                 ,
