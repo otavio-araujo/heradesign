@@ -9,6 +9,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\AttachAction;
 use Filament\Tables\Actions\DetachAction;
@@ -40,9 +41,13 @@ class StepsRelationManager extends BelongsToManyRelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('nome')
-                    ->label('Status do Pedido')
-                    ->sortable()
+                // TextColumn::make('nome')
+                //     ->label('Status do Pedido')
+                //     ->sortable()
+                // ,
+
+                ViewColumn::make('nome')
+                    ->view('filament.tables.columns.order-steps-badge')
                 ,
                 
                 TextColumn::make('defined_at')

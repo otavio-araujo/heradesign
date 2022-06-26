@@ -110,7 +110,7 @@ class EstadoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\CidadesRelationManager::class,
+            
         ];
     }
     

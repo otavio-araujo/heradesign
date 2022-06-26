@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 150);
+            $table->string('nome', 150)->unique();
+            $table->string('color', 50);
             $table->timestamps();
         });
     }

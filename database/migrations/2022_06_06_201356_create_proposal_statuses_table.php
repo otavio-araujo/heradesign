@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('proposal_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 50);
+            $table->string('nome', 50)->unique();
             $table->timestamps();
         });
     }

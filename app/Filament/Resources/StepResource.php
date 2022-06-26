@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\StepResource\Pages;
 use App\Filament\Resources\StepResource\RelationManagers;
@@ -79,8 +80,12 @@ class StepResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nome')
-                    ->searchable()    
+                // TextColumn::make('nome')
+                //     ->searchable()    
+                // ,
+                ViewColumn::make('nome')
+                    ->label('Nome')
+                    ->view('filament.tables.columns.steps-badge')
                 ,
                 TextColumn::make('updated_at')
                     ->label('Atualizado em')

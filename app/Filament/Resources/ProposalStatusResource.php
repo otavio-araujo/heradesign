@@ -85,10 +85,10 @@ class ProposalStatusResource extends Resource
             ->columns([
                 BadgeColumn::make('nome')
                     ->colors([
-                        'success',
                         'primary' => 'Nova',
                         'danger' => 'Reprovada',
                         'warning' => 'Em Análise',
+                        'success',
                         
                     ]),
             ])

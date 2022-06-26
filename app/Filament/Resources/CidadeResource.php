@@ -63,9 +63,8 @@ class CidadeResource extends Resource
                         Select::make('estado_id')
                             ->label('Estado')
                             ->required()
+                            ->options(Estado::all()->pluck('nome', 'id'))
                             ->searchable()
-                            ->getSearchResultsUsing(fn (string $searchQuery) => Estado::where('nome', 'like', "%{$searchQuery}%")->limit(50)->pluck('nome', 'id'))
-                            ->getOptionLabelUsing(fn ($value): ?string => Estado::find($value)?->nome)
                         ,
     
                     ])->columnSpan([
