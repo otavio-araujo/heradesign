@@ -7,15 +7,15 @@ return [
     'buttons' => [
 
         'dark_mode' => [
-            'label' => 'Tema escuro',
+            'label' => 'Mudar para modo escuro',
         ],
 
         'light_mode' => [
-            'label' => 'Tema claro',
+            'label' => 'Mudar para modo claro',
         ],
 
         'logout' => [
-            'label' => 'Sair',
+            'label' => 'Logout',
         ],
 
     ],

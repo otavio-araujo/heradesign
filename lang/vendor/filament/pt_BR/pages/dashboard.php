@@ -2,6 +2,6 @@
 
 return [
 
-    'title' => 'Painel Administrativo',
+    'title' => 'Painel de Controle',
 
 ];

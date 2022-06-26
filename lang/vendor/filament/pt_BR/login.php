@@ -9,7 +9,7 @@ return [
     'buttons' => [
 
         'submit' => [
-            'label' => 'Entrar',
+            'label' => 'Login',
         ],
 
     ],
@@ -31,7 +31,7 @@ return [
     ],
 
     'messages' => [
-        'failed' => 'Essas credenciais não correspondem aos nossos registros.',
+        'failed' => 'Essas credenciais não correspondem aos com nossos registros.',
         'throttled' => 'Muitas tentativas de login. Por favor, aguarde :seconds segundos para tentar novamente.',
     ],
 
