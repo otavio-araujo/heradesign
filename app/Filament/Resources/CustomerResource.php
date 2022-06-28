@@ -332,7 +332,7 @@ class CustomerResource extends Resource
                     Tables\Columns\TextColumn::make('parceiro.nome')
                     ,
                     
-            ])
+            ])->defaultSort('id', 'desc')
         ;
     }
     
