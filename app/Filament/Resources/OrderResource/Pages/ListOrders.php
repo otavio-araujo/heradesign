@@ -15,4 +15,9 @@ class ListOrders extends ListRecords
             
         ];
     }
+
+    public function faturarPedido(Array $data)
+    {
+        dd($data);
+    }
 }
