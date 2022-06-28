@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             PartnerSeeder::class,
             ProposalStatusSeeder::class,
             StepSeeder::class,
+            BillingTypeSeeder::class,
+            BillingStatusSeeder::class,
         ]);
     }
 }
