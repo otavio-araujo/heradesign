@@ -13,7 +13,6 @@ class EditCustomer extends EditRecord
 {
     protected static string $resource = CustomerResource::class;
 
-
     protected function mutateFormDataBeforeSave(array $data): array
     {
         return Helpers::arrayToUpper($data);
