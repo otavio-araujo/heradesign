@@ -154,92 +154,124 @@ class OrderResource extends Resource
                     ->modalHeading('Faturar Pedido')
                     ->modalButton('Faturar Pedido')
                     ->form([
-                        TextInput::make('order_id')
-                            ->label('Pedido Nº')
-                            ->numeric()
-                            ->integer()
-                            ->default(fn (Order $record): string => $record->id)
-                            ->disabled()
-                        ,
 
-                        TextInput::make('proposal_id')
-                            ->label('Proposta Nº')
-                            ->numeric()
-                            ->integer()
-                            ->default(fn (Order $record): string => $record->proposal->id)
-                            ->disabled()
-                        ,
+                        /* BEGIN - Grid */
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2,
+                            'md' => 3,
+                            'lg' => 4,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])->schema([
+            
+                            /* BEGIN - Section - Dados do Faturamento */
+                            Section::make('Dados do Faturamento')->schema([
+                                
+                                TextInput::make('order_id')
+                                    ->label('Pedido Nº')
+                                    ->numeric()
+                                    ->integer()
+                                    ->default(fn (Order $record): string => $record->id)
+                                    ->disabled()
+                                ,
+            
+                            ])->columnSpan([
+                                    'md' => 2,
+                                    'lg' => 3,
+                                    'xl' => 4,
+                            ]),
+                            /* END - Section - Dados do Faturamento */
+            
+                        ])
+                        /* END - Grid */
 
-                        TextInput::make('customer_id')
-                            ->label('Código do Cliente')
-                            ->default(fn (Order $record): string => $record->customer->id)
-                            ->disabled()
-                        ,
+                        // TextInput::make('order_id')
+                        //     ->label('Pedido Nº')
+                        //     ->numeric()
+                        //     ->integer()
+                        //     ->default(fn (Order $record): string => $record->id)
+                        //     ->disabled()
+                        // ,
 
-                        TextInput::make('customer_nome')
-                            ->label('Nome do Cliente')
-                            ->default(fn (Order $record): string => $record->customer->nome)
-                            ->disabled()
-                        ,
+                        // TextInput::make('proposal_id')
+                        //     ->label('Proposta Nº')
+                        //     ->numeric()
+                        //     ->integer()
+                        //     ->default(fn (Order $record): string => $record->proposal->id)
+                        //     ->disabled()
+                        // ,
 
-                        Select::make('billing_status_id')
-                            ->label('Situação')
-                            ->options(BillingStatus::all()->pluck('nome', 'id'))
-                            ->searchable() 
-                            ->required()
-                        ,
+                        // TextInput::make('customer_id')
+                        //     ->label('Código do Cliente')
+                        //     ->default(fn (Order $record): string => $record->customer->id)
+                        //     ->disabled()
+                        // ,
 
-                        Select::make('billing_type_id')
-                            ->label('Tipo de Pagamento')
-                            ->searchable()
-                            ->options(BillingType::all()->pluck('nome', 'id'))
-                            ->required()
-                        ,
+                        // TextInput::make('customer_nome')
+                        //     ->label('Nome do Cliente')
+                        //     ->default(fn (Order $record): string => $record->customer->nome)
+                        //     ->disabled()
+                        // ,
 
-                        TextInput::make('valor_total')
-                            ->label('Valor Total do Pedido')
-                            ->mask(fn (Mask $mask) => $mask
-                                ->patternBlocks([
-                                    'money' => fn (Mask $mask) => $mask
-                                        ->numeric()
-                                        ->decimalPlaces(2)
-                                        ->mapToDecimalSeparator([',', '.'])
-                                        ->thousandsSeparator('.')
-                                        ->decimalSeparator(',')
-                                        ->normalizeZeros(false)
-                                        ->padFractionalZeros(false)
-                                        ->lazyPlaceholder()
-                                    ,
-                                ])
-                                ->pattern('R$ money')
-                            )
-                            ->default(fn (Order $record): float => ($record->proposal->headboards->sum('valor_total') + $record->proposal->proposalItems->sum('valor_total')))        
-                            ->disabled(true)
-                        ,
+                        // Select::make('billing_status_id')
+                        //     ->label('Situação')
+                        //     ->options(BillingStatus::all()->pluck('nome', 'id'))
+                        //     ->searchable() 
+                        //     ->required()
+                        // ,
 
-                        TextInput::make('qtd_parcelas')
-                            ->label('Quantidade de Parcelas')
-                            ->numeric()
-                            ->integer()
-                            ->default(1)
-                            ->required()
-                        ,
+                        // Select::make('billing_type_id')
+                        //     ->label('Tipo de Pagamento')
+                        //     ->searchable()
+                        //     ->options(BillingType::all()->pluck('nome', 'id'))
+                        //     ->required()
+                        // ,
 
-                        DatePicker::make('data_vencimento')
-                            ->label('Primeiro Vencimento')
-                            ->displayFormat('d/m/Y')
-                            ->required()
-                        ,
+                        // TextInput::make('valor_total')
+                        //     ->label('Valor Total do Pedido')
+                        //     ->mask(fn (Mask $mask) => $mask
+                        //         ->patternBlocks([
+                        //             'money' => fn (Mask $mask) => $mask
+                        //                 ->numeric()
+                        //                 ->decimalPlaces(2)
+                        //                 ->mapToDecimalSeparator([',', '.'])
+                        //                 ->thousandsSeparator('.')
+                        //                 ->decimalSeparator(',')
+                        //                 ->normalizeZeros(false)
+                        //                 ->padFractionalZeros(false)
+                        //                 ->lazyPlaceholder()
+                        //             ,
+                        //         ])
+                        //         ->pattern('R$ money')
+                        //     )
+                        //     ->default(fn (Order $record): float => ($record->proposal->headboards->sum('valor_total') + $record->proposal->proposalItems->sum('valor_total')))        
+                        //     ->disabled(true)
+                        // ,
 
-                        TextInput::make('documento')
-                            ->label('Documento')
-                            ->maxLength(250)
-                        ,
+                        // TextInput::make('qtd_parcelas')
+                        //     ->label('Quantidade de Parcelas')
+                        //     ->numeric()
+                        //     ->integer()
+                        //     ->default(1)
+                        //     ->required()
+                        // ,
 
-                        TextInput::make('observacoes')
-                            ->label('Observações')
-                            ->maxLength(250)
-                        ,
+                        // DatePicker::make('data_vencimento')
+                        //     ->label('Primeiro Vencimento')
+                        //     ->displayFormat('d/m/Y')
+                        //     ->required()
+                        // ,
+
+                        // TextInput::make('documento')
+                        //     ->label('Documento')
+                        //     ->maxLength(250)
+                        // ,
+
+                        // TextInput::make('observacoes')
+                        //     ->label('Observações')
+                        //     ->maxLength(250)
+                        // ,
 
                         
                     ])
