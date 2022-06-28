@@ -448,7 +448,7 @@
         <h2 class="titulo" style="margin-top: 2rem;">outros ítens</h2>
         
             @foreach ($data->proposalItems as $item)
-            <div class="card mb-15px">
+            <div class="card mb-15px" style="page-break-inside: avoid !important;">
                 <div class="card-header">
                     <h2>Ítem - {{ $count_items }}</h2>
                 </div>
@@ -679,40 +679,42 @@
         </div>
         
         @if (!empty($data->pgto_vista) or !empty($data->pgto_boleto) or !empty($data->pgto_cartao) or !empty($data->pgto_outros))
-        <h2 class="titulo" style="margin-top: 2rem;">Formas de pagamento</h2>
-        
-        <ul style="color: #434343;">
+        <div style="page-break-inside: avoid !important;">
+            <h2 class="titulo" style="margin-top: 2rem;">Formas de pagamento</h2>
+            
+            <ul style="color: #434343;">
 
 
-            @if (!empty($data->pgto_vista))
-                <li class="p-3px text-secondary">
-                    <strong class="text-primary">Á VISTA: </strong> 
-                    {{  $data->pgto_vista }};
-                </li>
-            @endif
+                @if (!empty($data->pgto_vista))
+                    <li class="p-3px text-secondary">
+                        <strong class="text-primary">Á VISTA: </strong> 
+                        {{  $data->pgto_vista }};
+                    </li>
+                @endif
 
-            @if (!empty($data->pgto_boleto))
-                <li class="p-3px text-secondary">
-                    <strong class="text-primary">BOLETO BANCÁRIO: </strong> 
-                    {{  $data->pgto_boleto }};
-                </li>
-            @endif
+                @if (!empty($data->pgto_boleto))
+                    <li class="p-3px text-secondary">
+                        <strong class="text-primary">BOLETO BANCÁRIO: </strong> 
+                        {{  $data->pgto_boleto }};
+                    </li>
+                @endif
 
-            @if (!empty($data->pgto_cartao))
-                <li class="p-3px text-secondary">
-                    <strong class="text-primary">CARTÕES DE CRÉDITO: </strong> 
-                    {{  $data->pgto_cartao }};
-                </li>
-            @endif
+                @if (!empty($data->pgto_cartao))
+                    <li class="p-3px text-secondary">
+                        <strong class="text-primary">CARTÕES DE CRÉDITO: </strong> 
+                        {{  $data->pgto_cartao }};
+                    </li>
+                @endif
 
-            @if (!empty($data->pgto_outros))
-                <li class="p-3px text-secondary">
-                    <strong class="text-primary">OUTROS: </strong> 
-                    {{  $data->pgto_outros }};
-                </li>
-            @endif
+                @if (!empty($data->pgto_outros))
+                    <li class="p-3px text-secondary">
+                        <strong class="text-primary">OUTROS: </strong> 
+                        {{  $data->pgto_outros }};
+                    </li>
+                @endif
 
-        </ul>
+            </ul>
+        </div>
         @endif
         
 
