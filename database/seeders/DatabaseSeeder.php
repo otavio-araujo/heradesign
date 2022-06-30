@@ -34,8 +34,11 @@ class DatabaseSeeder extends Seeder
             PartnerSeeder::class,
             ProposalStatusSeeder::class,
             StepSeeder::class,
-            BillingTypeSeeder::class,
-            BillingStatusSeeder::class,
+            ContaCorrenteSeeder::class,
+            FormaPagamentoSeeder::class,
+            StatusContaSeeder::class,
+            PlanoContaSeeder::class,
+            CategoriaContaSeeder::class,
         ]);
     }
 }

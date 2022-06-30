@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class BillingStatusSeeder extends Seeder
+class ContaCorrenteSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,20 +16,24 @@ class BillingStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('billing_statuses')->insert([
-            'nome' => 'ATIVO',
+        DB::table('contas_correntes')->insert([
+            'titular' => 'HERA DESIGN',
+            'banco' => 'CAIXA INTERNO',
+            'agencia' => '1',
+            'conta' => '1',
+            'saldo_inicial' => 0,
+            'saldo_atual' => 0,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('billing_statuses')->insert([
-            'nome' => 'LIQUIDADO',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
-        ]);
-
-        DB::table('billing_statuses')->insert([
-            'nome' => 'VENCIDO',
+        DB::table('contas_correntes')->insert([
+            'titular' => 'HERA DESIGN',
+            'banco' => 'BANCO C6 S.A.',
+            'agencia' => '0001',
+            'conta' => '18410383-5',
+            'saldo_inicial' => 0,
+            'saldo_atual' => 0,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('billing_types', function (Blueprint $table) {
+        Schema::create('contas_correntes', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 100)->unique();
+            $table->string('titular');
+            $table->string('banco');
+            $table->string('agencia');
+            $table->string('conta');
+            $table->decimal('saldo_inicial', 12, 2)->default(0);
+            $table->decimal('saldo_atual', 12, 2)->default(0);
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('billing_types');
+        Schema::dropIfExists('conta_correntes');
     }
 };

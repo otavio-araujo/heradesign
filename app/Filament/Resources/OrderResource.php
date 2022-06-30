@@ -6,9 +6,7 @@ use Filament\Forms;
 use Filament\Tables;
 use App\Models\Order;
 use App\Helpers\Helpers;
-use App\Models\BillingType;
 use Filament\Resources\Form;
-use App\Models\BillingStatus;
 use Filament\Resources\Table;
 use PhpParser\Node\Stmt\Label;
 use Filament\Resources\Resource;
@@ -234,7 +232,7 @@ class OrderResource extends Resource
 
                                 Select::make('billing_status_id')
                                     ->label('Situação')
-                                    ->options(BillingStatus::all()->pluck('nome', 'id'))
+                                    // ->options()
                                     ->searchable() 
                                     ->required()
                                     ->default(1)
@@ -247,7 +245,7 @@ class OrderResource extends Resource
                                 Select::make('billing_type_id')
                                     ->label('Tipo de Pagamento')
                                     ->searchable()
-                                    ->options(BillingType::all()->pluck('nome', 'id'))
+                                    // ->options()
                                     ->required()
                                     ->default(5)
                                     ->columnSpan([
