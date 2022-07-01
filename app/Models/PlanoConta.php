@@ -39,4 +39,17 @@ class PlanoConta extends Model
     {
         return $this->hasMany(ContaReceber::class, 'plano_conta_id');
     }
+
+
+    /* Query Scopes */
+
+    public function scopeDespesas($query)
+    {
+        return $query->where('tipo_conta_id', '=', 1);
+    }
+
+    public function scopeReceitas($query)
+    {
+        return $query->where('tipo_conta_id', '=', 2);
+    }
 }

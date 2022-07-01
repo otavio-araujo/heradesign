@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Order;
 use App\Helpers\Helpers;
+use App\Models\PlanoConta;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
+use App\Models\CategoriaConta;
 use PhpParser\Node\Stmt\Label;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
@@ -149,6 +152,7 @@ class OrderResource extends Resource
                     ->color('success')
                     ->icon('heroicon-o-currency-dollar')
                     ->size('lg')
+                    ->modalWidth('6xl')
                     ->modalButton('Faturar Pedido')
                     ->form([
 
@@ -203,6 +207,38 @@ class OrderResource extends Resource
                                         'md' => 8,
                                     ])
                                     ->disabled()
+                                ,
+
+                                Select::make('plano_conta_id')
+                                    ->label('Plano de Contas')
+                                    ->options(PlanoConta::Receitas()->pluck('nome', 'id'))
+                                    ->reactive()
+                                    ->afterStateUpdated(fn (callable $set) => $set('categoria_conta_id', null))
+                                    ->searchable() 
+                                    ->required()
+                                    ->preload(true)
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 6,
+                                    ])
+                                ,
+
+                                Select::make('categoria_conta_id')
+                                    ->label('Categorias de Contas')
+                                    ->options(function (callable $get) {
+                                        $plano = PlanoConta::find($get('plano_conta_id'));
+
+                                        if (! $plano) {
+                                           return CategoriaConta::all()->pluck('nome', 'id');
+                                        }
+
+                                        return $plano->categoriasContas->pluck('nome', 'id');
+                                    }) 
+                                    ->required()
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 6,
+                                    ])
                                 ,
 
                                 TextInput::make('valor_total')
