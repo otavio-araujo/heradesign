@@ -23,9 +23,9 @@ return new class extends Migration
             $table->foreignId('proposal_id')->constrained();
             $table->foreignId('order_id')->constrained();
             $table->foreignId('customer_id')->constrained();
-            $table->string('descricao');
-            $table->string('documento');
-            $table->string('observacoes');
+            $table->text('descricao');
+            $table->string('documento')->nullable();
+            $table->string('observacoes')->nullable();
             $table->integer('qtd_parcelas');
             $table->integer('parcela_atual');
             $table->decimal('valor_previsto', 12, 2);
@@ -34,8 +34,8 @@ return new class extends Migration
             $table->decimal('valor_acrescimos', 12, 2)->nullable();
             $table->decimal('valor_pago', 12, 2)->nullable();
             $table->date('vencimento_em');
-            $table->date('pago_em');
-            $table->date('liquidado_em');
+            $table->date('pago_em')->nullable();
+            $table->date('liquidado_em')->nullable();
             $table->timestamps();
 
             $table->foreign('status_conta_id')->references('id')->on('status_contas');

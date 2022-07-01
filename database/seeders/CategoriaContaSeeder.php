@@ -114,6 +114,54 @@ class CategoriaContaSeeder extends Seeder
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
+        DB::table('categorias_contas')->insert([
+            'nome' => 'RECEITAS COM PEDIDOS',
+            'plano_conta_id' => 6,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('categorias_contas')->insert([
+            'nome' => 'RENDA FIXA',
+            'plano_conta_id' => 7,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('categorias_contas')->insert([
+            'nome' => 'PROVENTOS',
+            'plano_conta_id' => 7,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('categorias_contas')->insert([
+            'nome' => 'FUNDOS IMOBILIÁRIOS',
+            'plano_conta_id' => 7,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('categorias_contas')->insert([
+            'nome' => 'DIVIDENDOS',
+            'plano_conta_id' => 7,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('categorias_contas')->insert([
+            'nome' => 'OUTROS RENDIMENTOS',
+            'plano_conta_id' => 7,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('categorias_contas')->insert([
+            'nome' => 'DOAÇÕES',
+            'plano_conta_id' => 8,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
         
     }
 }

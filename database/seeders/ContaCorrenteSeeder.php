@@ -37,5 +37,16 @@ class ContaCorrenteSeeder extends Seeder
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
+
+        DB::table('contas_correntes')->insert([
+            'titular' => 'HERA DESIGN - PERMUTAS',
+            'banco' => 'PERMUTAS',
+            'agencia' => '0001',
+            'conta' => '0001',
+            'saldo_inicial' => 0,
+            'saldo_atual' => 0,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
     }
 }

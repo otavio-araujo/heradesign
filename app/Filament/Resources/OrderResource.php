@@ -26,6 +26,11 @@ use Filament\Forms\Components\TextInput\Mask;
 use Filament\Forms\Components\BelongsToSelect;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Models\ContaCorrente;
+use App\Models\FormaPagamento;
+use App\Models\StatusConta;
+use Carbon\Carbon;
+use Filament\Forms\Components\Hidden;
 
 class OrderResource extends Resource
 {
@@ -171,6 +176,7 @@ class OrderResource extends Resource
                                 
                                 TextInput::make('order_id')
                                     ->label('Pedido Nº')
+                                    ->required()
                                     ->numeric()
                                     ->integer()
                                     ->default(fn (Order $record): string => $record->id)
@@ -183,6 +189,7 @@ class OrderResource extends Resource
 
                                 TextInput::make('proposal_id')
                                     ->label('Proposta Nº')
+                                    ->required()
                                     ->numeric()
                                     ->integer()
                                     ->default(fn (Order $record): string => $record->proposal->id)
@@ -193,14 +200,15 @@ class OrderResource extends Resource
                                     ->disabled()
                                 ,
 
-                                TextInput::make('customer_id')
+                                Hidden::make('customer_id')
                                     ->label('Código do Cliente')
+                                    ->required()
                                     ->default(fn (Order $record): string => $record->customer->id)
-                                    ->hidden(true)
                                 ,
 
                                 TextInput::make('customer_nome')
                                     ->label('Nome do Cliente')
+                                    ->required()
                                     ->default(fn (Order $record): string => $record->customer->nome)
                                     ->columnSpan([
                                         'default' => 'full',
@@ -209,22 +217,37 @@ class OrderResource extends Resource
                                     ->disabled()
                                 ,
 
+                                Select::make('conta_corrente_id')
+                                    ->label('Conta Corrente')
+                                    ->required()
+                                    ->options(ContaCorrente::all()->pluck('banco', 'id'))
+                                    ->searchable() 
+                                    ->preload(true)
+                                    ->default(3)
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 4,
+                                    ])
+                                ,
+
                                 Select::make('plano_conta_id')
                                     ->label('Plano de Contas')
+                                    ->required()
                                     ->options(PlanoConta::Receitas()->pluck('nome', 'id'))
                                     ->reactive()
                                     ->afterStateUpdated(fn (callable $set) => $set('categoria_conta_id', null))
                                     ->searchable() 
-                                    ->required()
+                                    ->default(6)
                                     ->preload(true)
                                     ->columnSpan([
                                         'default' => 'full',
-                                        'md' => 6,
+                                        'md' => 4,
                                     ])
                                 ,
 
                                 Select::make('categoria_conta_id')
                                     ->label('Categorias de Contas')
+                                    ->required()
                                     ->options(function (callable $get) {
                                         $plano = PlanoConta::find($get('plano_conta_id'));
 
@@ -234,15 +257,16 @@ class OrderResource extends Resource
 
                                         return $plano->categoriasContas->pluck('nome', 'id');
                                     }) 
-                                    ->required()
+                                    ->default(15)
                                     ->columnSpan([
                                         'default' => 'full',
-                                        'md' => 6,
+                                        'md' => 4,
                                     ])
                                 ,
 
-                                TextInput::make('valor_total')
+                                TextInput::make('valor_previsto')
                                     ->label('Valor Total do Pedido')
+                                    ->required()
                                     ->mask(fn (Mask $mask) => $mask
                                         ->patternBlocks([
                                             'money' => fn (Mask $mask) => $mask
@@ -266,24 +290,125 @@ class OrderResource extends Resource
                                     ])
                                 ,
 
-                                Select::make('billing_status_id')
-                                    ->label('Situação')
-                                    // ->options()
-                                    ->searchable() 
+                                Select::make('forma_pagamento_id')
+                                    ->label('Formas de Pagamento')
                                     ->required()
-                                    ->default(1)
+                                    ->options(FormaPagamento::all()->pluck('nome', 'id'))
+                                    ->searchable() 
+                                    ->preload(true)
+                                    ->default(8)
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 4,
                                     ])
                                 ,
 
-                                Select::make('billing_type_id')
-                                    ->label('Tipo de Pagamento')
-                                    ->searchable()
-                                    // ->options()
+                                Select::make('status_conta_id')
+                                    ->label('Sitação Atual')
                                     ->required()
-                                    ->default(5)
+                                    ->options(StatusConta::all()->pluck('nome', 'id'))
+                                    ->default(1)
+                                    ->searchable() 
+                                    ->preload(true)
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 4,
+                                    ])
+                                ,
+
+                                TextInput::make('qtd_parcelas')
+                                    ->label('Nº de Parcelas')
+                                    ->required()
+                                    ->numeric()
+                                    ->integer()
+                                    ->default(1)
+                                    ->reactive()
+                                    ->afterStateUpdated(fn (callable $set) => $set('valor_parcela', fn (callable $get): string => ($get('valor_previsto') / $get('qtd_parcelas'))))
+                                    ->lazy()
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 2,
+                                    ])
+                                ,
+
+                                TextInput::make('valor_parcela')
+                                    ->label('Valor das Parcelas')
+                                    ->required()
+                                    ->mask(fn (Mask $mask) => $mask
+                                        ->patternBlocks([
+                                            'money' => fn (Mask $mask) => $mask
+                                                ->numeric()
+                                                ->decimalPlaces(2)
+                                                ->mapToDecimalSeparator([',', '.'])
+                                                ->thousandsSeparator('.')
+                                                ->decimalSeparator(',')
+                                                ->normalizeZeros(false)
+                                                ->padFractionalZeros(false)
+                                                ->lazyPlaceholder()
+                                            ,
+                                        ])
+                                        ->pattern('R$ money')
+                                    )
+                                    ->default(fn (callable $get): float => ($get('valor_previsto') / $get('qtd_parcelas')))      
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 2,
+                                    ])
+                                ,
+
+                                TextInput::make('valor_descontos')
+                                    ->label('Descontos')
+                                    ->mask(fn (Mask $mask) => $mask
+                                        ->patternBlocks([
+                                            'money' => fn (Mask $mask) => $mask
+                                                ->numeric()
+                                                ->decimalPlaces(2)
+                                                ->mapToDecimalSeparator([',', '.'])
+                                                ->thousandsSeparator('.')
+                                                ->decimalSeparator(',')
+                                                ->normalizeZeros(false)
+                                                ->padFractionalZeros(false)
+                                                ->lazyPlaceholder()
+                                            ,
+                                        ])
+                                        ->pattern('R$ money')
+                                    )
+                                    ->default('0.00')      
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 2,
+                                    ])
+                                ,
+
+                                TextInput::make('valor_acrescimos')
+                                    ->label('Acréscimos')
+                                    ->mask(fn (Mask $mask) => $mask
+                                        ->patternBlocks([
+                                            'money' => fn (Mask $mask) => $mask
+                                                ->numeric()
+                                                ->decimalPlaces(2)
+                                                ->mapToDecimalSeparator([',', '.'])
+                                                ->thousandsSeparator('.')
+                                                ->decimalSeparator(',')
+                                                ->normalizeZeros(false)
+                                                ->padFractionalZeros(false)
+                                                ->lazyPlaceholder()
+                                            ,
+                                        ])
+                                        ->pattern('R$ money')
+                                    )
+                                    ->default('0.00')      
+                                    ->columnSpan([
+                                        'default' => 'full',
+                                        'md' => 2,
+                                    ])
+                                ,
+
+                                DatePicker::make('vencimento_em')
+                                    ->label('Primeiro Vencimento')
+                                    ->required()
+                                    ->displayFormat('d/m/Y')
+                                    ->default(Carbon::now())
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 4,
@@ -292,6 +417,7 @@ class OrderResource extends Resource
 
                                 TextInput::make('documento')
                                     ->label('Documento')
+                                    ->default('PT-10 / PD-1')
                                     ->maxLength(250)
                                     ->columnSpan([
                                         'default' => 'full',
@@ -302,51 +428,13 @@ class OrderResource extends Resource
                                 TextInput::make('observacoes')
                                     ->label('Observações')
                                     ->maxLength(250)
+                                    ->default('PUBLICIDADE - REDES SOCIAIS')
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 8,
                                     ])
                                 ,
 
-
-                                TextInput::make('qtd_parcelas')
-                                    ->label('Parcelas')
-                                    ->numeric()
-                                    ->integer()
-                                    ->default(1)
-                                    ->required()
-                                    ->columnSpan([
-                                        'default' => 'full',
-                                        'md' => 2,
-                                    ])
-                                ,
-
-                                Select::make('repeticao')
-                                    ->options([
-                                        '7' => '7 dias',
-                                        '10' => '10 dias',
-                                        '15' => '15 dias',
-                                        '20' => '20 dias',
-                                        '28' => '28 dias',
-                                    ])
-                                    ->label('Repetição')
-                                    ->default(28)
-                                    ->hidden()
-                                    ->columnSpan([
-                                        'default' => 'full',
-                                        'md' => 2,
-                                    ])
-                                ,
-
-                                DatePicker::make('data_vencimento')
-                                    ->label('Primeiro Vencimento')
-                                    ->displayFormat('d/m/Y')
-                                    ->required()
-                                    ->columnSpan([
-                                        'default' => 'full',
-                                        'md' => 4,
-                                    ])
-                                ,
             
                             ])->columnSpan([
                                     'md' => 6,
