@@ -9,8 +9,10 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
@@ -54,6 +56,13 @@ class PlanoContaResource extends Resource
                 ])->schema([
     
                     Section::make('Dados Básicos')->schema([
+
+                        Select::make('tipo_conta_id')
+                            ->relationship('tipoConta', 'nome')
+                            ->required()
+                            ->preload(true)
+                            ->columnSpan(12)
+                        ,
                         
                         TextInput::make('nome')
                             ->autofocus()    
@@ -98,12 +107,18 @@ class PlanoContaResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nome')->label('Plano de Conta'),
+                ViewColumn::make('tipoConta.nome')->view('filament.tables.columns.tipos-contas'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Plano de Conta')
+                    ->label('')
+                    ->color('warning')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

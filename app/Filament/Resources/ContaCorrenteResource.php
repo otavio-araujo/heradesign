@@ -183,7 +183,12 @@ class ContaCorrenteResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Conta Corrente')
+                    ->label('')
+                    ->color('warning')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg')
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

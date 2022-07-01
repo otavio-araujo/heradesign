@@ -18,48 +18,56 @@ class PlanoContaSeeder extends Seeder
     {
         DB::table('planos_contas')->insert([
             'nome' => 'DESPESAS ADMINISTRATIVAS',
+            'tipo_conta_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'DESPESAS COM IMPOSTOS',
+            'tipo_conta_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'DESPESAS COM MARKETING',
+            'tipo_conta_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'DESPESAS COM RH',
+            'tipo_conta_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'DESPESAS OPERACIONAIS',
+            'tipo_conta_id' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'RENDIMENTOS',
+            'tipo_conta_id' => 2,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'OUTRAS RECEITAS',
+            'tipo_conta_id' => 2,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         DB::table('planos_contas')->insert([
             'nome' => 'RECEITAS COM PEDIDOS',
+            'tipo_conta_id' => 2,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

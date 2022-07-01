@@ -102,7 +102,12 @@ class StatusContaResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Status de Pagamento')
+                    ->label('')
+                    ->color('warning')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

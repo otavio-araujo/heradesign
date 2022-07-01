@@ -15,8 +15,11 @@ return new class extends Migration
     {
         Schema::create('planos_contas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tipo_conta_id');
             $table->string('nome')->unique();
             $table->timestamps();
+
+            $table->foreign('tipo_conta_id')->references('id')->on('tipos_contas');
         });
     }
 
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('plano_contas');
+        Schema::dropIfExists('planos_contas');
     }
 };

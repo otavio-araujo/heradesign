@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conta_correntes');
+        Schema::dropIfExists('contas_correntes');
     }
 };
