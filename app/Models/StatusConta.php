@@ -16,6 +16,12 @@ class StatusConta extends Model
         'nome'
     ];
 
+    public function contasReceber()
+    {
+        return $this->hasMany(ContaReceber::class, 'status_conta_id');
+    }
+
+
     protected function nome(): Attribute
     {
         

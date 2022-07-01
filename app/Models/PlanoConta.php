@@ -34,4 +34,9 @@ class PlanoConta extends Model
     {
         return $this->belongsTo(TipoConta::class, 'tipo_conta_id');
     }
+
+    public function contasReceber()
+    {
+        return $this->hasMany(ContaReceber::class, 'plano_conta_id');
+    }
 }

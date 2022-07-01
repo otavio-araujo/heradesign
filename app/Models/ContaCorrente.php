@@ -26,6 +26,15 @@ class ContaCorrente extends Model
         'saldo_atual' => 'decimal:2',
     ];
 
+    /*Relationships*/
+
+    public function contasReceber()
+    {
+        return $this->hasMany(ContaReceber::class, 'conta_corrente_id');
+    }
+
+    /*Mutators and Accessors */
+
     protected function titular(): Attribute
     {
         

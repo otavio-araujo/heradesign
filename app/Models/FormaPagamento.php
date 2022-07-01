@@ -23,4 +23,9 @@ class FormaPagamento extends Model
             set: fn ($value) => mb_strtoupper($value),
         );
     }
+
+    public function contasReceber()
+    {
+        return $this->hasMany(ContaReceber::class, 'forma_pagamento_id');
+    }
 }

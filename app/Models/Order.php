@@ -34,8 +34,8 @@ class Order extends Model
         return $this->belongsToMany(Step::class)->withPivot('step_id', 'defined_at')->using(OrderStep::class);
     }
 
-    public function receivable ()
+    public function contasReceber ()
     {
-        return $this->hasOne(Receivable::class);
+        return $this->hasMany(ContaReceber::class);
     }
 }

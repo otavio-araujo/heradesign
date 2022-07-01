@@ -66,9 +66,9 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function receivables ()
+    public function contasReceber ()
     {
-        return $this->hasMany(Receivable::class);
+        return $this->hasMany(ContaReceber::class);
     }
 
 
