@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\OrderResource\RelationManagers;
+namespace App\Filament\Resources\CustomerResource\RelationManagers;
 
+use App\Helpers\Helpers;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
@@ -42,6 +43,11 @@ class ContasReceberRelationManager extends RelationManager
     {
         return $table
             ->columns([
+
+                Tables\Columns\TextColumn::make('order_id')
+                    ->label('Pedido Nº')
+                    ->formatStateUsing(fn (ContaReceber $record) => Helpers::setProposalNumber($record->order_id))
+                ,
 
                 Tables\Columns\TextColumn::make('parcela_atual')
                     ->label('Parcela Atual')

@@ -343,10 +343,10 @@ class CustomerResource extends Resource
                 RelationManagers\ProposalsRelationManager::class,
             ]),
             RelationGroup::make('Pedidos', [
-                RelationManagers\ProposalsRelationManager::class,
+                RelationManagers\OrdersRelationManager::class,
             ]),
             RelationGroup::make('Financeiro', [
-                RelationManagers\ProposalsRelationManager::class,
+                RelationManagers\ContasReceberRelationManager::class,
             ]),
             
         ];

@@ -55,4 +55,6 @@ class ListOrders extends ListRecords
 
         $this->notify('success', 'Pedido Faturado com Sucesso!');
     }
+
+    
 }
