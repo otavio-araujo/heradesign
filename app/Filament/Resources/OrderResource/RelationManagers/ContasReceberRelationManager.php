@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\OrderResource\RelationManagers;
 
 use Carbon\Carbon;
 use Filament\Forms;
@@ -8,44 +8,32 @@ use Filament\Tables;
 use App\Models\ContaReceber;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
-use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput\Mask;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ContaReceberResource\Pages;
-use App\Filament\Resources\ContaReceberResource\RelationManagers;
+use Filament\Resources\RelationManagers\RelationManager;
 
-class ContaReceberResource extends Resource
+class ContasReceberRelationManager extends RelationManager
 {
-    protected static ?string $model = ContaReceber::class;
+    protected static string $relationship = 'contasReceber';
 
-    protected static ?string $navigationIcon = 'heroicon-o-thumb-up';
+    protected static ?string $recordTitleAttribute = 'id';
 
-    protected static ?string $navigationGroup = 'Financeiro';
+    protected static ?string $label = 'Faturamento';
 
-    protected static ?int $navigationSort = 1;
-
-    protected static ?string $recordTitleAttribute = 'descricao';
-
-    protected static ?string $navigationLabel = 'Contas a Receber';
-    
-    protected static ?string $slug = 'contas-a-receber';
-
-    protected static ?string $label = 'Conta a Receber';
-
-    protected static ?string $pluralLabel = 'Contas a Receber';
+    protected static ?string $pluralLabel = 'Faturamentos';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('id')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -53,46 +41,54 @@ class ContaReceberResource extends Resource
     {
         return $table
             ->columns([
-
-                TextColumn::make('order.id')
-                    ->label('Nº Pedido')
+                Tables\Columns\TextColumn::make('qtd_parcelas')
+                    ->label('Qtd Parcelas')
                 ,
 
-                TextColumn::make('vencimento_em')
+                Tables\Columns\TextColumn::make('parcela_atual')
+                    ->label('Parcela Atual')
+                ,
+
+                Tables\Columns\TextColumn::make('valor_parcela')
+                    ->label('Valor Previsto')
+                    ->money('BRL')
+                ,
+
+                Tables\Columns\TextColumn::make('vencimento_em')
                     ->label('Vencimento')
                     ->date('d/m/Y')
                 ,
 
-                TextColumn::make('descricao')
-                    ->label('Descrição')
-                    ->wrap()
-                ,
-
-                TextColumn::make('valor_parcela')
-                    ->label('Valor da Parcela')
-                    ->money('BRL')
-                ,
-
-                TextColumn::make('valor_pago')
-                    ->label('Total Pago')
-                    ->money('BRL')
-                ,
-
-                ViewColumn::make('statusConta.nome')
+                Tables\Columns\ViewColumn::make('statusConta.nome')
                     ->label('Situação')
                     ->view('filament.tables.columns.status-conta')
                 ,
+
+                Tables\Columns\TextColumn::make('valor_pago')
+                    ->label('Valor Pago')
+                    ->money('BRL')
+                ,
+
+                Tables\Columns\TextColumn::make('pago_em')
+                    ->label('Pago em')
+                    ->date('d/m/Y')
+                ,
+                
             ])
             ->filters([
                 //
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()->visible(false),
+            ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->tooltip('Editar Conta a Receber')
+                Tables\Actions\EditAction::make()->visible(false),
+                Tables\Actions\DeleteAction::make()
                     ->label('')
-                    ->color('warning')
-                    ->icon('heroicon-o-pencil')
+                    ->tooltip('Remover Faturamento')
                     ->size('lg')
+                    ->visible(false)
+                
                 ,
 
                 Tables\Actions\Action::make('baixarConta')
@@ -312,21 +308,5 @@ class ContaReceberResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-    
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-    
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListContaRecebers::route('/'),
-            'create' => Pages\CreateContaReceber::route('/create'),
-            'edit' => Pages\EditContaReceber::route('/{record}/edit'),
-        ];
     }    
 }

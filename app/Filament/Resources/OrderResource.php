@@ -3,18 +3,23 @@
 namespace App\Filament\Resources;
 
 use Closure;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Order;
 use App\Helpers\Helpers;
 use App\Models\PlanoConta;
+use App\Models\StatusConta;
 use Filament\Resources\Form;
+use App\Models\ContaCorrente;
 use Filament\Resources\Table;
 use App\Models\CategoriaConta;
+use App\Models\FormaPagamento;
 use PhpParser\Node\Stmt\Label;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
@@ -25,12 +30,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput\Mask;
 use Filament\Forms\Components\BelongsToSelect;
 use App\Filament\Resources\OrderResource\Pages;
+use Filament\Resources\RelationManagers\RelationGroup;
 use App\Filament\Resources\OrderResource\RelationManagers;
-use App\Models\ContaCorrente;
-use App\Models\FormaPagamento;
-use App\Models\StatusConta;
-use Carbon\Carbon;
-use Filament\Forms\Components\Hidden;
 
 class OrderResource extends Resource
 {
@@ -159,6 +160,7 @@ class OrderResource extends Resource
                     ->size('lg')
                     ->modalWidth('6xl')
                     ->modalButton('Faturar Pedido')
+                    ->visible(fn (Order $record): bool => $record->faturado == 0) 
                     ->form([
 
                         /* BEGIN - Grid */
@@ -223,7 +225,7 @@ class OrderResource extends Resource
                                     ->options(ContaCorrente::all()->pluck('banco', 'id'))
                                     ->searchable() 
                                     ->preload(true)
-                                    ->default(3)
+                                    ->default(2)
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 4,
@@ -236,8 +238,7 @@ class OrderResource extends Resource
                                     ->options(PlanoConta::Receitas()->pluck('nome', 'id'))
                                     ->reactive()
                                     ->afterStateUpdated(fn (callable $set) => $set('categoria_conta_id', null))
-                                    ->searchable() 
-                                    ->default(6)
+                                    ->searchable()
                                     ->preload(true)
                                     ->columnSpan([
                                         'default' => 'full',
@@ -257,7 +258,6 @@ class OrderResource extends Resource
 
                                         return $plano->categoriasContas->pluck('nome', 'id');
                                     }) 
-                                    ->default(15)
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 4,
@@ -296,7 +296,6 @@ class OrderResource extends Resource
                                     ->options(FormaPagamento::all()->pluck('nome', 'id'))
                                     ->searchable() 
                                     ->preload(true)
-                                    ->default(8)
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 4,
@@ -417,7 +416,6 @@ class OrderResource extends Resource
 
                                 TextInput::make('documento')
                                     ->label('Documento')
-                                    ->default('PT-10 / PD-1')
                                     ->maxLength(250)
                                     ->columnSpan([
                                         'default' => 'full',
@@ -428,7 +426,6 @@ class OrderResource extends Resource
                                 TextInput::make('observacoes')
                                     ->label('Observações')
                                     ->maxLength(250)
-                                    ->default('PUBLICIDADE - REDES SOCIAIS')
                                     ->columnSpan([
                                         'default' => 'full',
                                         'md' => 8,
@@ -456,7 +453,14 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\StepsRelationManager::class,
+            
+            RelationGroup::make('Acompanhamento', [
+                RelationManagers\StepsRelationManager::class,
+            ]),
+
+            RelationGroup::make('Faturamento', [
+                RelationManagers\ContasReceberRelationManager::class,
+            ]),
         ];
     }
     

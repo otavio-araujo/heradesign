@@ -11,12 +11,14 @@ class Order extends Model
 
     protected $fillable = [
         'proposal_id',
-        'customer_id'
+        'customer_id',
+        'faturado'
     ];
 
     protected $casts = [
         'proposal_id' => 'integer',
         'customer_id' => 'integer',
+        'faturado' => 'boolean'
     ];
 
     public function customer()

@@ -30,9 +30,9 @@ return new class extends Migration
             $table->integer('parcela_atual');
             $table->decimal('valor_previsto', 12, 2);
             $table->decimal('valor_parcela', 12, 2);
-            $table->decimal('valor_descontos', 12, 2)->nullable();
-            $table->decimal('valor_acrescimos', 12, 2)->nullable();
-            $table->decimal('valor_pago', 12, 2)->nullable();
+            $table->decimal('valor_descontos', 12, 2)->nullable()->default(0.00);
+            $table->decimal('valor_acrescimos', 12, 2)->nullable()->default(0.00);
+            $table->decimal('valor_pago', 12, 2)->nullable()->default(0.00);
             $table->date('vencimento_em');
             $table->date('pago_em')->nullable();
             $table->date('liquidado_em')->nullable();

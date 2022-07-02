@@ -16,4 +16,10 @@ class ListContaRecebers extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+
+    public function baixarConta() 
+    {
+        $this->notify('danger', 'Aqui vai baixar conta.');
+    }
 }
