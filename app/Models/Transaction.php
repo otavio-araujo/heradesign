@@ -13,7 +13,7 @@ class Transaction extends Model
 
     protected $fillable = [
         'conta_corrente_id',
-        'conta_pagar_id',
+        'conta_receber_id',
         'saldo_anterior',
         'saldo_atual',
         'valor'
@@ -21,7 +21,7 @@ class Transaction extends Model
 
     protected $casts = [
         'conta_corrente_id' => 'integer',
-        'conta_pagar_id' => 'integer',
+        'conta_receber_id' => 'integer',
         'saldo_anterior' => 'decimal:2',
         'saldo_atual' => 'decimal:2',
         'valor' => 'decimal:2',
@@ -32,8 +32,8 @@ class Transaction extends Model
         return $this->belongsTo(ContaCorrente::class, 'conta_corrente_id');
     }
 
-    public function contaPagar()
+    public function contaReceber()
     {
-        return $this->belongsTo(contaPagar::class, 'conta_pagar_id');
+        return $this->belongsTo(ContaReceber::class, 'conta_receber_id');
     }
 }

@@ -102,7 +102,7 @@ class ContaReceber extends Model
 
     public function transaction()
     {
-        return $this->hasOne(Transaction::class, 'conta_pagar_id');
+        return $this->hasOne(Transaction::class, 'conta_receber_id');
     }
 
     protected function descricao(): Attribute
