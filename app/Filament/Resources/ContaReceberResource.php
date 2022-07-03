@@ -5,11 +5,13 @@ namespace App\Filament\Resources;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
+use App\Helpers\Helpers;
 use App\Models\ContaReceber;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -54,17 +56,20 @@ class ContaReceberResource extends Resource
         return $table
             ->columns([
 
-                TextColumn::make('order.id')
-                    ->label('Nº Pedido')
+                Tables\Columns\TextColumn::make('order_id')
+                    ->label('Pedido Nº')
+                    ->formatStateUsing(fn (ContaReceber $record) => Helpers::setProposalNumber($record->order_id))
                 ,
 
                 TextColumn::make('vencimento_em')
                     ->label('Vencimento')
                     ->date('d/m/Y')
+                    ->sortable()
                 ,
 
                 TextColumn::make('descricao')
                     ->label('Descrição')
+                    ->searchable()
                     ->wrap()
                 ,
 
@@ -81,6 +86,7 @@ class ContaReceberResource extends Resource
                 ViewColumn::make('statusConta.nome')
                     ->label('Situação')
                     ->view('filament.tables.columns.status-conta')
+                    ->sortable()
                 ,
             ])
             ->filters([
@@ -96,7 +102,7 @@ class ContaReceberResource extends Resource
                 ,
 
                 Tables\Actions\Action::make('baixarConta')
-                    ->action('baixarcConta', fn (array $data): array => $data)
+                    ->action('baixarConta', fn (array $data): array => $data)
                     ->tooltip('Baixar Conta a Pagar')
                     ->label('')
                     ->color('success')
@@ -104,6 +110,7 @@ class ContaReceberResource extends Resource
                     ->size('lg')
                     ->modalWidth('5xl')
                     ->modalButton('Baixar Conta')
+                    ->visible(fn (ContaReceber $record): bool => $record->pago_em == null)
                     ->form([
 
                         /* BEGIN - Grid */
@@ -119,6 +126,10 @@ class ContaReceberResource extends Resource
                             /* BEGIN - Section - Dados do Faturamento */
                             Section::make(fn (ContaReceber $record): string => $record->customer->nome)->schema([
 
+                                Hidden::make('id')
+                                    ->default(fn (ContaReceber $record): string => $record->id)
+                                ,
+                                
                                 TextInput::make('conta_corrente_nome')
                                     ->label('Conta Corrente')
                                     ->default(fn (ContaReceber $record): string => $record->contaCorrente->banco . ' | AG: ' . $record->contaCorrente->agencia . '/ CC: ' . $record->contaCorrente->agencia)
@@ -204,6 +215,7 @@ class ContaReceberResource extends Resource
                                 DatePicker::make('pago_em')
                                     ->label('Pago em')
                                     ->required()
+                                    ->format('Y-m-d')
                                     ->displayFormat('d/m/Y')
                                     ->default(fn (ContaReceber $record): string => Carbon::make($record->vencimento_em)->format('Y-m-d'))
                                     ->columnSpan([
@@ -215,6 +227,7 @@ class ContaReceberResource extends Resource
                                 DatePicker::make('liquidado_em')
                                     ->label('Liquidado em')
                                     ->required()
+                                    ->format('Y-m-d')
                                     ->displayFormat('d/m/Y')
                                     ->default(fn (ContaReceber $record): string => Carbon::make($record->vencimento_em)->format('Y-m-d'))
                                     ->columnSpan([
@@ -329,4 +342,5 @@ class ContaReceberResource extends Resource
             'edit' => Pages\EditContaReceber::route('/{record}/edit'),
         ];
     }    
+
 }

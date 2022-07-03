@@ -100,6 +100,11 @@ class ContaReceber extends Model
         return $this->belongsTo(FormaPagamento::class, 'forma_pagamento_id');
     }
 
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class, 'conta_pagar_id');
+    }
+
     protected function descricao(): Attribute
     {
         

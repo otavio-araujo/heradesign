@@ -33,6 +33,11 @@ class ContaCorrente extends Model
         return $this->hasMany(ContaReceber::class, 'conta_corrente_id');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'conta_corrente_id');
+    }
+
     /*Mutators and Accessors */
 
     protected function titular(): Attribute
