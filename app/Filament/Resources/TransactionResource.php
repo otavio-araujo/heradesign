@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\TransactionResource\Pages;
+use Webbingbrasil\FilamentAdvancedFilter\Filters\DateFilter;
 use App\Filament\Resources\TransactionResource\RelationManagers;
 
 class TransactionResource extends Resource
@@ -64,7 +65,7 @@ class TransactionResource extends Resource
                 ,
 
                 ViewColumn::make('contaReceber.pago_em')
-                    ->label('Pago')
+                    ->label('Recebido em')
                     ->view('filament.tables.columns.transaction-pago-em')
                 ,
 
@@ -96,24 +97,26 @@ class TransactionResource extends Resource
                     ->column('conta_corrente_id')    
                 ,
 
-                Filter::make('created_at')
+                Filter::make('liquidado_em')
                     ->form([
                         Forms\Components\DatePicker::make('liquidado_em'),
                         Forms\Components\DatePicker::make('liquidado_ate'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
-                            ->join('contas_receber', 'transactions.id', 'contas_receber.id')
                             ->when(
                                 $data['liquidado_em'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('contas_receber.liquidado_em', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('contas_receber.liquidado_em', '>=', $date)->join('contas_receber', 'transactions.conta_receber_id', '=', 'contas_receber.id'),
                             )
                             ->when(
                                 $data['liquidado_ate'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('contas_receber.liquidado_em', '<=', $date), 
+                                fn (Builder $query, $date): Builder => $query->whereDate('contas_receber.liquidado_em', '<=', $date)->join('contas_receber', 'transactions.conta_receber_id', '=', 'contas_receber.id'), 
                             );
                     })
                 ,  
+
+
+
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
