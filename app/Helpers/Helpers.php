@@ -6,6 +6,7 @@ use App\Models\CategoriaConta;
 use App\Models\ContaCorrente;
 use App\Models\FormaPagamento;
 use App\Models\Supplier;
+use Faker\Core\Number;
 use Illuminate\Support\Str;
 
 class Helpers
@@ -230,6 +231,12 @@ class Helpers
                         'OUTRAS OBSERVAÇÕES: ' . trim($data['observacoes']);
         
         return $descricao;
+    }
+
+    public static function getRealCurrency ($amount)
+    {
+        
+        return 'R$' . number_format($amount, 2, ',', '.');
     }
 
 }

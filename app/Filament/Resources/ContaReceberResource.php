@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
@@ -11,18 +12,21 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput\Mask;
+use Filament\Tables\Filters\MultiSelectFilter;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ContaReceberResource\Pages;
+use Illuminate\Database\Eloquent\Factories\Relationship;
 use App\Filament\Resources\ContaReceberResource\RelationManagers;
-use Closure;
 
 class ContaReceberResource extends Resource
 {
@@ -338,8 +342,55 @@ class ContaReceberResource extends Resource
                     /* END - Formulario */
                 ,
             ])
+            ->filters([
+
+                Filter::make('vencimento_em')
+                    ->form([
+
+
+                        Fieldset::make('Período de Pesquisa')
+                        ->schema([
+                            Forms\Components\DatePicker::make('vencimento_em')
+                                ->displayFormat('d/m/Y')
+                                ->default(now()->subDays(7))
+                                ->columnSpan(3)
+                            ,
+                            Forms\Components\DatePicker::make('vencimento_ate')
+                                ->default(now())
+                                ->displayFormat('d/m/Y')
+                                ->columnSpan(3)
+                            ,
+                        ])
+                        
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['vencimento_em'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('vencimento_em', '>=', $date),
+                            )
+                            ->when(
+                                $data['vencimento_ate'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('vencimento_em', '<=', $date), 
+                            );
+                    })
+                , 
+
+                MultiSelectFilter::make('customer_id')
+                    ->label('Cliente')
+                    ->relationship('customer', 'nome')
+                    ->column('customer.nome')
+                ,
+
+                MultiSelectFilter::make('conta_status_id')
+                    ->label('Status da Conta')
+                    ->relationship('statusConta', 'nome')
+                    ->column('statusConta.nome')
+                ,
+                
+            ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
     

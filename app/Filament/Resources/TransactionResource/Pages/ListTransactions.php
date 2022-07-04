@@ -25,4 +25,10 @@ class ListTransactions extends ListRecords
         return fn (Model $record): string => '';
     }
 
+    protected function getTableFiltersFormColumns(): int
+    {
+        return 3;
+    }
+
+
 }

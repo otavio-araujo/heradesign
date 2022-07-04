@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\ContaPagarResource\Pages;
 
+use Closure;
 use Carbon\Carbon;
 use App\Models\ContaPagar;
 use App\Models\Transaction;
 use Filament\Pages\Actions;
 use App\Models\ContaCorrente;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\ContaPagarResource;
 
@@ -19,6 +21,21 @@ class ListContaPagars extends ListRecords
         return [
             Actions\CreateAction::make()->label('Nova Conta a Pagar'),
         ];
+    }
+
+    protected function getTableRecordUrlUsing(): Closure
+    {
+        return fn (Model $record): string => '';
+    }
+
+    protected function getTableFiltersFormColumns(): int
+    {
+        return 3;
+    }
+
+    protected function getTableFiltersFormWidth(): string
+    {
+        return '6xl';
     }
 
     public function baixarConta(Array $data)

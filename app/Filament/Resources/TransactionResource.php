@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Pages\Actions\Action;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -102,16 +103,25 @@ class TransactionResource extends Resource
             ->defaultSort('liquidado_em', 'desc')
 
             ->filters([
-                MultiSelectFilter::make('conta_corrente_id')
-                    ->label('Conta Corrente')
-                    ->options(ContaCorrente::all()->pluck('banco', 'id'))
-                    ->column('conta_corrente_id')    
-                ,
 
                 Filter::make('liquidado_em')
                     ->form([
-                        Forms\Components\DatePicker::make('liquidado_em'),
-                        Forms\Components\DatePicker::make('liquidado_ate'),
+
+
+                        Fieldset::make('Período de Pesquisa')
+                        ->schema([
+                            Forms\Components\DatePicker::make('liquidado_em')
+                                ->displayFormat('d/m/Y')
+                                ->default(now()->subDays(7))
+                                ->columnSpan(3)
+                            ,
+                            Forms\Components\DatePicker::make('liquidado_ate')
+                                ->default(now())
+                                ->displayFormat('d/m/Y')
+                                ->columnSpan(3)
+                            ,
+                        ])
+                        
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -124,7 +134,46 @@ class TransactionResource extends Resource
                                 fn (Builder $query, $date): Builder => $query->whereDate('liquidado_em', '<=', $date), 
                             );
                     })
-                ,  
+                , 
+                
+                Filter::make('operacoes')
+                    ->form([
+
+                        Fieldset::make('Operações')
+                            ->schema([
+                                Forms\Components\Checkbox::make('conta_pagar_id')
+                                    ->label('Despesas')
+                                    ->columnSpan(3)
+                                    ->reactive()
+                                    ->afterStateUpdated(fn (callable $set) => $set('conta_receber_id', null))
+                                ,
+                                Forms\Components\Checkbox::make('conta_receber_id')
+                                    ->label('Receitas')
+                                    ->columnSpan(3)
+                                    ->reactive()
+                                    ->afterStateUpdated(fn (callable $set) => $set('conta_pagar_id', null))
+                                ,
+                            ])
+                            
+                        ])
+                        ->query(function (Builder $query, array $data): Builder {
+                            return $query
+                                ->when(
+                                    $data['conta_pagar_id'] != null,
+                                    fn (Builder $query): Builder => $query->whereNotNull('conta_pagar_id'),
+                                )
+                                ->when(
+                                    $data['conta_receber_id'] != null,
+                                    fn (Builder $query): Builder => $query->whereNotNull('conta_receber_id'), 
+                                );
+                        })
+                , 
+
+                MultiSelectFilter::make('conta_corrente_id')
+                    ->label('Conta Corrente')
+                    ->options(ContaCorrente::all()->pluck('banco', 'id'))
+                    ->column('conta_corrente_id')    
+                ,
 
             ])
 

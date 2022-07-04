@@ -2,13 +2,15 @@
 
 namespace App\Filament\Resources\ContaReceberResource\Pages;
 
+use Closure;
+use Carbon\Carbon;
+use App\Models\Transaction;
 use Filament\Pages\Actions;
 use App\Models\ContaReceber;
+use App\Models\ContaCorrente;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\ContaReceberResource;
-use App\Models\ContaCorrente;
-use App\Models\Transaction;
-use Carbon\Carbon;
 
 class ListContaRecebers extends ListRecords
 {
@@ -19,6 +21,21 @@ class ListContaRecebers extends ListRecords
         return [
             // Actions\CreateAction::make()->visible(false),
         ];
+    }
+
+    protected function getTableRecordUrlUsing(): Closure
+    {
+        return fn (Model $record): string => '';
+    }
+
+    protected function getTableFiltersFormColumns(): int
+    {
+        return 3;
+    }
+
+    protected function getTableFiltersFormWidth(): string
+    {
+        return '6xl';
     }
 
 

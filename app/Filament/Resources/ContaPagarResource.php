@@ -17,9 +17,11 @@ use App\Models\CategoriaConta;
 use App\Models\FormaPagamento;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +29,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput\Mask;
+use Filament\Tables\Filters\MultiSelectFilter;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ContaPagarResource\Pages;
 use App\Filament\Resources\ContaPagarResource\RelationManagers;
@@ -652,6 +655,53 @@ class ContaPagarResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->filters([
+
+                Filter::make('vencimento_em')
+                    ->form([
+
+
+                        Fieldset::make('Período de Pesquisa')
+                        ->schema([
+                            Forms\Components\DatePicker::make('vencimento_em')
+                                ->displayFormat('d/m/Y')
+                                ->default(now()->subDays(7))
+                                ->columnSpan(3)
+                            ,
+                            Forms\Components\DatePicker::make('vencimento_ate')
+                                ->default(now())
+                                ->displayFormat('d/m/Y')
+                                ->columnSpan(3)
+                            ,
+                        ])
+                        
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['vencimento_em'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('vencimento_em', '>=', $date),
+                            )
+                            ->when(
+                                $data['vencimento_ate'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('vencimento_em', '<=', $date), 
+                            );
+                    })
+                , 
+
+                MultiSelectFilter::make('supplier_id')
+                    ->label('Fornecedor')
+                    ->relationship('supplier', 'nome')
+                    ->column('supplier.nome')
+                ,
+
+                MultiSelectFilter::make('conta_status_id')
+                    ->label('Status da Conta')
+                    ->relationship('statusConta', 'nome')
+                    ->column('statusConta.nome')
+                ,
+                
             ]);
     }
     
