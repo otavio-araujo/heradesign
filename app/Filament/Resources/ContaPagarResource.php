@@ -412,6 +412,21 @@ class ContaPagarResource extends Resource
                     ->label('')
                     ->icon('heroicon-o-pencil')
                     ->size('lg')
+                    ->visible(fn (ContaPagar $record): bool => $record->pago_em == null)
+                ,
+
+                Tables\Actions\Action::make('cancelarBaixa')
+                    ->action('cancelarBaixa', fn (ContaPagar $record) => $record->id)
+                    ->tooltip('Cancelar Baixa de Conta')
+                    ->label('')
+                    ->color('danger')
+                    ->icon('heroicon-o-thumb-down')
+                    ->size('lg')
+                    ->visible(fn (ContaPagar $record): bool => $record->pago_em !== null)
+                    ->requiresConfirmation()
+                    ->modalHeading('Cancelar Baixa de Conta Paga')
+                    ->modalSubheading('Deseja realmente cancelar a baixa deste pagamento?')
+                    ->modalButton('Sim, pode cancelar.')
                 ,
 
                 Tables\Actions\Action::make('baixarConta')

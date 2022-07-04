@@ -22,6 +22,7 @@ use Filament\Forms\Components\TextInput\Mask;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ContaReceberResource\Pages;
 use App\Filament\Resources\ContaReceberResource\RelationManagers;
+use Closure;
 
 class ContaReceberResource extends Resource
 {
@@ -71,6 +72,7 @@ class ContaReceberResource extends Resource
                     ->label('Descrição')
                     ->searchable()
                     ->wrap()
+                    ->extraAttributes(['class' => 'text-xs'])
                 ,
 
                 TextColumn::make('valor_parcela')
@@ -98,6 +100,21 @@ class ContaReceberResource extends Resource
                     ->label('')
                     ->icon('heroicon-o-pencil')
                     ->size('lg')
+                    ->visible(fn (ContaReceber $record): bool => $record->pago_em == null)
+                ,
+
+                Tables\Actions\Action::make('cancelarBaixa')
+                    ->action('cancelarBaixa', fn (ContaReceber $record) => $record->id)
+                    ->tooltip('Cancelar Baixa de Conta')
+                    ->label('')
+                    ->color('danger')
+                    ->icon('heroicon-o-thumb-down')
+                    ->size('lg')
+                    ->visible(fn (ContaReceber $record): bool => $record->pago_em !== null)
+                    ->requiresConfirmation()
+                    ->modalHeading('Cancelar Baixa de Conta Recebida')
+                    ->modalSubheading('Deseja realmente cancelar a baixa deste recebimento?')
+                    ->modalButton('Sim, pode cancelar.')
                 ,
 
                 Tables\Actions\Action::make('baixarConta')

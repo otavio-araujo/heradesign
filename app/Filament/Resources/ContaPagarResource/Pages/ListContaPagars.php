@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ContaPagarResource\Pages;
 
+use Carbon\Carbon;
 use App\Models\ContaPagar;
 use App\Models\Transaction;
 use Filament\Pages\Actions;
@@ -53,6 +54,46 @@ class ListContaPagars extends ListRecords
         $conta_corrente->save();
 
         $this->notify('success', 'Conta Liquidada com Sucesso!');
+    }
+
+    public function cancelarBaixa(ContaPagar $record)
+    {
+        
+        /* Localiza a transação e apaga do banco de dados */
+        $transaction = $record->transaction;
+        $transaction->delete();
+        
+        /* Localiza a conta corrente e atualiza o saldo_atual */
+        $conta_corrente = $record->contaCorrente;
+        $conta_corrente->saldo_atual = bcadd($conta_corrente->saldo_atual, $record->valor_pago, 2);
+        $conta_corrente->save();
+    
+        /* Atualiza os dados do ContasReceber */
+        if ($record->vencimento_em->lt(Carbon::now()->format('Y-m-d')) === true) {
+            
+            $record->update([
+                'status_conta_id' => 2,
+                'valor_pago' => null,
+                'pago_em' => null,
+                'liquidado_em' => null,
+                'valor_descontos' => 0.00,
+                'valor_acrescimos' => 0.00,  
+            ]);
+
+        } else {
+
+            $record->update([
+                'status_conta_id' => 1,
+                'valor_pago' => null,
+                'pago_em' => null,
+                'liquidado_em' => null,
+                'valor_descontos' => 0.00,
+                'valor_acrescimos' => 0.00,  
+            ]);
+        }
+
+        $this->notify('success', 'Baixa de Conta Cancelada com Sucesso!');
+        
     }
 
 }
