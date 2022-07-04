@@ -14,17 +14,22 @@ class Transaction extends Model
     protected $fillable = [
         'conta_corrente_id',
         'conta_receber_id',
-        'saldo_anterior',
-        'saldo_atual',
+        'conta_pagar_id',
+        'liquidado_em',
         'valor'
     ];
 
     protected $casts = [
         'conta_corrente_id' => 'integer',
         'conta_receber_id' => 'integer',
-        'saldo_anterior' => 'decimal:2',
-        'saldo_atual' => 'decimal:2',
+        'conta_pagar_id' => 'integer',
         'valor' => 'decimal:2',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated-at',
+        'liquidado_em'
     ];
 
     public function contaCorrente()
@@ -35,5 +40,10 @@ class Transaction extends Model
     public function contaReceber()
     {
         return $this->belongsTo(ContaReceber::class, 'conta_receber_id');
+    }
+
+    public function contaPagar()
+    {
+        return $this->belongsTo(ContaPagar::class, 'conta_pagar_id');
     }
 }

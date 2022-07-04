@@ -145,7 +145,6 @@ class OrderResource extends Resource
                 Action::make('edit')
                     ->tooltip('Adicionar Acompanhamento')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-clipboard-check')
                     ->size('lg')
                     ->url(fn (Order $record): string => route('filament.resources.pedidos.edit', $record))

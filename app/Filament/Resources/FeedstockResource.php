@@ -151,6 +151,13 @@ class FeedstockResource extends Resource
         
         return $table
             ->columns(static::getTableColumns())
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Matéria Prima')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
             ->filters([
                 
             ]);

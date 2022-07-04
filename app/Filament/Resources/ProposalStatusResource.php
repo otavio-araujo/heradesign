@@ -92,6 +92,13 @@ class ProposalStatusResource extends Resource
                         
                     ]),
             ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Estatus de Propostas')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
             ->filters([
                 //
             ]);

@@ -102,6 +102,13 @@ class EstadoResource extends Resource
     {
         return $table
             ->columns(static::getTableColumns())
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Estado')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
             ->filters([
                 
             ]);

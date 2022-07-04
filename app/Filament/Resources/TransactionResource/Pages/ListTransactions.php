@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\TransactionResource\Pages;
 
+use Closure;
 use Filament\Pages\Actions;
 use Filament\Tables\Filters\Layout;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\TransactionResource;
 
@@ -14,13 +16,13 @@ class ListTransactions extends ListRecords
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make()->visible(false),
+            // Actions\CreateAction::make()->visible(false),
         ];
     }
 
-    // protected function getTableFiltersLayout(): ?string
-    // {
-    //     return Layout::AboveContent;
-    // }
+    protected function getTableRecordUrlUsing(): Closure
+    {
+        return fn (Model $record): string => '';
+    }
 
 }

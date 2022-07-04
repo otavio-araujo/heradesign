@@ -105,7 +105,6 @@ class StatusContaResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->tooltip('Editar Status de Pagamento')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-pencil')
                     ->size('lg'),
             ])

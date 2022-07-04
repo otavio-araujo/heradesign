@@ -116,7 +116,6 @@ class PlanoContaResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->tooltip('Editar Plano de Conta')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-pencil')
                     ->size('lg'),
             ])

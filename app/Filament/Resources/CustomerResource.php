@@ -330,9 +330,18 @@ class CustomerResource extends Resource
                     ,
 
                     Tables\Columns\TextColumn::make('parceiro.nome')
+                    ->wrap()
                     ,
                     
-            ])->defaultSort('id', 'desc')
+            ])
+            ->defaultSort('id', 'desc')
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Cliente')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
         ;
     }
     

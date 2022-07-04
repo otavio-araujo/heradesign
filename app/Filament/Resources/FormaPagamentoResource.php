@@ -105,7 +105,6 @@ class FormaPagamentoResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->tooltip('Editar Forma de Pagamento')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-pencil')
                     ->size('lg'),
             ])

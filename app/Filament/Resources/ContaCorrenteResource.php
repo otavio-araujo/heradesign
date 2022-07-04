@@ -186,7 +186,6 @@ class ContaCorrenteResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->tooltip('Editar Conta Corrente')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-pencil')
                     ->size('lg')
             ])

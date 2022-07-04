@@ -89,7 +89,14 @@ class FeedstockTypeResource extends Resource
                     ->sortable(),
 
                 ])
-                ->defaultSort('nome');
+                ->defaultSort('nome')
+                ->actions([
+                    Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Tipo de Matéria Prima')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+                ]);
     }
     
     public static function getRelations(): array

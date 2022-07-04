@@ -1,5 +1,5 @@
 <x-utils.simple-badge type='pink'>
     
-    {{ Carbon\Carbon::make($getState())->format('d/m/Y') }}
+    {{ $getRecord()->conta_pagar_id === NULL ? Carbon\Carbon::make($getRecord()->contaReceber->vencimento_em)->format('d/m/Y') : Carbon\Carbon::make($getRecord()->contaPagar->vencimento_em)->format('d/m/Y') }}
     
 </x-utils.simple-badge>

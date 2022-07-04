@@ -99,7 +99,15 @@ class CidadeResource extends Resource
             ->columns(static::getTableColumns())
             ->filters([
                 
-            ]);
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Cidade')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
+        ;
     }
     
     public static function getRelations(): array

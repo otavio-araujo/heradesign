@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\FormaPagamentoResource\Pages;
 
-use App\Filament\Resources\FormaPagamentoResource;
-use Filament\Pages\Actions;
+use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\FormaPagamentoResource;
 
 class ListFormaPagamentos extends ListRecords
 {
@@ -13,7 +13,7 @@ class ListFormaPagamentos extends ListRecords
     protected function getActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make()->label('Nova Forma de Pagamento'),
         ];
     }
 }

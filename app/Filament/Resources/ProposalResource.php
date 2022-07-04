@@ -749,21 +749,13 @@ class ProposalResource extends Resource
                 Tables\Columns\TextColumn::make('customer.nome')
                     ->label('Cliente')
                     ->sortable()
+                    ->searchable()
                 ,
 
                 Tables\Columns\TextColumn::make('customer.parceiro.nome')
                     ->label('Parceiro')
                     ->sortable()
                 ,
-
-                // BadgeColumn::make('status.nome')
-                //     ->colors([
-                //         'success',
-                //         'primary' => 'Nova',
-                //         'danger' => 'Reprovada',
-                //         'warning' => 'Em Análise',
-                        
-                //     ]),
 
                 ViewColumn::make('status')
                     ->view('filament.tables.columns.proposal-status')
@@ -802,7 +794,6 @@ class ProposalResource extends Resource
                 Action::make('edit')
                     ->tooltip('Editar Proposta')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-pencil')
                     ->size('lg')
                     ->url(fn (Proposal $record): string => route('filament.resources.propostas.edit', $record))

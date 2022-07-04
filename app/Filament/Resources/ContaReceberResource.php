@@ -31,7 +31,7 @@ class ContaReceberResource extends Resource
 
     protected static ?string $navigationGroup = 'Financeiro';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $recordTitleAttribute = 'descricao';
 
@@ -96,7 +96,6 @@ class ContaReceberResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->tooltip('Editar Conta a Receber')
                     ->label('')
-                    ->color('warning')
                     ->icon('heroicon-o-pencil')
                     ->size('lg')
                 ,
