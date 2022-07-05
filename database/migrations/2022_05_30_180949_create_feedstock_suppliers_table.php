@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('feedstock_supplier', function (Blueprint $table) {
 
+            $table->id();
+
             $table->foreignId('feedstock_id')
                 ->constrained()
                 ->onUpdate('cascade')
