@@ -14,13 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('feedstock_supplier', function (Blueprint $table) {
-<<<<<<< HEAD
 
             $table->id();
-
-=======
-            $table->id();
->>>>>>> Dev
             $table->foreignId('feedstock_id')
                 ->constrained()
                 ->onUpdate('cascade')

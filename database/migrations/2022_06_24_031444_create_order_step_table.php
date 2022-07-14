@@ -14,10 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('order_step', function (Blueprint $table) {
-<<<<<<< HEAD
-
-=======
->>>>>>> Dev
             $table->id();
             $table->foreignId('order_id')
                 ->constrained()
