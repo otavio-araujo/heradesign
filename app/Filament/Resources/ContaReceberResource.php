@@ -99,13 +99,13 @@ class ContaReceberResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->tooltip('Editar Conta a Receber')
-                    ->label('')
-                    ->icon('heroicon-o-pencil')
-                    ->size('lg')
-                    ->visible(fn (ContaReceber $record): bool => $record->pago_em == null)
-                ,
+                // Tables\Actions\EditAction::make()
+                //     ->tooltip('Editar Conta a Receber')
+                //     ->label('')
+                //     ->icon('heroicon-o-pencil')
+                //     ->size('lg')
+                //     ->visible(fn (ContaReceber $record): bool => $record->pago_em == null)
+                // ,
 
                 Tables\Actions\Action::make('cancelarBaixa')
                     ->action('cancelarBaixa', fn (ContaReceber $record) => $record->id)

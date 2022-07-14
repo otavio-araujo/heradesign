@@ -782,7 +782,6 @@ class ProposalResource extends Resource
                     ->size('lg')
                 ,
                 Action::make('order_generate')
-                    // ->url(fn (Proposal $record): string => route('order.generate', $record))
                     ->label('')
                     ->tooltip('Gerar Pedido')
                     ->color('success')

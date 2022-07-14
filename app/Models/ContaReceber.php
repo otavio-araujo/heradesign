@@ -26,6 +26,7 @@ class ContaReceber extends Model
         'qtd_parcelas',
         'valor_previsto',
         'valor_parcela',
+        'valor_pago',
         'valor_descontos',
         'valor_acrescimos',
         'vencimento_em',
@@ -50,6 +51,7 @@ class ContaReceber extends Model
         'valor_parcela' => 'decimal:2',
         'valor_descontos' => 'decimal:2',
         'valor_acrescimos' => 'decimal:2',
+        'valor_pago' => 'decimal:2',
     ];
 
     protected $dates = [

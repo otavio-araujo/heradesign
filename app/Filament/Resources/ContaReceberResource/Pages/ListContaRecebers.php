@@ -92,7 +92,7 @@ class ListContaRecebers extends ListRecords
             
             $record->update([
                 'status_conta_id' => 2,
-                'valor_pago' => null,
+                'valor_pago' => 0.00,
                 'pago_em' => null,
                 'liquidado_em' => null,
                 'valor_descontos' => 0.00,
@@ -103,7 +103,7 @@ class ListContaRecebers extends ListRecords
 
             $record->update([
                 'status_conta_id' => 1,
-                'valor_pago' => null,
+                'valor_pago' => 0.00,
                 'pago_em' => null,
                 'liquidado_em' => null,
                 'valor_descontos' => 0.00,
