@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('proposal_id');
             $table->foreignId('customer_id');
+            $table->boolean('faturado')->default(false);
             $table->timestamps();
         });
     }

@@ -2,6 +2,11 @@
 
 namespace App\Helpers;
 
+use App\Models\CategoriaConta;
+use App\Models\ContaCorrente;
+use App\Models\FormaPagamento;
+use App\Models\Supplier;
+use Faker\Core\Number;
 use Illuminate\Support\Str;
 
 class Helpers
@@ -188,6 +193,50 @@ class Helpers
                 break;
         }
         
+    }
+
+    public static function getDescricaoReceber ($data, $parcela_atual = 1)
+    {
+        
+        $categoria = CategoriaConta::find($data['categoria_conta_id']);
+        $pagamento = FormaPagamento::find($data['forma_pagamento_id']);
+        $conta = ContaCorrente::find($data['conta_corrente_id']);
+        
+        $descricao = trim($data['customer_nome']) . ' | ' . 
+                        'PARCELA: ' . $parcela_atual . ' DE ' . $data['qtd_parcelas'] . ' | ' .
+                        'PEDIDO Nº: ' . $data['order_id'] . ' | ' .
+                        $categoria->nome . ' | ' .
+                        $pagamento->nome . ' | ' .
+                        $conta->banco . ' (AG:' . $conta->agencia . ' - CC:' . $conta->conta . ') | ' .
+                        'DOCUMENTO: ' . $data['documento'] . ' | ' . 
+                        'OUTRAS OBSERVAÇÕES: ' . trim($data['observacoes']);
+        
+        return $descricao;
+    }
+
+    public static function getDescricaoPagar ($data, $parcela_atual = 1)
+    {
+        
+        $categoria = CategoriaConta::find($data['categoria_conta_id']);
+        $pagamento = FormaPagamento::find($data['forma_pagamento_id']);
+        $conta = ContaCorrente::find($data['conta_corrente_id']);
+        $fornecedor = Supplier::find($data['supplier_id']);
+        
+        $descricao =    $fornecedor->nome . ' | ' . 
+                        'PARCELA: ' . $parcela_atual . ' DE ' . $data['qtd_parcelas'] . ' | ' .
+                        $categoria->nome . ' | ' .
+                        $pagamento->nome . ' | ' .
+                        $conta->banco . ' (AG:' . $conta->agencia . ' - CC:' . $conta->conta . ') | ' .
+                        'DOCUMENTO: ' . $data['documento'] . ' | ' . 
+                        'OUTRAS OBSERVAÇÕES: ' . trim($data['observacoes']);
+        
+        return $descricao;
+    }
+
+    public static function getRealCurrency ($amount)
+    {
+        
+        return 'R$' . number_format($amount, 2, ',', '.');
     }
 
 }

@@ -4,9 +4,11 @@ namespace App\Filament\Resources\CustomerResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Order;
 use App\Models\Proposal;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
+use Illuminate\Support\Facades\DB;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Columns\BadgeColumn;
@@ -70,12 +72,12 @@ class ProposalsRelationManager extends HasManyRelationManager
                         ->size('lg')
                     ,
                     Action::make('order_generate')
-                        ->url(fn (Proposal $record): string => route('proposal.pdf', $record))
                         ->label('')
                         ->tooltip('Gerar Pedido')
                         ->color('success')
                         ->icon('heroicon-o-clipboard-check')
                         ->size('lg')
+                        ->action('generateOrder', fn (Proposal $record): string => $record->id)
                     ,
     
                     Action::make('edit')
@@ -101,5 +103,35 @@ class ProposalsRelationManager extends HasManyRelationManager
         $this->emit('refreshComponent');
 
         $this->notify('success', 'Status Atualizado!');
+    }
+
+    public function generateOrder (Proposal $record)
+    {
+        if ($counter = Order::where('proposal_id', $record->id)->count()) {
+
+            $this->notify('warning', 'Pedido Já Existente');
+
+            $order = DB::table('orders')
+                                ->where('proposal_id', $record->id)->first();
+            
+            return redirect()->route('filament.resources.pedidos.edit', $order->id);
+
+        } else {
+
+            $dados = [
+                'proposal_id' => $record->id,
+                'customer_id' => $record->customer->id
+            ];
+
+            $order = Order::create($dados);
+
+            $this->notify('success', 'Pedido Gerado com Sucesso!');
+
+            return redirect()->route('filament.resources.pedidos.edit', $order);
+            
+        }
+        
+        
+        return $record;
     }
 }

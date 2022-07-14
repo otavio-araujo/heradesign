@@ -53,6 +53,11 @@ class Supplier extends Model
         return $this->hasMany(PjSupplier::class);
     }
 
+    public function contasPagar(): HasMany
+    {
+        return $this->hasMany(ContaPagar::class, 'conta_pagar_id');
+    }
+
     protected function cep(): Attribute
     {
         return Attribute::make(

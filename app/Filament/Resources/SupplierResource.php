@@ -321,6 +321,13 @@ class SupplierResource extends Resource
                     ,
                     
             ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Fornecedor')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
         ;
     }
     

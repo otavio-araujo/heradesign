@@ -11,12 +11,14 @@ class Order extends Model
 
     protected $fillable = [
         'proposal_id',
-        'customer_id'
+        'customer_id',
+        'faturado'
     ];
 
     protected $casts = [
         'proposal_id' => 'integer',
         'customer_id' => 'integer',
+        'faturado' => 'boolean'
     ];
 
     public function customer()
@@ -32,5 +34,10 @@ class Order extends Model
     public function steps()
     {
         return $this->belongsToMany(Step::class)->withPivot('step_id', 'defined_at')->using(OrderStep::class);
+    }
+
+    public function contasReceber ()
+    {
+        return $this->hasMany(ContaReceber::class);
     }
 }

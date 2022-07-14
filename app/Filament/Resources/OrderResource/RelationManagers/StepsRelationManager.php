@@ -58,6 +58,7 @@ class StepsRelationManager extends BelongsToManyRelationManager
             ->headerActions([
                 // ...
                 AttachAction::make()
+                    ->label('Adicionar Acompanhamento')
                     ->form(fn (AttachAction $action): array => [
                         
                         $action->getRecordSelect()
@@ -76,7 +77,14 @@ class StepsRelationManager extends BelongsToManyRelationManager
             ])
             ->actions([
                 // ...
-                DetachAction::make(),
+                DetachAction::make()
+                    ->tooltip('Remover Acompanhamento')
+                    ->label('')
+                    ->color('danger')
+                    ->icon('heroicon-o-trash')
+                    ->size('lg')
+                
+                ,
             ])
             ->bulkActions([
                 // ...

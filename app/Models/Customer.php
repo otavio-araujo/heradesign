@@ -66,6 +66,11 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function contasReceber ()
+    {
+        return $this->hasMany(ContaReceber::class);
+    }
+
 
     // Mutators and Acessors
 

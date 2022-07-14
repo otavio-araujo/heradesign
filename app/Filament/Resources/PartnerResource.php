@@ -320,6 +320,13 @@ class PartnerResource extends Resource
                     ,
                     
             ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Parceiro')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
         ;
     }
     

@@ -8,6 +8,7 @@ use Filament\Resources\Form;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Pages\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\ProposalResource;
 use Filament\Forms\Components\BelongsToSelect;
@@ -17,6 +18,13 @@ class ListProposals extends ListRecords
 {
     
     protected static string $resource = ProposalResource::class;
+
+    protected function getActions(): array
+    {
+        return [
+            CreateAction::make()->label('Nova Proposta'),
+        ];
+    }
 
     protected $listeners = ['refreshComponent' => '$refresh'];
 

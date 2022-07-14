@@ -91,6 +91,13 @@ class StepResource extends Resource
                     ->label('Atualizado em')
                     ->date('d/m/Y')
             ])
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Acompanhamento')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
+            ])
             ->filters([
                 //
             ]);

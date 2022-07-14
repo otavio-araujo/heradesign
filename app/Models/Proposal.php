@@ -59,5 +59,10 @@ class Proposal extends Model
         return $this->hasOne(Order::class);
     }
 
+    public function contasReceber ()
+    {
+        return $this->hasMany(ContaReceber::class);
+    }
+
     
 }

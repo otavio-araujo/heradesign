@@ -330,8 +330,17 @@ class CustomerResource extends Resource
                     ,
 
                     Tables\Columns\TextColumn::make('parceiro.nome')
+                    ->wrap()
                     ,
                     
+            ])
+            ->defaultSort('id', 'desc')
+            ->actions([
+                Tables\Actions\EditAction::make()
+                    ->tooltip('Editar Cliente')
+                    ->label('')
+                    ->icon('heroicon-o-pencil')
+                    ->size('lg'),
             ])
         ;
     }
@@ -343,10 +352,10 @@ class CustomerResource extends Resource
                 RelationManagers\ProposalsRelationManager::class,
             ]),
             RelationGroup::make('Pedidos', [
-                RelationManagers\ProposalsRelationManager::class,
+                RelationManagers\OrdersRelationManager::class,
             ]),
             RelationGroup::make('Financeiro', [
-                RelationManagers\ProposalsRelationManager::class,
+                RelationManagers\ContasReceberRelationManager::class,
             ]),
             
         ];

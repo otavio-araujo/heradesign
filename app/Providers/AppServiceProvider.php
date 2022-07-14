@@ -25,17 +25,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        
         Filament::serving(function () {
 
             Filament::registerTheme(mix('css/filament.css'));
 
             Filament::registerNavigationGroups([
                 'Operacional',
+                'Financeiro',
                 'Fornecedores e Materiais',
                 'Cadastros Auxiliares',
             ]);
         });
 
-        // Pluralizer::useLanguage('portuguese');
     }
 }

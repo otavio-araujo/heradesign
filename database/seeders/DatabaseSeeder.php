@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TipoConta;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -34,6 +35,12 @@ class DatabaseSeeder extends Seeder
             PartnerSeeder::class,
             ProposalStatusSeeder::class,
             StepSeeder::class,
+            ContaCorrenteSeeder::class,
+            FormaPagamentoSeeder::class,
+            StatusContaSeeder::class,
+            TipoContaSeeder::class,
+            PlanoContaSeeder::class,
+            CategoriaContaSeeder::class,
         ]);
     }
 }
